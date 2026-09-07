@@ -1,3 +1,4 @@
+import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase, type Brand, type Profile } from "@/lib/supabase";
@@ -28,8 +29,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
     enabled: !!userId,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
+        .from("profiles").select("*")
         .eq("id", userId!)
         .single();
       if (error) throw error;
@@ -79,7 +79,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
       // Just fetch a healthy batch of brands, we will sort them client-side based on profile
       const { data, error } = await supabase
         .from("brands")
-        .select("*")
+        .select(BRAND_SELECT_FIELDS)
         .limit(100)
         .order("influencer_fit_score", { ascending: false, nullsFirst: false });
       if (error) throw error;
@@ -288,12 +288,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
                   key={rec.brand.id}
                   rec={rec}
                   isSaved={savedBrandIds.has(rec.brand.id)}
-                  onToggleSave={() =>
-                    toggleSaveMutation.mutate({
-                      brandId: rec.brand.id,
-                      isSaved: savedBrandIds.has(rec.brand.id),
-                    })
-                  }
+                  onToggleSave={() => toggleSaveMutation.mutate({ brandId: rec.brand.id, isSaved: savedBrandIds.has(rec.brand.id) })}
                   onClickView={() => setSelectedBrand(rec.brand)}
                 />
               ))}
@@ -330,15 +325,10 @@ export function ForYouView({ userId }: { userId: string | null }) {
       {selectedBrand && workspaceId && (
         <BrandProfileModal
           brand={selectedBrand}
-          workspaceId={workspaceId}
-          onClose={() => setSelectedBrand(null)}
+          isOpen={true}
+                    onClose={() => setSelectedBrand(null)}
           isSaved={savedBrandIds.has(selectedBrand.id)}
-          onToggleSave={() =>
-            toggleSaveMutation.mutate({
-              brandId: selectedBrand.id,
-              isSaved: savedBrandIds.has(selectedBrand.id),
-            })
-          }
+          isSaving={toggleSaveMutation.isPending} onSave={() => toggleSaveMutation.mutate({ brandId: selectedBrand.id, isSaved: savedBrandIds.has(selectedBrand.id) })} onStartOutreach={() => {}}
         />
       )}
     </div>

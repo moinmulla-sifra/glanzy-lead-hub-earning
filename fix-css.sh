@@ -1,2 +1,0 @@
-sed -i '/--color-destructive/a \  --color-success: var(--success);\n  --color-success-foreground: var(--success-foreground);\n  --color-warning: var(--warning);\n  --color-warning-foreground: var(--warning-foreground);' src/styles.css
-sed -i '/--destructive: /a \  --success: oklch(0.6 0.15 140);\n  --success-foreground: oklch(0.98 0 0);\n  --warning: oklch(0.7 0.15 80);\n  --warning-foreground: oklch(0.2 0 0);' src/styles.css

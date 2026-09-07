@@ -10,7 +10,7 @@ type OutreachSearch = {
 export const Route = createFileRoute("/_dashboard/outreach")({
   validateSearch: (search: Record<string, unknown>): OutreachSearch => {
     return {
-      brandId: search.brandId as string | undefined,
+      ...(search.brandId ? { brandId: search.brandId as string } : {}),
     };
   },
   component: OutreachPage,

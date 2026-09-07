@@ -13,7 +13,7 @@ import {
   Send,
 } from "lucide-react";
 import { type Brand } from "@/lib/supabase";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { toast } from "sonner";
 
@@ -27,7 +27,7 @@ interface BrandProfileModalProps {
   onStartOutreach: () => void;
 }
 
-export function BrandProfileModal({
+export const BrandProfileModal = React.memo(function BrandProfileModal({
   brand,
   isOpen,
   onClose,
@@ -373,3 +373,4 @@ export function BrandProfileModal({
     </div>
   );
 }
+);

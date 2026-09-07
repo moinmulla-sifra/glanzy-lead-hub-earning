@@ -26,7 +26,7 @@ export function TeamView({ userId }: { userId: string | null }) {
   const workspaceId = workspaceMemberQuery.data?.workspace_id;
   const isOwner = workspaceMemberQuery.data?.role === "owner";
   const isAgency =
-    workspaceMemberQuery.data?.workspaces?.workspace_type === "agency";
+    ((Array.isArray(workspaceMemberQuery.data?.workspaces) ? workspaceMemberQuery.data?.workspaces[0] : workspaceMemberQuery.data?.workspaces) as any)?.workspace_type === "agency";
 
   const teamMembersQuery = useQuery({
     queryKey: ["team_members", workspaceId],
@@ -93,7 +93,7 @@ export function TeamView({ userId }: { userId: string | null }) {
           </h1>
           <p className="text-muted-foreground text-lg">
             Manage access to your agency workspace (
-            {workspaceMemberQuery.data?.workspaces?.name}).
+            {((Array.isArray(workspaceMemberQuery.data?.workspaces) ? workspaceMemberQuery.data?.workspaces[0] : workspaceMemberQuery.data?.workspaces) as any)?.name}).
           </p>
         </div>
       </div>

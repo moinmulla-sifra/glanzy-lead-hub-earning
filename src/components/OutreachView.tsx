@@ -1,3 +1,4 @@
+import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -93,11 +94,11 @@ export function OutreachView({
     queryFn: async () => {
       const { data, error } = await supabase
         .from("outreach")
-        .select(`*, brand:brand_id (*)`)
+        .select(`*, brand:brand_id (${BRAND_SELECT_FIELDS})`)
         .eq("workspace_id", workspaceId!)
         .order("updated_at", { ascending: false });
       if (error) throw error;
-      return data as Outreach[];
+      return data as unknown as Outreach[];
     },
   });
 

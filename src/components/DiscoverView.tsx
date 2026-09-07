@@ -1,5 +1,5 @@
+import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { AdSlot } from "./ui/AdSlot";
 import { useMonetization } from "@/lib/useMonetization";
 
 import {
@@ -85,7 +85,7 @@ export function DiscoverView({
 
   const fetchBrands = async ({ pageParam = 0 }) => {
     const pageSize = 12;
-    let q = supabase.from("brands").select("*", { count: "exact" });
+    let q = supabase.from("brands").select(BRAND_SELECT_FIELDS, { count: "exact" });
 
     if (debouncedSearch) {
       q = q.or(
@@ -505,11 +505,7 @@ export function DiscoverView({
         </div>
       ) : (
         <>
-          {!planConfig?.features?.removeAds && showAd && (
-            <div className="mb-8">
-              <AdSlot placement="discover-feed" />
-            </div>
-          )}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {allBrands.map((brand) => {
               const isSaved = savedIds.has(brand.id);

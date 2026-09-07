@@ -1,3 +1,4 @@
+import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect } from "react";
 import {
   useQuery,
@@ -77,7 +78,7 @@ export function SavedView({
       .select(
         `
         *,
-        brand:brand_id!inner (*)
+        brand:brand_id!inner (${BRAND_SELECT_FIELDS})
       `,
         { count: "exact" },
       )
