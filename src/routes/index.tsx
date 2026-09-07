@@ -1,14 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { toast } from "sonner";
 import {
-  ChevronRight,
-  Filter,
-  LogOut,
-  RefreshCw,
-  Search,
-} from "lucide-react";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import { toast } from "sonner";
+import { ChevronRight, Filter, LogOut, RefreshCw, Search } from "lucide-react";
 import { supabase, type BrandLead } from "@/lib/supabase";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LeadDetails, badgeClass, fmt } from "@/components/LeadDetails";
@@ -52,7 +53,8 @@ const SEARCH_COLUMNS = [
   "email_body",
 ];
 
-type SortKey = "lead_desc" | "fit_desc" | "updated_desc" | "verified_desc" | "name_asc";
+type SortKey =
+  "lead_desc" | "fit_desc" | "updated_desc" | "verified_desc" | "name_asc";
 
 const SORTS: Record<SortKey, { column: string; ascending: boolean }> = {
   lead_desc: { column: "lead_score", ascending: false },
@@ -157,9 +159,13 @@ function Dashboard() {
     if (!ready) return;
     const channel = supabase
       .channel("brand_leads_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "brand_leads" }, () => {
-        refreshAll();
-      })
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "brand_leads" },
+        () => {
+          refreshAll();
+        },
+      )
       .subscribe();
     return () => {
       void supabase.removeChannel(channel);
@@ -209,7 +215,10 @@ function Dashboard() {
         <div className="topbar-copy">
           <div className="eyebrow">GLANZY STUDIO</div>
           <h1>Lead Command Center</h1>
-          <p>Search, review and update your saved brand leads directly from Supabase.</p>
+          <p>
+            Search, review and update your saved brand leads directly from
+            Supabase.
+          </p>
         </div>
         <div className="topbar-actions">
           {userEmail ? <span className="user-chip">{userEmail}</span> : null}
@@ -273,7 +282,9 @@ function Dashboard() {
             <div>
               <h2>Saved Brands</h2>
               <span className="muted">
-                {leadsQuery.isLoading ? "Loading…" : `${total} match${total === 1 ? "" : "es"}`}
+                {leadsQuery.isLoading
+                  ? "Loading…"
+                  : `${total} match${total === 1 ? "" : "es"}`}
               </span>
             </div>
             {leadsQuery.error ? (
@@ -314,10 +325,16 @@ function Dashboard() {
                     >
                       <td>
                         <div className="brand-cell">
-                          <div className="avatar">{initials(r.company_name)}</div>
+                          <div className="avatar">
+                            {initials(r.company_name)}
+                          </div>
                           <div>
-                            <div className="brand-name">{fmt(r.company_name)}</div>
-                            <div className="brand-sub">{fmt(r.email || r.website || r.product)}</div>
+                            <div className="brand-name">
+                              {fmt(r.company_name)}
+                            </div>
+                            <div className="brand-sub">
+                              {fmt(r.email || r.website || r.product)}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -326,11 +343,15 @@ function Dashboard() {
                         <span className="score">{r.lead_score ?? "—"}</span>
                       </td>
                       <td>
-                        <span className="badge priority">{fmt(r.priority)}</span>
+                        <span className="badge priority">
+                          {fmt(r.priority)}
+                        </span>
                       </td>
                       <td>{fmt(r.budget_potential)}</td>
                       <td>
-                        <span className={`badge ${badgeClass(r.mail)}`}>{fmt(r.mail)}</span>
+                        <span className={`badge ${badgeClass(r.mail)}`}>
+                          {fmt(r.mail)}
+                        </span>
                       </td>
                     </tr>
                   ))
@@ -356,15 +377,26 @@ function Dashboard() {
                   aria-label={`Open ${fmt(lead.company_name)} details`}
                 >
                   <span className="mobile-lead-main">
-                    <span className="avatar">{initials(lead.company_name)}</span>
+                    <span className="avatar">
+                      {initials(lead.company_name)}
+                    </span>
                     <span className="mobile-lead-copy">
                       <span className="mobile-brand-line">
-                        <span className="brand-name">{fmt(lead.company_name)}</span>
-                        <span className={`badge ${badgeClass(lead.mail)}`}>{fmt(lead.mail)}</span>
+                        <span className="brand-name">
+                          {fmt(lead.company_name)}
+                        </span>
+                        <span className={`badge ${badgeClass(lead.mail)}`}>
+                          {fmt(lead.mail)}
+                        </span>
                       </span>
-                      <span className="brand-sub">{fmt(lead.industry || lead.product)}</span>
+                      <span className="brand-sub">
+                        {fmt(lead.industry || lead.product)}
+                      </span>
                     </span>
-                    <ChevronRight className="mobile-lead-chevron" aria-hidden="true" />
+                    <ChevronRight
+                      className="mobile-lead-chevron"
+                      aria-hidden="true"
+                    />
                   </span>
                   <span className="mobile-lead-metrics">
                     <span>
@@ -431,12 +463,73 @@ function FilterControls({
 }) {
   return (
     <>
-      <Select value={filters.mail} onChange={(mail) => setFilters((f) => ({ ...f, mail, page: 0 }))} options={[["all", "All mail statuses"], ["Pending", "Pending"], ["Complete", "Complete"], ["Success", "Success"]]} />
-      <Select value={filters.priority} onChange={(priority) => setFilters((f) => ({ ...f, priority, page: 0 }))} options={[["all", "All priorities"], ["Immediate", "Immediate"], ["High Priority", "High Priority"], ["Good Lead", "Good Lead"], ["Nurture", "Nurture"], ["Low", "Low"]]} />
-      <Select value={filters.budget} onChange={(budget) => setFilters((f) => ({ ...f, budget, page: 0 }))} options={[["all", "All budget potential"], ["Very High", "Very High"], ["High", "High"], ["Medium", "Medium"], ["Low", "Low"], ["Unknown", "Unknown"]]} />
-      <Select value={filters.industry} onChange={(industry) => setFilters((f) => ({ ...f, industry, page: 0 }))} options={[["all", "All industries"], ...industries.map((value) => [value, value] as [string, string])]} />
-      <Select value={filters.stage} onChange={(stage) => setFilters((f) => ({ ...f, stage, page: 0 }))} options={[["all", "All company stages"], ...stages.map((value) => [value, value] as [string, string])]} />
-      <Select value={filters.sort} onChange={(sort) => setFilters((f) => ({ ...f, sort: sort as SortKey, page: 0 }))} options={[["lead_desc", "Lead score ↓"], ["fit_desc", "Influencer fit ↓"], ["updated_desc", "Recently updated"], ["verified_desc", "Recently verified"], ["name_asc", "Brand A–Z"]]} />
+      <Select
+        value={filters.mail}
+        onChange={(mail) => setFilters((f) => ({ ...f, mail, page: 0 }))}
+        options={[
+          ["all", "All mail statuses"],
+          ["Pending", "Pending"],
+          ["Complete", "Complete"],
+          ["Success", "Success"],
+        ]}
+      />
+      <Select
+        value={filters.priority}
+        onChange={(priority) =>
+          setFilters((f) => ({ ...f, priority, page: 0 }))
+        }
+        options={[
+          ["all", "All priorities"],
+          ["Immediate", "Immediate"],
+          ["High Priority", "High Priority"],
+          ["Good Lead", "Good Lead"],
+          ["Nurture", "Nurture"],
+          ["Low", "Low"],
+        ]}
+      />
+      <Select
+        value={filters.budget}
+        onChange={(budget) => setFilters((f) => ({ ...f, budget, page: 0 }))}
+        options={[
+          ["all", "All budget potential"],
+          ["Very High", "Very High"],
+          ["High", "High"],
+          ["Medium", "Medium"],
+          ["Low", "Low"],
+          ["Unknown", "Unknown"],
+        ]}
+      />
+      <Select
+        value={filters.industry}
+        onChange={(industry) =>
+          setFilters((f) => ({ ...f, industry, page: 0 }))
+        }
+        options={[
+          ["all", "All industries"],
+          ...industries.map((value) => [value, value] as [string, string]),
+        ]}
+      />
+      <Select
+        value={filters.stage}
+        onChange={(stage) => setFilters((f) => ({ ...f, stage, page: 0 }))}
+        options={[
+          ["all", "All company stages"],
+          ...stages.map((value) => [value, value] as [string, string]),
+        ]}
+      />
+      <Select
+        value={filters.sort}
+        onChange={(sort) =>
+          setFilters((f) => ({ ...f, sort: sort as SortKey, page: 0 }))
+        }
+        options={[
+          ["lead_desc", "Lead score ↓"],
+          ["fit_desc", "Influencer fit ↓"],
+          ["updated_desc", "Recently updated"],
+          ["verified_desc", "Recently verified"],
+          ["name_asc", "Brand A–Z"],
+        ]}
+      />
     </>
   );
 }
@@ -460,7 +553,11 @@ function Select({
   options: [string, string][];
 }) {
   return (
-    <select className="control" value={value} onChange={(e) => onChange(e.target.value)}>
+    <select
+      className="control"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
       {options.map(([v, label]) => (
         <option key={v} value={v}>
           {label}
@@ -485,21 +582,36 @@ async function fetchLeads(filters: Filters) {
     let query = supabase.from("brand_leads").select("*", { count: "exact" });
     const term = filters.search.replace(/[,()%]/g, " ").trim();
     if (term) {
-      query = query.or(SEARCH_COLUMNS.map((c) => `${c}.ilike.%${term}%`).join(","));
+      query = query.or(
+        SEARCH_COLUMNS.map((c) => `${c}.ilike.%${term}%`).join(","),
+      );
     }
     if (filters.mail !== "all") query = query.eq("mail", filters.mail);
-    if (filters.priority !== "all") query = query.eq("priority", filters.priority);
-    if (filters.budget !== "all") query = query.eq("budget_potential", filters.budget);
-    if (filters.industry !== "all") query = query.eq("industry", filters.industry);
-    if (filters.stage !== "all") query = query.eq("company_stage", filters.stage);
-    query = query.order(sort.column, { ascending: sort.ascending, nullsFirst: false });
+    if (filters.priority !== "all")
+      query = query.eq("priority", filters.priority);
+    if (filters.budget !== "all")
+      query = query.eq("budget_potential", filters.budget);
+    if (filters.industry !== "all")
+      query = query.eq("industry", filters.industry);
+    if (filters.stage !== "all")
+      query = query.eq("company_stage", filters.stage);
+    query = query.order(sort.column, {
+      ascending: sort.ascending,
+      nullsFirst: false,
+    });
     const from = filters.page * PAGE_SIZE;
     return query.range(from, from + PAGE_SIZE - 1);
   };
 
   let { data, error, count } = await run(filters.sort);
-  if (error && filters.sort === "verified_desc" && /verified_at/.test(error.message)) {
-    toast.message("No verified date on this table — sorted by recently updated instead.");
+  if (
+    error &&
+    filters.sort === "verified_desc" &&
+    /verified_at/.test(error.message)
+  ) {
+    toast.message(
+      "No verified date on this table — sorted by recently updated instead.",
+    );
     ({ data, error, count } = await run("updated_desc"));
   }
   if (error) throw new Error(error.message);
@@ -508,7 +620,9 @@ async function fetchLeads(filters: Filters) {
 
 async function fetchStats() {
   const countFor = async (mail?: string) => {
-    let q = supabase.from("brand_leads").select("id", { count: "exact", head: true });
+    let q = supabase
+      .from("brand_leads")
+      .select("id", { count: "exact", head: true });
     if (mail) q = q.eq("mail", mail);
     const { count, error } = await q;
     if (error) throw new Error(error.message);
