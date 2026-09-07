@@ -116,6 +116,33 @@ export interface Outreach {
   brand?: Brand; // For joined queries
 }
 
+export interface Subscription {
+  id: string;
+  workspace_id: string;
+  plan: "free" | "pro" | "agency";
+  status: string;
+  provider: string | null;
+  provider_customer_id: string | null;
+  provider_subscription_id: string | null;
+  current_period_start: string | null;
+  current_period_end: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Usage {
+  id: string;
+  workspace_id: string;
+  period_start: string;
+  period_end: string;
+  searches: number;
+  brand_views: number;
+  saved_brands: number;
+  outreach_activity: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface OutreachActivity {
   id: string;
   outreach_id: string;

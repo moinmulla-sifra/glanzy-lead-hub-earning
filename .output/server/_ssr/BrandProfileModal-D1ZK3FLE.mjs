@@ -1,7 +1,7 @@
 import { n as __toESM } from "../_runtime.mjs";
 import { s as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { A as CircleAlert, E as ExternalLink, M as Check, P as Building2, S as Linkedin, f as Save, m as Phone, r as TrendingUp, s as Sparkles, t as X, u as Send, v as Mail } from "../_libs/lucide-react.mjs";
+import { A as Linkedin, B as CircleAlert, E as Mail, F as ExternalLink, G as Building2, H as Check, b as Phone, c as TrendingUp, f as Sparkles, g as Send, n as X, v as Save } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/BrandProfileModal-D1ZK3FLE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

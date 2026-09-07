@@ -113,7 +113,10 @@ export function OutreachView({
     },
   });
 
-  const allRecords = useMemo(() => outreachQuery.data || [], [outreachQuery.data]);
+  const allRecords = useMemo(
+    () => outreachQuery.data || [],
+    [outreachQuery.data],
+  );
 
   const filteredRecords = useMemo(() => {
     return allRecords.filter((record) => {
@@ -858,7 +861,9 @@ function OutreachDetailPane({
         ].map((t) => (
           <button
             key={t.id}
-            onClick={() => setActiveTab(t.id as "details" | "email" | "history")}
+            onClick={() =>
+              setActiveTab(t.id as "details" | "email" | "history")
+            }
             className={`flex items-center gap-2 pb-3 px-1 text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
               activeTab === t.id
                 ? "border-brand text-brand"

@@ -26,7 +26,11 @@ function AdminPage() {
     queryKey: ["profile", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("*").eq("id", userId!).single();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId!)
+        .single();
       if (error) throw error;
       return data;
     },
@@ -49,9 +53,16 @@ function AdminPage() {
         <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
           <Shield className="w-8 h-8 text-destructive" />
         </div>
-        <h2 className="text-2xl font-bold text-foreground mb-2">Access Denied</h2>
-        <p className="text-muted-foreground mb-6">You do not have permission to access the admin portal.</p>
-        <Link to="/discover" className="flex items-center gap-2 text-sm font-semibold text-brand hover:underline">
+        <h2 className="text-2xl font-bold text-foreground mb-2">
+          Access Denied
+        </h2>
+        <p className="text-muted-foreground mb-6">
+          You do not have permission to access the admin portal.
+        </p>
+        <Link
+          to="/discover"
+          className="flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+        >
           <ArrowLeft size={16} /> Return to Dashboard
         </Link>
       </div>
@@ -67,31 +78,44 @@ function AdminPage() {
           </div>
           <span className="font-bold text-lg">Branzly Admin</span>
         </div>
-        <Link to="/discover" className="text-sm font-semibold text-muted-foreground hover:text-foreground">
+        <Link
+          to="/discover"
+          className="text-sm font-semibold text-muted-foreground hover:text-foreground"
+        >
           Exit Admin
         </Link>
       </header>
 
       <main className="p-8 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Platform Administration</h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">Total Users</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
+              Total Users
+            </h3>
             <p className="text-3xl font-bold">---</p>
           </div>
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">Total Brands</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
+              Total Brands
+            </h3>
             <p className="text-3xl font-bold">---</p>
           </div>
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">Active Subscriptions</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
+              Active Subscriptions
+            </h3>
             <p className="text-3xl font-bold">---</p>
           </div>
         </div>
 
         <div className="bg-card border border-border/50 rounded-2xl p-8 text-center text-muted-foreground">
-          <p>Admin tools are currently in development. Database operations should be performed via the Supabase Dashboard until the internal admin suite is ready.</p>
+          <p>
+            Admin tools are currently in development. Database operations should
+            be performed via the Supabase Dashboard until the internal admin
+            suite is ready.
+          </p>
         </div>
       </main>
     </div>

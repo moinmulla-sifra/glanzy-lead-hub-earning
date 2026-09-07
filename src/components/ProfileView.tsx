@@ -7,12 +7,16 @@ import { User, Loader2, Save, ExternalLink } from "lucide-react";
 export function ProfileView({ userId }: { userId: string | null }) {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState<Partial<Profile>>({});
-  
+
   const profileQuery = useQuery({
     queryKey: ["profile", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("*").eq("id", userId!).single();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId!)
+        .single();
       if (error) throw error;
       return data as Profile;
     },
@@ -36,7 +40,8 @@ export function ProfileView({ userId }: { userId: string | null }) {
       toast.success("Profile updated successfully");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
-    onError: (err: Error) => toast.error(err.message || "Failed to update profile"),
+    onError: (err: Error) =>
+      toast.error(err.message || "Failed to update profile"),
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,7 +50,9 @@ export function ProfileView({ userId }: { userId: string | null }) {
     updateProfileMutation.mutate(formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -71,14 +78,20 @@ export function ProfileView({ userId }: { userId: string | null }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-card border border-border/60 rounded-3xl p-6 lg:p-10 subtle-shadow space-y-8">
-        
+      <form
+        onSubmit={handleSubmit}
+        className="bg-card border border-border/60 rounded-3xl p-6 lg:p-10 subtle-shadow space-y-8"
+      >
         {/* Basic Info */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-foreground mb-4">Basic Information</h2>
+          <h2 className="text-xl font-bold text-foreground mb-4">
+            Basic Information
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">Full Name</label>
+              <label className="text-sm font-semibold text-foreground">
+                Full Name
+              </label>
               <input
                 type="text"
                 name="full_name"
@@ -87,10 +100,12 @@ export function ProfileView({ userId }: { userId: string | null }) {
                 className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/50"
               />
             </div>
-            
+
             {isAgency && (
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-foreground">Agency Name</label>
+                <label className="text-sm font-semibold text-foreground">
+                  Agency Name
+                </label>
                 <input
                   type="text"
                   name="agency_name"
@@ -102,7 +117,9 @@ export function ProfileView({ userId }: { userId: string | null }) {
             )}
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">Country</label>
+              <label className="text-sm font-semibold text-foreground">
+                Country
+              </label>
               <input
                 type="text"
                 name="country"
@@ -119,11 +136,18 @@ export function ProfileView({ userId }: { userId: string | null }) {
 
         {/* Brand Matching */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-foreground mb-4">Brand Matching</h2>
-          <p className="text-sm text-muted-foreground mb-4">This information helps us recommend the best brand opportunities in the For You section.</p>
-          
+          <h2 className="text-xl font-bold text-foreground mb-4">
+            Brand Matching
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            This information helps us recommend the best brand opportunities in
+            the For You section.
+          </p>
+
           <div className="space-y-2 max-w-lg">
-            <label className="text-sm font-semibold text-foreground">Primary Niche / Category</label>
+            <label className="text-sm font-semibold text-foreground">
+              Primary Niche / Category
+            </label>
             <input
               type="text"
               name="niche"
@@ -135,7 +159,9 @@ export function ProfileView({ userId }: { userId: string | null }) {
           </div>
 
           <div className="space-y-2 max-w-2xl">
-            <label className="text-sm font-semibold text-foreground">Bio / Description</label>
+            <label className="text-sm font-semibold text-foreground">
+              Bio / Description
+            </label>
             <textarea
               name="bio"
               value={formData.bio || ""}
@@ -153,7 +179,11 @@ export function ProfileView({ userId }: { userId: string | null }) {
             disabled={updateProfileMutation.isPending}
             className="flex items-center gap-2 px-6 py-3 bg-brand text-brand-foreground font-semibold rounded-xl text-sm hover:bg-brand/90 transition-all shadow-sm shadow-brand/20 disabled:opacity-50"
           >
-            {updateProfileMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {updateProfileMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
             Save Profile
           </button>
         </div>

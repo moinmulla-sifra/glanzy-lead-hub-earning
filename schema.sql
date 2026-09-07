@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS notification_preferences CASCADE;
+DROP TABLE IF EXISTS usage CASCADE;
+DROP TABLE IF EXISTS subscriptions CASCADE;
+DROP TABLE IF EXISTS outreach_activity CASCADE;
+DROP TABLE IF EXISTS outreach CASCADE;
+DROP TABLE IF EXISTS saved_brands CASCADE;
+DROP TABLE IF EXISTS brands CASCADE;
+DROP TABLE IF EXISTS workspace_members CASCADE;
+DROP TABLE IF EXISTS workspaces CASCADE;
+DROP TABLE IF EXISTS profiles CASCADE;
+
 -- BRANZLY SUPABASE BACKEND SCHEMA
 -- Apply this in the Supabase SQL Editor
 
@@ -252,76 +263,119 @@ CREATE POLICY "Users can update their own profile" ON profiles FOR UPDATE USING 
 -- Prevent users from making themselves admin via update
 CREATE POLICY "Users cannot elevate to admin" ON profiles FOR UPDATE USING (auth.uid() = id AND account_type != 'admin');
 
+-- 1. Helper functions (SECURITY DEFINER to bypass RLS for checks)
+CREATE OR REPLACE FUNCTION user_workspaces()
+RETURNS SETOF uuid AS $$
+BEGIN
+  RETURN QUERY SELECT workspace_id FROM public.workspace_members WHERE user_id = auth.uid();
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+CREATE OR REPLACE FUNCTION is_workspace_manager(check_workspace_id uuid)
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.workspace_members 
+    WHERE workspace_id = check_workspace_id 
+      AND user_id = auth.uid() 
+      AND role IN ('owner', 'admin')
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+
+-- 2. Drop existing policies that cause recursion
+DROP POLICY IF EXISTS "Users can view workspaces they are members of" ON workspaces;
+DROP POLICY IF EXISTS "Workspace owners/admins can update workspace" ON workspaces;
+
+DROP POLICY IF EXISTS "Users can view members of their workspaces" ON workspace_members;
+DROP POLICY IF EXISTS "Workspace owners/admins can manage members" ON workspace_members;
+
+DROP POLICY IF EXISTS "Users can view their workspace saved brands" ON saved_brands;
+DROP POLICY IF EXISTS "Users can manage their workspace saved brands" ON saved_brands;
+
+DROP POLICY IF EXISTS "Users can view their workspace outreach" ON outreach;
+DROP POLICY IF EXISTS "Users can manage their workspace outreach" ON outreach;
+
+DROP POLICY IF EXISTS "Users can view their workspace outreach activity" ON outreach_activity;
+DROP POLICY IF EXISTS "Users can manage their workspace outreach activity" ON outreach_activity;
+
+DROP POLICY IF EXISTS "Users can view their workspace subscriptions" ON subscriptions;
+
+DROP POLICY IF EXISTS "Users can view their workspace usage" ON usage;
+
+
+-- 3. Recreate policies securely without recursion
+
 -- Workspaces
 CREATE POLICY "Users can view workspaces they are members of" ON workspaces FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid())
+  id IN (SELECT user_workspaces())
 );
-CREATE POLICY "Admins can view all workspaces" ON workspaces FOR SELECT USING (is_admin());
+
 CREATE POLICY "Workspace owners/admins can update workspace" ON workspaces FOR UPDATE USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid() AND role IN ('owner', 'admin'))
+  is_workspace_manager(id)
 ) WITH CHECK (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid() AND role IN ('owner', 'admin'))
+  is_workspace_manager(id)
 );
-CREATE POLICY "Users can create workspaces" ON workspaces FOR INSERT WITH CHECK (auth.uid() = owner_id);
 
 -- Workspace Members
 CREATE POLICY "Users can view members of their workspaces" ON workspace_members FOR SELECT USING (
-  user_id = auth.uid() OR EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid())
+  workspace_id IN (SELECT user_workspaces())
 );
-CREATE POLICY "Admins can view all workspace members" ON workspace_members FOR SELECT USING (is_admin());
+
 CREATE POLICY "Workspace owners/admins can manage members" ON workspace_members FOR ALL USING (
-  EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid() AND wm.role IN ('owner', 'admin'))
+  is_workspace_manager(workspace_id)
 ) WITH CHECK (
-  EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid() AND wm.role IN ('owner', 'admin'))
+  is_workspace_manager(workspace_id)
+);
+
+-- Saved Brands
+CREATE POLICY "Users can view their workspace saved brands" ON saved_brands FOR SELECT USING (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+CREATE POLICY "Users can manage their workspace saved brands" ON saved_brands FOR ALL USING (
+  workspace_id IN (SELECT user_workspaces())
+) WITH CHECK (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+-- Outreach
+CREATE POLICY "Users can view their workspace outreach" ON outreach FOR SELECT USING (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+CREATE POLICY "Users can manage their workspace outreach" ON outreach FOR ALL USING (
+  workspace_id IN (SELECT user_workspaces())
+) WITH CHECK (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+-- Outreach Activity
+CREATE POLICY "Users can view their workspace outreach activity" ON outreach_activity FOR SELECT USING (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+CREATE POLICY "Users can manage their workspace outreach activity" ON outreach_activity FOR ALL USING (
+  workspace_id IN (SELECT user_workspaces())
+) WITH CHECK (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+-- Subscriptions
+CREATE POLICY "Users can view their workspace subscriptions" ON subscriptions FOR SELECT USING (
+  workspace_id IN (SELECT user_workspaces())
+);
+
+-- Usage
+CREATE POLICY "Users can view their workspace usage" ON usage FOR SELECT USING (
+  workspace_id IN (SELECT user_workspaces())
 );
 
 -- Brands
 CREATE POLICY "Authenticated users can view brands" ON brands FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Admins can manage brands" ON brands FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
--- Saved Brands
-CREATE POLICY "Users can view their workspace saved brands" ON saved_brands FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
-);
-CREATE POLICY "Users can manage their workspace saved brands" ON saved_brands FOR ALL USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
-) WITH CHECK (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
-);
-
--- Outreach
-CREATE POLICY "Users can view their workspace outreach" ON outreach FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
-);
-CREATE POLICY "Users can manage their workspace outreach" ON outreach FOR ALL USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
-) WITH CHECK (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
-);
-
--- Outreach Activity
-CREATE POLICY "Users can view their workspace outreach activity" ON outreach_activity FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
-);
-CREATE POLICY "Users can manage their workspace outreach activity" ON outreach_activity FOR ALL USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
-) WITH CHECK (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
-);
-
--- Subscriptions
-CREATE POLICY "Users can view their workspace subscriptions" ON subscriptions FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = subscriptions.workspace_id AND workspace_members.user_id = auth.uid())
-);
-CREATE POLICY "Admins can manage subscriptions" ON subscriptions FOR ALL USING (is_admin()) WITH CHECK (is_admin());
-
--- Usage
-CREATE POLICY "Users can view their workspace usage" ON usage FOR SELECT USING (
-  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = usage.workspace_id AND workspace_members.user_id = auth.uid())
-);
-CREATE POLICY "Admins can manage usage" ON usage FOR ALL USING (is_admin()) WITH CHECK (is_admin());
-
 -- Notification Preferences
 CREATE POLICY "Users can view their own preferences" ON notification_preferences FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage their own preferences" ON notification_preferences FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-

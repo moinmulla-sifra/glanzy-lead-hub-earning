@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { AdSlot } from "./ui/AdSlot";
+import { useMonetization } from "@/lib/useMonetization";
+
 import {
   useInfiniteQuery,
   useMutation,
@@ -533,6 +536,11 @@ export function DiscoverView({
         </div>
       ) : (
         <>
+          {!planConfig?.features?.removeAds && showAd && (
+            <div className="mb-8">
+              <AdSlot placement="discover-feed" />
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {allBrands.map((brand) => {
               const isSaved = savedIds.has(brand.id);

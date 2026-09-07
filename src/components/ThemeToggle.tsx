@@ -7,17 +7,22 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setTheme(getStoredTheme());
-    
+
     const handleThemeChange = (e: CustomEvent<Theme>) => {
       setTheme(e.detail);
     };
-    
+
     window.addEventListener("theme-change", handleThemeChange as EventListener);
-    return () => window.removeEventListener("theme-change", handleThemeChange as EventListener);
+    return () =>
+      window.removeEventListener(
+        "theme-change",
+        handleThemeChange as EventListener,
+      );
   }, []);
 
   function toggle() {
-    const next: Theme = theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
+    const next: Theme =
+      theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
     applyTheme(next);
   }
 
@@ -28,7 +33,13 @@ export function ThemeToggle() {
       aria-label={`Current theme: ${theme}. Click to change.`}
       title={`Current theme: ${theme}. Click to change.`}
     >
-      {theme === "dark" ? <Moon size={18} /> : theme === "light" ? <Sun size={18} /> : <Monitor size={18} />}
+      {theme === "dark" ? (
+        <Moon size={18} />
+      ) : theme === "light" ? (
+        <Sun size={18} />
+      ) : (
+        <Monitor size={18} />
+      )}
     </button>
   );
 }
