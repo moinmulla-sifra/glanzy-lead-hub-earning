@@ -8,11 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import appCss from "../styles.css?url";
-import glanzyCss from "../glanzy.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -86,22 +83,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "Glanzy Lead Command Center" },
+        { title: "Branzly" },
         {
           name: "description",
-          content: "Private lead CRM for Glanzy Studio's saved brand leads.",
+          content:
+            "Discover brand opportunities and manage your outreach with Branzly.",
         },
-        { property: "og:title", content: "Glanzy Lead Command Center" },
+        { property: "og:title", content: "Branzly" },
         {
           property: "og:description",
-          content: "Private lead CRM for Glanzy Studio's saved brand leads.",
+          content:
+            "Discover brand opportunities and manage your outreach with Branzly.",
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [
         { rel: "stylesheet", href: appCss },
-        { rel: "stylesheet", href: glanzyCss },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
           rel: "preconnect",
@@ -145,8 +143,6 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="bottom-right" richColors />
-      <Analytics />
-      <SpeedInsights />
     </QueryClientProvider>
   );
 }

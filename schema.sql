@@ -1,0 +1,327 @@
+-- BRANZLY SUPABASE BACKEND SCHEMA
+-- Apply this in the Supabase SQL Editor
+
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 1. PROFILES
+CREATE TABLE profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name text,
+  avatar_url text,
+  account_type text CHECK (account_type IN ('creator', 'agency', 'admin')),
+  country text,
+  bio text,
+  primary_niche text,
+  content_categories text[],
+  platforms text[],
+  audience_range text,
+  website text,
+  social_links jsonb,
+  onboarding_completed boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- 2. WORKSPACES
+CREATE TABLE workspaces (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name text NOT NULL,
+  type text CHECK (type IN ('creator', 'agency')),
+  owner_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- 3. WORKSPACE MEMBERS
+CREATE TABLE workspace_members (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  role text CHECK (role IN ('owner', 'admin', 'member')) DEFAULT 'member',
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(workspace_id, user_id)
+);
+
+-- 4. BRANDS (Global Canonical)
+CREATE TABLE brands (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_name text NOT NULL,
+  normalized_name text UNIQUE,
+  domain text UNIQUE,
+  website text,
+  country text,
+  industry text,
+  product text,
+  company_stage text,
+  contact_person text,
+  contact_role text,
+  email text,
+  phone text,
+  linkedin text,
+  social_links jsonb,
+  recent_funding text,
+  recent_launch text,
+  why_now text,
+  marketing_activity text,
+  existing_creator_activity text,
+  influencer_fit_score integer,
+  budget_potential text,
+  lead_score integer,
+  priority text,
+  source text,
+  verification_status text,
+  last_verified timestamptz,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- 5. SAVED BRANDS
+CREATE TABLE saved_brands (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  brand_id uuid REFERENCES brands(id) ON DELETE CASCADE NOT NULL,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(workspace_id, brand_id)
+);
+
+-- 6. OUTREACH
+CREATE TABLE outreach (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  brand_id uuid REFERENCES brands(id) ON DELETE CASCADE NOT NULL,
+  status text CHECK (status IN ('saved', 'contacted', 'replied', 'interested', 'meeting', 'won', 'lost')) DEFAULT 'saved',
+  notes text,
+  next_action text,
+  contacted_at timestamptz,
+  last_activity_at timestamptz DEFAULT now(),
+  email_subject text,
+  email_body text,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now(),
+  UNIQUE(workspace_id, brand_id)
+);
+
+-- 7. OUTREACH ACTIVITY
+CREATE TABLE outreach_activity (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  outreach_id uuid REFERENCES outreach(id) ON DELETE CASCADE NOT NULL,
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  activity_type text NOT NULL,
+  note text,
+  metadata jsonb,
+  created_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+-- 8. SUBSCRIPTIONS
+CREATE TABLE subscriptions (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  plan text CHECK (plan IN ('free', 'pro', 'agency')) DEFAULT 'free',
+  status text DEFAULT 'active',
+  provider text,
+  provider_customer_id text,
+  provider_subscription_id text,
+  current_period_start timestamptz,
+  current_period_end timestamptz,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- 9. USAGE
+CREATE TABLE usage (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  workspace_id uuid REFERENCES workspaces(id) ON DELETE CASCADE NOT NULL,
+  period_start timestamptz NOT NULL,
+  period_end timestamptz NOT NULL,
+  searches integer DEFAULT 0,
+  brand_views integer DEFAULT 0,
+  saved_brands integer DEFAULT 0,
+  outreach_activity integer DEFAULT 0,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- 10. NOTIFICATION PREFERENCES
+CREATE TABLE notification_preferences (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  recommendation_notifications boolean DEFAULT true,
+  product_updates boolean DEFAULT true,
+  outreach_reminders boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- INDEXES
+CREATE INDEX idx_profiles_account_type ON profiles(account_type);
+CREATE INDEX idx_workspace_members_workspace_id ON workspace_members(workspace_id);
+CREATE INDEX idx_workspace_members_user_id ON workspace_members(user_id);
+CREATE INDEX idx_brands_domain ON brands(domain);
+CREATE INDEX idx_brands_normalized_name ON brands(normalized_name);
+CREATE INDEX idx_brands_industry ON brands(industry);
+CREATE INDEX idx_brands_country ON brands(country);
+CREATE INDEX idx_brands_lead_score ON brands(lead_score);
+CREATE INDEX idx_brands_influencer_fit_score ON brands(influencer_fit_score);
+CREATE INDEX idx_brands_updated_at ON brands(updated_at);
+CREATE INDEX idx_saved_brands_workspace_id ON saved_brands(workspace_id);
+CREATE INDEX idx_saved_brands_brand_id ON saved_brands(brand_id);
+CREATE INDEX idx_outreach_workspace_id ON outreach(workspace_id);
+CREATE INDEX idx_outreach_brand_id ON outreach(brand_id);
+CREATE INDEX idx_outreach_status ON outreach(status);
+CREATE INDEX idx_outreach_updated_at ON outreach(updated_at);
+CREATE INDEX idx_outreach_last_activity ON outreach(last_activity_at);
+CREATE INDEX idx_outreach_activity_outreach_id ON outreach_activity(outreach_id);
+CREATE INDEX idx_outreach_activity_workspace_id ON outreach_activity(workspace_id);
+CREATE INDEX idx_outreach_activity_created_at ON outreach_activity(created_at);
+
+-- ENABLE ROW LEVEL SECURITY
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workspaces ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workspace_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE brands ENABLE ROW LEVEL SECURITY;
+ALTER TABLE saved_brands ENABLE ROW LEVEL SECURITY;
+ALTER TABLE outreach ENABLE ROW LEVEL SECURITY;
+ALTER TABLE outreach_activity ENABLE ROW LEVEL SECURITY;
+ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE usage ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notification_preferences ENABLE ROW LEVEL SECURITY;
+
+-- FUNCTIONS & TRIGGERS
+
+-- Function to check if user is admin
+CREATE OR REPLACE FUNCTION is_admin() RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM profiles WHERE id = auth.uid() AND account_type = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to handle new user signup
+CREATE OR REPLACE FUNCTION handle_new_user() RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, avatar_url, account_type)
+  VALUES (
+    new.id,
+    new.raw_user_meta_data->>'full_name',
+    new.raw_user_meta_data->>'avatar_url',
+    COALESCE(new.raw_user_meta_data->>'account_type', 'creator')
+  );
+  
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger for new user signup
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE handle_new_user();
+
+-- Automatic Workspace Creation for Creators
+CREATE OR REPLACE FUNCTION create_creator_workspace() RETURNS trigger AS $$
+DECLARE
+  new_workspace_id uuid;
+BEGIN
+  IF new.account_type = 'creator' THEN
+    INSERT INTO public.workspaces (name, type, owner_id)
+    VALUES (COALESCE(new.full_name, 'My Workspace'), 'creator', new.id)
+    RETURNING id INTO new_workspace_id;
+    
+    INSERT INTO public.workspace_members (workspace_id, user_id, role)
+    VALUES (new_workspace_id, new.id, 'owner');
+  END IF;
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_profile_created_workspace ON profiles;
+CREATE TRIGGER on_profile_created_workspace
+  AFTER INSERT ON profiles
+  FOR EACH ROW EXECUTE PROCEDURE create_creator_workspace();
+
+
+-- RLS POLICIES
+
+-- Profiles
+CREATE POLICY "Users can view their own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Admins can view all profiles" ON profiles FOR SELECT USING (is_admin());
+CREATE POLICY "Users can update their own profile" ON profiles FOR UPDATE USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+-- Prevent users from making themselves admin via update
+CREATE POLICY "Users cannot elevate to admin" ON profiles FOR UPDATE USING (auth.uid() = id AND account_type != 'admin');
+
+-- Workspaces
+CREATE POLICY "Users can view workspaces they are members of" ON workspaces FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Admins can view all workspaces" ON workspaces FOR SELECT USING (is_admin());
+CREATE POLICY "Workspace owners/admins can update workspace" ON workspaces FOR UPDATE USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid() AND role IN ('owner', 'admin'))
+) WITH CHECK (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = workspaces.id AND workspace_members.user_id = auth.uid() AND role IN ('owner', 'admin'))
+);
+CREATE POLICY "Users can create workspaces" ON workspaces FOR INSERT WITH CHECK (auth.uid() = owner_id);
+
+-- Workspace Members
+CREATE POLICY "Users can view members of their workspaces" ON workspace_members FOR SELECT USING (
+  user_id = auth.uid() OR EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid())
+);
+CREATE POLICY "Admins can view all workspace members" ON workspace_members FOR SELECT USING (is_admin());
+CREATE POLICY "Workspace owners/admins can manage members" ON workspace_members FOR ALL USING (
+  EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid() AND wm.role IN ('owner', 'admin'))
+) WITH CHECK (
+  EXISTS (SELECT 1 FROM workspace_members wm WHERE wm.workspace_id = workspace_members.workspace_id AND wm.user_id = auth.uid() AND wm.role IN ('owner', 'admin'))
+);
+
+-- Brands
+CREATE POLICY "Authenticated users can view brands" ON brands FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Admins can manage brands" ON brands FOR ALL USING (is_admin()) WITH CHECK (is_admin());
+
+-- Saved Brands
+CREATE POLICY "Users can view their workspace saved brands" ON saved_brands FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Users can manage their workspace saved brands" ON saved_brands FOR ALL USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
+) WITH CHECK (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = saved_brands.workspace_id AND workspace_members.user_id = auth.uid())
+);
+
+-- Outreach
+CREATE POLICY "Users can view their workspace outreach" ON outreach FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Users can manage their workspace outreach" ON outreach FOR ALL USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
+) WITH CHECK (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach.workspace_id AND workspace_members.user_id = auth.uid())
+);
+
+-- Outreach Activity
+CREATE POLICY "Users can view their workspace outreach activity" ON outreach_activity FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Users can manage their workspace outreach activity" ON outreach_activity FOR ALL USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
+) WITH CHECK (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = outreach_activity.workspace_id AND workspace_members.user_id = auth.uid())
+);
+
+-- Subscriptions
+CREATE POLICY "Users can view their workspace subscriptions" ON subscriptions FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = subscriptions.workspace_id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Admins can manage subscriptions" ON subscriptions FOR ALL USING (is_admin()) WITH CHECK (is_admin());
+
+-- Usage
+CREATE POLICY "Users can view their workspace usage" ON usage FOR SELECT USING (
+  EXISTS (SELECT 1 FROM workspace_members WHERE workspace_members.workspace_id = usage.workspace_id AND workspace_members.user_id = auth.uid())
+);
+CREATE POLICY "Admins can manage usage" ON usage FOR ALL USING (is_admin()) WITH CHECK (is_admin());
+
+-- Notification Preferences
+CREATE POLICY "Users can view their own preferences" ON notification_preferences FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage their own preferences" ON notification_preferences FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
