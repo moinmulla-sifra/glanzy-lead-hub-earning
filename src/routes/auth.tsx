@@ -10,12 +10,14 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — Glanzy Lead Command Center" },
       {
         name: "description",
-        content: "Private sign-in for the Glanzy Studio brand lead command center.",
+        content:
+          "Private sign-in for the Glanzy Studio brand lead command center.",
       },
       { property: "og:title", content: "Sign in — Glanzy Lead Command Center" },
       {
         property: "og:description",
-        content: "Private sign-in for the Glanzy Studio brand lead command center.",
+        content:
+          "Private sign-in for the Glanzy Studio brand lead command center.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -44,7 +46,10 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     setError(null);
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     setBusy(false);
     if (authError) {
       setError(authError.message);
@@ -56,12 +61,20 @@ function AuthPage() {
   return (
     <div className="glanzy auth-wrap">
       <div className="auth-card">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div className="eyebrow">GLANZY STUDIO</div>
           <ThemeToggle />
         </div>
         <h1>Lead Command Center</h1>
-        <p className="sub">Private access. Sign in with your team account to continue.</p>
+        <p className="sub">
+          Private access. Sign in with your team account to continue.
+        </p>
         <form onSubmit={onSubmit}>
           <div className="auth-field">
             <label htmlFor="email">Email</label>

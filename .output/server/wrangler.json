@@ -1,22 +1,17 @@
 {
-  "compatibility_date": "2026-09-06",
+  "compatibility_date": "2026-09-07",
   "main": "index.mjs",
   "assets": {
     "binding": "ASSETS",
     "directory": "../public"
   },
   "name": "moinmulla-sifra-glanzy-lead-hub-earning",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "no_bundle": true,
   "rules": [
     {
       "type": "ESModule",
-      "globs": [
-        "**/*.mjs",
-        "**/*.js"
-      ]
+      "globs": ["**/*.mjs", "**/*.js"]
     }
   ]
 }

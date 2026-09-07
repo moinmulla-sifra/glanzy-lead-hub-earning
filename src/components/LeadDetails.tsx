@@ -13,7 +13,9 @@ export function badgeClass(value: string | null | undefined) {
 }
 
 export function fmt(value: unknown) {
-  return value === null || value === undefined || value === "" ? "—" : String(value);
+  return value === null || value === undefined || value === ""
+    ? "—"
+    : String(value);
 }
 
 function linkHref(href: string) {
@@ -66,7 +68,9 @@ export function LeadDetails({
         <div className="empty-state">
           <div className="empty-icon">✦</div>
           <h3>Select a brand</h3>
-          <p>Click any lead to view its full details and change the mail status.</p>
+          <p>
+            Click any lead to view its full details and change the mail status.
+          </p>
         </div>
       </aside>
     );
@@ -110,9 +114,16 @@ export function LeadDetails({
   }
 
   return (
-    <aside className={`details-panel${mobileOpen ? " mobile-open" : ""}`} aria-label={`${fmt(lead.company_name)} details`}>
+    <aside
+      className={`details-panel${mobileOpen ? " mobile-open" : ""}`}
+      aria-label={`${fmt(lead.company_name)} details`}
+    >
       <div className="mobile-details-nav">
-        <button className="mobile-back-btn" type="button" onClick={onMobileClose}>
+        <button
+          className="mobile-back-btn"
+          type="button"
+          onClick={onMobileClose}
+        >
           <ArrowLeft aria-hidden="true" />
           <span>Leads</span>
         </button>
@@ -126,7 +137,9 @@ export function LeadDetails({
               {fmt(lead.industry)} · {fmt(lead.company_stage)}
             </p>
           </div>
-          <span className={`badge ${badgeClass(lead.mail)}`}>{fmt(lead.mail)}</span>
+          <span className={`badge ${badgeClass(lead.mail)}`}>
+            {fmt(lead.mail)}
+          </span>
         </div>
       </div>
       <div className="details-body">
@@ -144,13 +157,17 @@ export function LeadDetails({
                 </option>
               ))}
             </select>
-            <button className="btn primary" onClick={saveMail} disabled={savingMail}>
+            <button
+              className="btn primary"
+              onClick={saveMail}
+              disabled={savingMail}
+            >
               {savingMail ? "Saving…" : "Save"}
             </button>
           </div>
           <div className="muted status-help">
-            Pending → Complete → Success. The Supabase trigger keeps the corresponding tables
-            synchronized.
+            Pending → Complete → Success. The Supabase trigger keeps the
+            corresponding tables synchronized.
           </div>
         </div>
 
@@ -174,7 +191,9 @@ export function LeadDetails({
               </button>
               <button
                 className="btn small secondary"
-                onClick={() => copy(`${subject ?? ""}\n\n${body ?? ""}`.trim(), "Email")}
+                onClick={() =>
+                  copy(`${subject ?? ""}\n\n${body ?? ""}`.trim(), "Email")
+                }
                 disabled={!subject && !body}
               >
                 <Copy aria-hidden="true" /> <span>Both</span>
@@ -189,7 +208,8 @@ export function LeadDetails({
                   setEditingEmail(!editingEmail);
                 }}
               >
-                {editingEmail ? null : <Pencil aria-hidden="true" />} <span>{editingEmail ? "Cancel" : "Edit"}</span>
+                {editingEmail ? null : <Pencil aria-hidden="true" />}{" "}
+                <span>{editingEmail ? "Cancel" : "Edit"}</span>
               </button>
             </div>
           </div>
@@ -214,7 +234,11 @@ export function LeadDetails({
                 />
               </div>
               <div className="section-actions email-save-actions">
-                <button className="btn primary small" onClick={saveEmail} disabled={savingEmail}>
+                <button
+                  className="btn primary small"
+                  onClick={saveEmail}
+                  disabled={savingEmail}
+                >
                   {savingEmail ? "Saving…" : "Save email"}
                 </button>
               </div>
@@ -297,8 +321,16 @@ export function LeadDetails({
           <div className="field-grid">
             <Field label="Recent funding" value={lead.recent_funding} full />
             <Field label="Recent launch" value={lead.recent_launch} full />
-            <Field label="Marketing activity" value={lead.marketing_activity} full />
-            <Field label="Creator activity" value={lead.existing_creator_activity} full />
+            <Field
+              label="Marketing activity"
+              value={lead.marketing_activity}
+              full
+            />
+            <Field
+              label="Creator activity"
+              value={lead.existing_creator_activity}
+              full
+            />
             <Field label="Next action" value={lead.next_action} full />
           </div>
         </div>
@@ -307,7 +339,15 @@ export function LeadDetails({
   );
 }
 
-function Field({ label, value, full }: { label: string; value: unknown; full?: boolean }) {
+function Field({
+  label,
+  value,
+  full,
+}: {
+  label: string;
+  value: unknown;
+  full?: boolean;
+}) {
   return (
     <div className={full ? "field full" : "field"}>
       <label>{label}</label>

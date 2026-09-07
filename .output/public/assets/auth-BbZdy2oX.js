@@ -1,1 +1,108 @@
-import{n as e}from"./rolldown-runtime-Bh1tDfsg.js";import{c as t,i as n,s as r}from"./theme-DjMA5HfB.js";import{n as i,t as a}from"./ThemeToggle-D-R7hces.js";var o=e(t()),s=r();function c(){let e=n(),[t,r]=(0,o.useState)(``),[c,l]=(0,o.useState)(``),[u,d]=(0,o.useState)(null),[f,p]=(0,o.useState)(!1);(0,o.useEffect)(()=>{let t=!0;return i.auth.getSession().then(({data:n})=>{t&&n.session&&e({to:`/`,replace:!0})}),()=>{t=!1}},[e]);async function m(n){n.preventDefault(),p(!0),d(null);let{error:r}=await i.auth.signInWithPassword({email:t,password:c});if(p(!1),r){d(r.message);return}e({to:`/`,replace:!0})}return(0,s.jsx)(`div`,{className:`glanzy auth-wrap`,children:(0,s.jsxs)(`div`,{className:`auth-card`,children:[(0,s.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`center`},children:[(0,s.jsx)(`div`,{className:`eyebrow`,children:`GLANZY STUDIO`}),(0,s.jsx)(a,{})]}),(0,s.jsx)(`h1`,{children:`Lead Command Center`}),(0,s.jsx)(`p`,{className:`sub`,children:`Private access. Sign in with your team account to continue.`}),(0,s.jsxs)(`form`,{onSubmit:m,children:[(0,s.jsxs)(`div`,{className:`auth-field`,children:[(0,s.jsx)(`label`,{htmlFor:`email`,children:`Email`}),(0,s.jsx)(`input`,{id:`email`,type:`email`,value:t,autoComplete:`email`,required:!0,onChange:e=>r(e.target.value)})]}),(0,s.jsxs)(`div`,{className:`auth-field`,children:[(0,s.jsx)(`label`,{htmlFor:`password`,children:`Password`}),(0,s.jsx)(`input`,{id:`password`,type:`password`,value:c,autoComplete:`current-password`,required:!0,onChange:e=>l(e.target.value)})]}),(0,s.jsx)(`button`,{className:`btn primary`,type:`submit`,disabled:f,children:f?`Signing in…`:`Sign in`}),u?(0,s.jsx)(`p`,{className:`auth-error`,children:u}):null]})]})})}export{c as component};
+import { n as e } from "./rolldown-runtime-Bh1tDfsg.js";
+import { c as t, i as n, s as r } from "./theme-DjMA5HfB.js";
+import { n as i, t as a } from "./ThemeToggle-D-R7hces.js";
+var o = e(t()),
+  s = r();
+function c() {
+  let e = n(),
+    [t, r] = (0, o.useState)(``),
+    [c, l] = (0, o.useState)(``),
+    [u, d] = (0, o.useState)(null),
+    [f, p] = (0, o.useState)(!1);
+  (0, o.useEffect)(() => {
+    let t = !0;
+    return (
+      i.auth.getSession().then(({ data: n }) => {
+        t && n.session && e({ to: `/`, replace: !0 });
+      }),
+      () => {
+        t = !1;
+      }
+    );
+  }, [e]);
+  async function m(n) {
+    (n.preventDefault(), p(!0), d(null));
+    let { error: r } = await i.auth.signInWithPassword({
+      email: t,
+      password: c,
+    });
+    if ((p(!1), r)) {
+      d(r.message);
+      return;
+    }
+    e({ to: `/`, replace: !0 });
+  }
+  return (0, s.jsx)(`div`, {
+    className: `glanzy auth-wrap`,
+    children: (0, s.jsxs)(`div`, {
+      className: `auth-card`,
+      children: [
+        (0, s.jsxs)(`div`, {
+          style: {
+            display: `flex`,
+            justifyContent: `space-between`,
+            alignItems: `center`,
+          },
+          children: [
+            (0, s.jsx)(`div`, {
+              className: `eyebrow`,
+              children: `GLANZY STUDIO`,
+            }),
+            (0, s.jsx)(a, {}),
+          ],
+        }),
+        (0, s.jsx)(`h1`, { children: `Lead Command Center` }),
+        (0, s.jsx)(`p`, {
+          className: `sub`,
+          children: `Private access. Sign in with your team account to continue.`,
+        }),
+        (0, s.jsxs)(`form`, {
+          onSubmit: m,
+          children: [
+            (0, s.jsxs)(`div`, {
+              className: `auth-field`,
+              children: [
+                (0, s.jsx)(`label`, { htmlFor: `email`, children: `Email` }),
+                (0, s.jsx)(`input`, {
+                  id: `email`,
+                  type: `email`,
+                  value: t,
+                  autoComplete: `email`,
+                  required: !0,
+                  onChange: (e) => r(e.target.value),
+                }),
+              ],
+            }),
+            (0, s.jsxs)(`div`, {
+              className: `auth-field`,
+              children: [
+                (0, s.jsx)(`label`, {
+                  htmlFor: `password`,
+                  children: `Password`,
+                }),
+                (0, s.jsx)(`input`, {
+                  id: `password`,
+                  type: `password`,
+                  value: c,
+                  autoComplete: `current-password`,
+                  required: !0,
+                  onChange: (e) => l(e.target.value),
+                }),
+              ],
+            }),
+            (0, s.jsx)(`button`, {
+              className: `btn primary`,
+              type: `submit`,
+              disabled: f,
+              children: f ? `Signing in…` : `Sign in`,
+            }),
+            u
+              ? (0, s.jsx)(`p`, { className: `auth-error`, children: u })
+              : null,
+          ],
+        }),
+      ],
+    }),
+  });
+}
+export { c as component };
