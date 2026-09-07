@@ -1,12 +1,13 @@
 import { n as __toESM } from "./_runtime.mjs";
 import { t as supabase } from "./_ssr/supabase-BEO93jmY.mjs";
-import { a as useQueryClient, n as useMutation, r as useQuery, s as require_react, t as useInfiniteQuery } from "./_libs/react+tanstack__react-query.mjs";
+import { a as useQueryClient, n as useMutation, s as require_react, t as useInfiniteQuery } from "./_libs/react+tanstack__react-query.mjs";
 import { g as Link, v as useNavigate } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { H as Check, N as Globe, O as LoaderCircle, V as ChevronDown, W as Calendar, _ as Search, d as Star, f as Sparkles, g as Send, l as Trash2, n as X, p as SlidersHorizontal } from "./_libs/lucide-react.mjs";
+import { t as useMonetization } from "./_ssr/useMonetization-C8GPMWTs.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
 import { t as BrandProfileModal } from "./_ssr/BrandProfileModal-D1ZK3FLE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.saved-CghEkveK.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.saved-DDIRc1JZ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$1 = "/app/applet/src/components/SavedView.tsx";
@@ -28,15 +29,7 @@ function SavedView({ userId, onStartOutreach }) {
 		const t = setTimeout(() => setDebouncedSearch(searchTerm.trim()), 400);
 		return () => clearTimeout(t);
 	}, [searchTerm]);
-	const workspaceId = useQuery({
-		queryKey: ["workspaces", userId],
-		enabled: !!userId,
-		queryFn: async () => {
-			const { data, error } = await supabase.from("workspace_members").select("workspace_id").eq("user_id", userId);
-			if (error) throw error;
-			return data.map((d) => d.workspace_id);
-		}
-	}).data?.[0];
+	const { workspaceId } = useMonetization(userId);
 	const fetchSavedBrands = async ({ pageParam = 0 }) => {
 		if (!workspaceId) throw new Error("No workspace found");
 		const pageSize = 12;
@@ -195,19 +188,19 @@ function SavedView({ userId, onStartOutreach }) {
 					children: "Saved Brands"
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 298,
+					lineNumber: 285,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 					className: "text-muted-foreground text-lg max-w-2xl",
 					children: "Keep track of the brands you want to explore or contact."
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 301,
+					lineNumber: 288,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 297,
+				lineNumber: 284,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -221,7 +214,7 @@ function SavedView({ userId, onStartOutreach }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 310,
+										lineNumber: 297,
 										columnNumber: 13
 									}, this),
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", {
@@ -232,7 +225,7 @@ function SavedView({ userId, onStartOutreach }) {
 										className: "w-full pl-10 pr-4 py-3 bg-transparent border-none focus:ring-0 text-base placeholder:text-muted-foreground"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 311,
+										lineNumber: 298,
 										columnNumber: 13
 									}, this),
 									searchTerm && /* @__PURE__ */ (void 0)("button", {
@@ -240,23 +233,23 @@ function SavedView({ userId, onStartOutreach }) {
 										className: "absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted",
 										children: /* @__PURE__ */ (void 0)(X, { size: 16 }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 323,
+											lineNumber: 310,
 											columnNumber: 17
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 319,
+										lineNumber: 306,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 309,
+								lineNumber: 296,
 								columnNumber: 11
 							}, this),
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "hidden sm:block w-px h-8 bg-border" }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 328,
+								lineNumber: 315,
 								columnNumber: 11
 							}, this),
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -269,7 +262,7 @@ function SavedView({ userId, onStartOutreach }) {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(SlidersHorizontal, { className: "w-4 h-4" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 341,
+											lineNumber: 328,
 											columnNumber: 15
 										}, this),
 										"Filters",
@@ -278,13 +271,13 @@ function SavedView({ userId, onStartOutreach }) {
 											children: activeFiltersCount
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 344,
+											lineNumber: 331,
 											columnNumber: 17
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 331,
+									lineNumber: 318,
 									columnNumber: 13
 								}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 									className: "relative group flex-1 sm:flex-none",
@@ -298,7 +291,7 @@ function SavedView({ userId, onStartOutreach }) {
 												children: "Recently Saved"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 356,
+												lineNumber: 343,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -306,7 +299,7 @@ function SavedView({ userId, onStartOutreach }) {
 												children: "Recently Updated"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 357,
+												lineNumber: 344,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -314,7 +307,7 @@ function SavedView({ userId, onStartOutreach }) {
 												children: "Highest Creator Fit"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 358,
+												lineNumber: 345,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -322,7 +315,7 @@ function SavedView({ userId, onStartOutreach }) {
 												children: "Highest Lead Score"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 359,
+												lineNumber: 346,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -330,33 +323,33 @@ function SavedView({ userId, onStartOutreach }) {
 												children: "Company A–Z"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 360,
+												lineNumber: 347,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 351,
+										lineNumber: 338,
 										columnNumber: 15
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ChevronDown, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none group-hover:text-foreground" }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 362,
+										lineNumber: 349,
 										columnNumber: 15
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 350,
+									lineNumber: 337,
 									columnNumber: 13
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 330,
+								lineNumber: 317,
 								columnNumber: 11
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 308,
+						lineNumber: 295,
 						columnNumber: 9
 					}, this),
 					isFilterOpen && /* @__PURE__ */ (void 0)("div", {
@@ -368,7 +361,7 @@ function SavedView({ userId, onStartOutreach }) {
 								children: "Advanced Filters"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 371,
+								lineNumber: 358,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("button", {
 								onClick: clearFilters,
@@ -376,12 +369,12 @@ function SavedView({ userId, onStartOutreach }) {
 								children: "Clear all"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 372,
+								lineNumber: 359,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 370,
+							lineNumber: 357,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
@@ -390,7 +383,7 @@ function SavedView({ userId, onStartOutreach }) {
 								children: category.replace("_", " ")
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 383,
+								lineNumber: 370,
 								columnNumber: 19
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar",
@@ -405,12 +398,12 @@ function SavedView({ userId, onStartOutreach }) {
                           `,
 												children: isActive && /* @__PURE__ */ (void 0)(Check, { className: "w-3 h-3 text-white" }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 408,
+													lineNumber: 395,
 													columnNumber: 31
 												}, this)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 398,
+												lineNumber: 385,
 												columnNumber: 27
 											}, this),
 											/* @__PURE__ */ (void 0)("span", {
@@ -418,7 +411,7 @@ function SavedView({ userId, onStartOutreach }) {
 												children: option
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 411,
+												lineNumber: 398,
 												columnNumber: 27
 											}, this),
 											/* @__PURE__ */ (void 0)("input", {
@@ -428,33 +421,33 @@ function SavedView({ userId, onStartOutreach }) {
 												onChange: () => toggleFilter(category, option)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 420,
+												lineNumber: 407,
 												columnNumber: 27
 											}, this)
 										]
 									}, option, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 394,
+										lineNumber: 381,
 										columnNumber: 25
 									}, this);
 								})
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 386,
+								lineNumber: 373,
 								columnNumber: 19
 							}, this)] }, category, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 382,
+								lineNumber: 369,
 								columnNumber: 17
 							}, this))
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 380,
+							lineNumber: 367,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 369,
+						lineNumber: 356,
 						columnNumber: 11
 					}, this),
 					activeFiltersCount > 0 && !isFilterOpen && /* @__PURE__ */ (void 0)("div", {
@@ -465,7 +458,7 @@ function SavedView({ userId, onStartOutreach }) {
 								children: "Active filters:"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 444,
+								lineNumber: 431,
 								columnNumber: 13
 							}, this),
 							Object.entries(activeFilters).map(([category, values]) => values.map((val) => /* @__PURE__ */ (void 0)("span", {
@@ -475,17 +468,17 @@ function SavedView({ userId, onStartOutreach }) {
 									className: "text-muted-foreground hover:text-foreground",
 									children: /* @__PURE__ */ (void 0)(X, { size: 12 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 460,
+										lineNumber: 447,
 										columnNumber: 21
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 454,
+									lineNumber: 441,
 									columnNumber: 19
 								}, this)]
 							}, `${category}-${val}`, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 449,
+								lineNumber: 436,
 								columnNumber: 17
 							}, this))),
 							/* @__PURE__ */ (void 0)("button", {
@@ -494,19 +487,19 @@ function SavedView({ userId, onStartOutreach }) {
 								children: "Clear all"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 465,
+								lineNumber: 452,
 								columnNumber: 13
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 443,
+						lineNumber: 430,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 307,
+				lineNumber: 294,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -515,17 +508,17 @@ function SavedView({ userId, onStartOutreach }) {
 					className: "text-sm font-medium text-muted-foreground",
 					children: isSavedLoading ? "Loading..." : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: totalCount === 1 ? "1 saved brand" : `${totalCount} saved brands` }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 481,
+						lineNumber: 468,
 						columnNumber: 13
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 477,
+					lineNumber: 464,
 					columnNumber: 9
 				}, this)
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 476,
+				lineNumber: 463,
 				columnNumber: 7
 			}, this),
 			isSavedError ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -533,7 +526,7 @@ function SavedView({ userId, onStartOutreach }) {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LoaderCircle, { className: "w-12 h-12 text-destructive mb-4" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 493,
+						lineNumber: 480,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -541,7 +534,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Couldn't load saved brands"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 494,
+						lineNumber: 481,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -549,7 +542,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Something went wrong while loading your saved opportunities."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 495,
+						lineNumber: 482,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
@@ -558,13 +551,13 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Try again"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 498,
+						lineNumber: 485,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 492,
+				lineNumber: 479,
 				columnNumber: 9
 			}, this) : isSavedLoading ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6",
@@ -573,47 +566,47 @@ function SavedView({ userId, onStartOutreach }) {
 					children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: [
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-7 w-2/3 bg-muted rounded-lg mb-4" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 517,
+							lineNumber: 504,
 							columnNumber: 17
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-5 w-1/3 bg-muted rounded-md mb-2" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 518,
+							lineNumber: 505,
 							columnNumber: 17
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-5 w-1/2 bg-muted rounded-md" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 519,
+							lineNumber: 506,
 							columnNumber: 17
 						}, this)
 					] }, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 516,
+						lineNumber: 503,
 						columnNumber: 15
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 						className: "flex gap-2 mt-6",
 						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-11 w-full bg-muted rounded-xl" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 522,
+							lineNumber: 509,
 							columnNumber: 17
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-11 w-full bg-muted rounded-xl" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 523,
+							lineNumber: 510,
 							columnNumber: 17
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 521,
+						lineNumber: 508,
 						columnNumber: 15
 					}, this)]
 				}, i, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 512,
+					lineNumber: 499,
 					columnNumber: 13
 				}, this))
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 510,
+				lineNumber: 497,
 				columnNumber: 9
 			}, this) : totalCount === 0 && !debouncedSearch && activeFiltersCount === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl h-[50vh]",
@@ -622,12 +615,12 @@ function SavedView({ userId, onStartOutreach }) {
 						className: "w-20 h-20 rounded-3xl bg-muted/50 flex items-center justify-center mb-6 border border-border/50 shadow-sm",
 						children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Star, { className: "w-10 h-10 text-muted-foreground" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 531,
+							lineNumber: 518,
 							columnNumber: 13
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 530,
+						lineNumber: 517,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -635,7 +628,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "No saved brands yet"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 533,
+						lineNumber: 520,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -643,7 +636,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Save interesting brands from Discover and they'll appear here."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 534,
+						lineNumber: 521,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
@@ -652,13 +645,13 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Discover Brands"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 537,
+						lineNumber: 524,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 529,
+				lineNumber: 516,
 				columnNumber: 9
 			}, this) : allSavedBrands.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl",
@@ -667,12 +660,12 @@ function SavedView({ userId, onStartOutreach }) {
 						className: "w-20 h-20 rounded-3xl bg-muted/50 flex items-center justify-center mb-6 border border-border/50 shadow-sm",
 						children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Search, { className: "w-10 h-10 text-muted-foreground" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 547,
+							lineNumber: 534,
 							columnNumber: 13
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 546,
+						lineNumber: 533,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -680,7 +673,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "No saved brands found"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 549,
+						lineNumber: 536,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -688,7 +681,7 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Try another search or clear your filters to see your saved brands."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 550,
+						lineNumber: 537,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
@@ -700,13 +693,13 @@ function SavedView({ userId, onStartOutreach }) {
 						children: "Clear search & filters"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 553,
+						lineNumber: 540,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 545,
+				lineNumber: 532,
 				columnNumber: 9
 			}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6",
@@ -739,19 +732,19 @@ function SavedView({ userId, onStartOutreach }) {
 										children: brand.company_name
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 589,
+										lineNumber: 576,
 										columnNumber: 23
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 										className: `flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider border shrink-0 ${getStatusColor(savedRecord.status)}`,
 										children: savedRecord.status
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 592,
+										lineNumber: 579,
 										columnNumber: 23
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 588,
+									lineNumber: 575,
 									columnNumber: 21
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -761,23 +754,23 @@ function SavedView({ userId, onStartOutreach }) {
 										children: brand.industry
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 603,
+										lineNumber: 590,
 										columnNumber: 25
 									}, this), brand.country && /* @__PURE__ */ (void 0)("span", {
 										className: "flex items-center gap-1 px-2.5 py-1 bg-muted/50 text-muted-foreground border border-border/50 rounded-lg text-xs font-medium",
 										children: [/* @__PURE__ */ (void 0)(Globe, { className: "w-3 h-3" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 609,
+											lineNumber: 596,
 											columnNumber: 27
 										}, this), brand.country]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 608,
+										lineNumber: 595,
 										columnNumber: 25
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 601,
+									lineNumber: 588,
 									columnNumber: 21
 								}, this),
 								signal && /* @__PURE__ */ (void 0)("div", {
@@ -788,17 +781,17 @@ function SavedView({ userId, onStartOutreach }) {
                         `,
 										children: [/* @__PURE__ */ (void 0)(Sparkles, { className: "w-3 h-3" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 628,
+											lineNumber: 615,
 											columnNumber: 27
 										}, this), signal.text]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 617,
+										lineNumber: 604,
 										columnNumber: 25
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 616,
+									lineNumber: 603,
 									columnNumber: 23
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -809,24 +802,24 @@ function SavedView({ userId, onStartOutreach }) {
 											className: "font-semibold text-foreground flex items-center gap-1",
 											children: [/* @__PURE__ */ (void 0)(Star, { className: "w-3 h-3 text-brand" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 639,
+												lineNumber: 626,
 												columnNumber: 31
 											}, this), " Creator Fit"]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 638,
+											lineNumber: 625,
 											columnNumber: 29
 										}, this), /* @__PURE__ */ (void 0)("span", {
 											className: "font-bold text-foreground",
 											children: [brand.influencer_fit_score, "/100"]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 642,
+											lineNumber: 629,
 											columnNumber: 29
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 637,
+										lineNumber: 624,
 										columnNumber: 27
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "h-1.5 w-full bg-muted rounded-full overflow-hidden",
@@ -835,23 +828,23 @@ function SavedView({ userId, onStartOutreach }) {
 											style: { width: `${brand.influencer_fit_score}%` }
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 647,
+											lineNumber: 634,
 											columnNumber: 29
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 646,
+										lineNumber: 633,
 										columnNumber: 27
 									}, this)] }, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 636,
+										lineNumber: 623,
 										columnNumber: 25
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 										className: "flex items-center gap-1 text-[11px] text-muted-foreground mt-2",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Calendar, { className: "w-3 h-3" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 657,
+												lineNumber: 644,
 												columnNumber: 25
 											}, this),
 											"Saved on",
@@ -860,12 +853,12 @@ function SavedView({ userId, onStartOutreach }) {
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 656,
+										lineNumber: 643,
 										columnNumber: 23
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 634,
+									lineNumber: 621,
 									columnNumber: 21
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -878,16 +871,16 @@ function SavedView({ userId, onStartOutreach }) {
 										title: "Remove from Saved",
 										children: removeMutation.isPending && removeMutation.variables === savedRecord.id ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LoaderCircle, { className: "w-4 h-4 animate-spin" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 678,
+											lineNumber: 665,
 											columnNumber: 27
 										}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Trash2, { className: "w-4 h-4" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 680,
+											lineNumber: 667,
 											columnNumber: 27
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 667,
+										lineNumber: 654,
 										columnNumber: 23
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 										onClick: () => {
@@ -896,34 +889,34 @@ function SavedView({ userId, onStartOutreach }) {
 										className: "flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-all shadow-sm",
 										children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Send, { className: "w-4 h-4" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 691,
+											lineNumber: 678,
 											columnNumber: 25
 										}, this), "Start Outreach"]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 683,
+										lineNumber: 670,
 										columnNumber: 23
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 663,
+									lineNumber: 650,
 									columnNumber: 21
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 584,
+							lineNumber: 571,
 							columnNumber: 19
 						}, this)
 					}, savedRecord.id, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 580,
+						lineNumber: 567,
 						columnNumber: 17
 					}, this);
 				})
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 565,
+				lineNumber: 552,
 				columnNumber: 11
 			}, this), hasNextPage && /* @__PURE__ */ (void 0)("div", {
 				className: "flex justify-center mt-8",
@@ -933,25 +926,25 @@ function SavedView({ userId, onStartOutreach }) {
 					className: "flex items-center gap-2 px-8 py-3 bg-muted text-foreground rounded-xl text-sm font-semibold hover:bg-muted/80 transition-colors border border-border/50 shadow-sm disabled:opacity-50",
 					children: isFetchingNextPage ? /* @__PURE__ */ (void 0)(import_jsx_dev_runtime.Fragment, { children: [/* @__PURE__ */ (void 0)(LoaderCircle, { className: "w-4 h-4 animate-spin" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 710,
+						lineNumber: 697,
 						columnNumber: 21
 					}, this), "Loading more..."] }, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 709,
+						lineNumber: 696,
 						columnNumber: 19
 					}, this) : "Load More Brands"
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 703,
+					lineNumber: 690,
 					columnNumber: 15
 				}, this)
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 702,
+				lineNumber: 689,
 				columnNumber: 13
 			}, this)] }, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 564,
+				lineNumber: 551,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(BrandProfileModal, {
@@ -974,13 +967,13 @@ function SavedView({ userId, onStartOutreach }) {
 				}
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 723,
+				lineNumber: 710,
 				columnNumber: 7
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 295,
+		lineNumber: 282,
 		columnNumber: 5
 	}, this);
 }

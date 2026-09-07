@@ -13,7 +13,8 @@ export function useMonetization(userId: string | null) {
         .select("workspace_id")
         .eq("user_id", userId!)
         .limit(1)
-        .single();
+        .maybeSingle();
+
       if (error) throw error;
       return data;
     },

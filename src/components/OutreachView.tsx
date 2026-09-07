@@ -8,6 +8,7 @@ import {
   type Brand,
 } from "@/lib/supabase";
 import { toast } from "sonner";
+import { useMonetization } from "@/lib/useMonetization";
 import {
   ExternalLink,
   Mail,
@@ -84,20 +85,7 @@ export function OutreachView({
     return () => clearTimeout(t);
   }, [searchTerm]);
 
-  const workspacesQuery = useQuery({
-    queryKey: ["workspaces", userId],
-    enabled: !!userId,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", userId!);
-      if (error) throw error;
-      return data.map((d) => d.workspace_id);
-    },
-  });
-
-  const workspaceId = workspacesQuery.data?.[0];
+  const { workspaceId } = useMonetization(userId);
 
   const outreachQuery = useQuery({
     queryKey: ["outreach", workspaceId],

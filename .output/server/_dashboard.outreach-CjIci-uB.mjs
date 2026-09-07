@@ -4,9 +4,10 @@ import { a as useQueryClient, n as useMutation, r as useQuery, s as require_reac
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { E as Mail, F as ExternalLink, H as Check, K as Briefcase, N as Globe, P as FileText, R as Clock, W as Calendar, Y as ArrowRight, Z as Activity, _ as Search, b as Phone, g as Send, i as User, j as LayoutGrid, k as List, n as X, v as Save, w as MessageSquare, z as CircleCheck } from "./_libs/lucide-react.mjs";
+import { t as useMonetization } from "./_ssr/useMonetization-C8GPMWTs.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
-import { t as Route } from "./_dashboard.outreach-DNwm7jRo.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.outreach-C7OQnaNK.js
+import { t as Route } from "./_dashboard.outreach-CK1Y5Fy8.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.outreach-CjIci-uB.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$1 = "/app/applet/src/components/OutreachView.tsx";
@@ -42,15 +43,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 		const t = setTimeout(() => setDebouncedSearch(searchTerm.trim()), 400);
 		return () => clearTimeout(t);
 	}, [searchTerm]);
-	const workspaceId = useQuery({
-		queryKey: ["workspaces", userId],
-		enabled: !!userId,
-		queryFn: async () => {
-			const { data, error } = await supabase.from("workspace_members").select("workspace_id").eq("user_id", userId);
-			if (error) throw error;
-			return data.map((d) => d.workspace_id);
-		}
-	}).data?.[0];
+	const { workspaceId } = useMonetization(userId);
 	const outreachQuery = useQuery({
 		queryKey: ["outreach", workspaceId],
 		enabled: !!workspaceId,
@@ -255,19 +248,19 @@ function OutreachView({ userId, defaultSelectedId }) {
 							children: "Outreach"
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 393,
+							lineNumber: 381,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 							className: "text-muted-foreground text-lg max-w-2xl",
 							children: "Manage your brand conversations and keep every opportunity organized."
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 396,
+							lineNumber: 384,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 392,
+						lineNumber: 380,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 						className: "flex items-center bg-card p-1 rounded-xl border border-border/60 shadow-sm subtle-shadow",
@@ -276,34 +269,34 @@ function OutreachView({ userId, defaultSelectedId }) {
 							className: `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${viewMode === "pipeline" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}`,
 							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LayoutGrid, { size: 16 }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 406,
+								lineNumber: 394,
 								columnNumber: 15
 							}, this), " Pipeline"]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 402,
+							lineNumber: 390,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 							onClick: () => setViewMode("list"),
 							className: `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${viewMode === "list" ? "bg-muted text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}`,
 							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(List, { size: 16 }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 412,
+								lineNumber: 400,
 								columnNumber: 15
 							}, this), " List"]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 408,
+							lineNumber: 396,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 401,
+						lineNumber: 389,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 391,
+					lineNumber: 379,
 					columnNumber: 9
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -316,7 +309,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Activity, { size: 16 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 421,
+										lineNumber: 409,
 										columnNumber: 15
 									}, this),
 									" ",
@@ -325,25 +318,25 @@ function OutreachView({ userId, defaultSelectedId }) {
 										children: "Active Outreach"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 422,
+										lineNumber: 410,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 420,
+								lineNumber: 408,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 								className: "text-2xl font-bold text-foreground",
 								children: metrics.active
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 424,
+								lineNumber: 412,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 419,
+							lineNumber: 407,
 							columnNumber: 11
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -353,7 +346,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(MessageSquare, { size: 16 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 430,
+										lineNumber: 418,
 										columnNumber: 15
 									}, this),
 									" ",
@@ -362,25 +355,25 @@ function OutreachView({ userId, defaultSelectedId }) {
 										children: "Replied"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 431,
+										lineNumber: 419,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 429,
+								lineNumber: 417,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 								className: "text-2xl font-bold text-foreground",
 								children: metrics.replied
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 433,
+								lineNumber: 421,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 428,
+							lineNumber: 416,
 							columnNumber: 11
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -390,7 +383,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Calendar, { size: 16 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 439,
+										lineNumber: 427,
 										columnNumber: 15
 									}, this),
 									" ",
@@ -399,25 +392,25 @@ function OutreachView({ userId, defaultSelectedId }) {
 										children: "Meetings"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 440,
+										lineNumber: 428,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 438,
+								lineNumber: 426,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 								className: "text-2xl font-bold text-foreground",
 								children: metrics.meetings
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 442,
+								lineNumber: 430,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 437,
+							lineNumber: 425,
 							columnNumber: 11
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -427,7 +420,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(CircleCheck, { size: 16 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 448,
+										lineNumber: 436,
 										columnNumber: 15
 									}, this),
 									" ",
@@ -436,31 +429,31 @@ function OutreachView({ userId, defaultSelectedId }) {
 										children: "Won"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 449,
+										lineNumber: 437,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 447,
+								lineNumber: 435,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 								className: "text-2xl font-bold text-foreground",
 								children: metrics.won
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 451,
+								lineNumber: 439,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 446,
+							lineNumber: 434,
 							columnNumber: 11
 						}, this)
 					]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 418,
+					lineNumber: 406,
 					columnNumber: 9
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -470,7 +463,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 458,
+								lineNumber: 446,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", {
@@ -481,7 +474,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 								className: "w-full pl-10 pr-4 py-2.5 bg-transparent border-none focus:ring-0 text-base placeholder:text-muted-foreground"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 459,
+								lineNumber: 447,
 								columnNumber: 13
 							}, this),
 							searchTerm && /* @__PURE__ */ (void 0)("button", {
@@ -489,47 +482,47 @@ function OutreachView({ userId, defaultSelectedId }) {
 								className: "absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted",
 								children: /* @__PURE__ */ (void 0)(X, { size: 16 }, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 471,
+									lineNumber: 459,
 									columnNumber: 17
 								}, this)
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 467,
+								lineNumber: 455,
 								columnNumber: 15
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 457,
+						lineNumber: 445,
 						columnNumber: 11
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 456,
+					lineNumber: 444,
 					columnNumber: 9
 				}, this)
 			]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 390,
+			lineNumber: 378,
 			columnNumber: 7
 		}, this), outreachQuery.isLoading ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 			className: "flex-1 flex flex-col items-center justify-center p-12 bg-card border border-border/60 rounded-3xl",
 			children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-8 w-8 animate-spin rounded-full border-4 border-brand border-t-transparent mb-4" }, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 480,
+				lineNumber: 468,
 				columnNumber: 11
 			}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 				className: "font-semibold text-muted-foreground",
 				children: "Loading your pipeline..."
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 481,
+				lineNumber: 469,
 				columnNumber: 11
 			}, this)]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 479,
+			lineNumber: 467,
 			columnNumber: 9
 		}, this) : allRecords.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 			className: "flex-1 flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl",
@@ -538,12 +531,12 @@ function OutreachView({ userId, defaultSelectedId }) {
 					className: "w-20 h-20 rounded-3xl bg-muted/50 flex items-center justify-center mb-6 border border-border/50 shadow-sm",
 					children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Briefcase, { className: "w-10 h-10 text-muted-foreground" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 488,
+						lineNumber: 476,
 						columnNumber: 13
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 487,
+					lineNumber: 475,
 					columnNumber: 11
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -551,7 +544,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 					children: "No outreach yet"
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 490,
+					lineNumber: 478,
 					columnNumber: 11
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -559,7 +552,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 					children: "Choose a brand from Discover and start your first conversation."
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 491,
+					lineNumber: 479,
 					columnNumber: 11
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
@@ -567,18 +560,18 @@ function OutreachView({ userId, defaultSelectedId }) {
 					className: "px-6 py-3 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-colors shadow-sm flex items-center gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Globe, { size: 18 }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 498,
+						lineNumber: 486,
 						columnNumber: 13
 					}, this), " Discover Brands"]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 494,
+					lineNumber: 482,
 					columnNumber: 11
 				}, this)
 			]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 486,
+			lineNumber: 474,
 			columnNumber: 9
 		}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 			className: "flex-1 flex flex-col min-h-0 relative",
@@ -594,19 +587,19 @@ function OutreachView({ userId, defaultSelectedId }) {
 								children: "Active Pipeline"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 508,
+								lineNumber: 496,
 								columnNumber: 19
 							}, this), /* @__PURE__ */ (void 0)("p", {
 								className: "text-xs text-muted-foreground",
 								children: [filteredRecords.length, " opportunities"]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 509,
+								lineNumber: 497,
 								columnNumber: 19
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 507,
+							lineNumber: 495,
 							columnNumber: 17
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar",
@@ -623,19 +616,19 @@ function OutreachView({ userId, defaultSelectedId }) {
 											children: row.brand?.company_name || "Unknown Brand"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 525,
+											lineNumber: 513,
 											columnNumber: 27
 										}, this), /* @__PURE__ */ (void 0)("span", {
 											className: `text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap border ${getStatusColor(row.status)}`,
 											children: row.status
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 528,
+											lineNumber: 516,
 											columnNumber: 27
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 524,
+										lineNumber: 512,
 										columnNumber: 25
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "flex flex-col gap-1 text-xs text-muted-foreground",
@@ -646,7 +639,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 												children: [
 													/* @__PURE__ */ (void 0)(Briefcase, { size: 12 }, void 0, false, {
 														fileName: _jsxFileName$1,
-														lineNumber: 537,
+														lineNumber: 525,
 														columnNumber: 31
 													}, this),
 													" ",
@@ -654,19 +647,19 @@ function OutreachView({ userId, defaultSelectedId }) {
 												]
 											}, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 536,
+												lineNumber: 524,
 												columnNumber: 29
 											}, this), /* @__PURE__ */ (void 0)("span", { children: new Date(row.updated_at).toLocaleDateString(void 0, {
 												month: "short",
 												day: "numeric"
 											}) }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 540,
+												lineNumber: 528,
 												columnNumber: 29
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 535,
+											lineNumber: 523,
 											columnNumber: 27
 										}, this), row.next_action && /* @__PURE__ */ (void 0)("span", {
 											className: "text-foreground/80 font-medium truncate flex items-center gap-1",
@@ -676,7 +669,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 													className: "text-brand"
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 549,
+													lineNumber: 537,
 													columnNumber: 31
 												}, this),
 												" ",
@@ -684,28 +677,28 @@ function OutreachView({ userId, defaultSelectedId }) {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 548,
+											lineNumber: 536,
 											columnNumber: 29
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 534,
+										lineNumber: 522,
 										columnNumber: 25
 									}, this)]
 								}, row.id, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 517,
+									lineNumber: 505,
 									columnNumber: 23
 								}, this);
 							})
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 513,
+							lineNumber: 501,
 							columnNumber: 17
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 506,
+						lineNumber: 494,
 						columnNumber: 15
 					}, this), /* @__PURE__ */ (void 0)("div", {
 						className: "flex-1 flex flex-col bg-card rounded-3xl border border-border/60 subtle-shadow overflow-hidden min-h-0",
@@ -737,7 +730,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 							})
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 563,
+							lineNumber: 551,
 							columnNumber: 19
 						}, this) : /* @__PURE__ */ (void 0)("div", {
 							className: "flex-1 flex flex-col items-center justify-center text-center p-12",
@@ -746,12 +739,12 @@ function OutreachView({ userId, defaultSelectedId }) {
 									className: "w-16 h-16 rounded-2xl bg-muted/50 flex items-center justify-center mb-4 border border-border/50 shadow-sm",
 									children: /* @__PURE__ */ (void 0)(Briefcase, { className: "w-8 h-8 text-muted-foreground" }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 600,
+										lineNumber: 588,
 										columnNumber: 23
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 599,
+									lineNumber: 587,
 									columnNumber: 21
 								}, this),
 								/* @__PURE__ */ (void 0)("h3", {
@@ -759,7 +752,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 									children: "Select an opportunity"
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 602,
+									lineNumber: 590,
 									columnNumber: 21
 								}, this),
 								/* @__PURE__ */ (void 0)("p", {
@@ -767,23 +760,23 @@ function OutreachView({ userId, defaultSelectedId }) {
 									children: "Choose a brand from the list to view details and manage outreach."
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 605,
+									lineNumber: 593,
 									columnNumber: 21
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 598,
+							lineNumber: 586,
 							columnNumber: 19
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 561,
+						lineNumber: 549,
 						columnNumber: 15
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 504,
+					lineNumber: 492,
 					columnNumber: 13
 				}, this),
 				viewMode === "pipeline" && /* @__PURE__ */ (void 0)("div", {
@@ -808,17 +801,17 @@ function OutreachView({ userId, defaultSelectedId }) {
 										children: colRecords.length
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 636,
+										lineNumber: 624,
 										columnNumber: 25
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 634,
+									lineNumber: 622,
 									columnNumber: 23
 								}, this)
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 633,
+								lineNumber: 621,
 								columnNumber: 21
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar",
@@ -833,12 +826,12 @@ function OutreachView({ userId, defaultSelectedId }) {
 												children: record.brand?.company_name
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 649,
+												lineNumber: 637,
 												columnNumber: 29
 											}, this)
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 648,
+											lineNumber: 636,
 											columnNumber: 27
 										}, this),
 										/* @__PURE__ */ (void 0)("p", {
@@ -846,7 +839,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 											children: [
 												/* @__PURE__ */ (void 0)(Briefcase, { size: 12 }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 654,
+													lineNumber: 642,
 													columnNumber: 29
 												}, this),
 												" ",
@@ -854,7 +847,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 653,
+											lineNumber: 641,
 											columnNumber: 27
 										}, this),
 										record.next_action && /* @__PURE__ */ (void 0)("div", {
@@ -865,7 +858,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 													className: "text-brand shrink-0"
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 660,
+													lineNumber: 648,
 													columnNumber: 31
 												}, this),
 												" ",
@@ -874,13 +867,13 @@ function OutreachView({ userId, defaultSelectedId }) {
 													children: record.next_action
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 664,
+													lineNumber: 652,
 													columnNumber: 31
 												}, this)
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 659,
+											lineNumber: 647,
 											columnNumber: 29
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -890,7 +883,7 @@ function OutreachView({ userId, defaultSelectedId }) {
 												children: [
 													/* @__PURE__ */ (void 0)(Clock, { size: 12 }, void 0, false, {
 														fileName: _jsxFileName$1,
-														lineNumber: 672,
+														lineNumber: 660,
 														columnNumber: 31
 													}, this),
 													" ",
@@ -898,14 +891,14 @@ function OutreachView({ userId, defaultSelectedId }) {
 												]
 											}, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 671,
+												lineNumber: 659,
 												columnNumber: 29
 											}, this), record.brand?.lead_score != null && /* @__PURE__ */ (void 0)("span", {
 												className: "text-brand flex items-center gap-1",
 												children: [
 													/* @__PURE__ */ (void 0)(Activity, { size: 12 }, void 0, false, {
 														fileName: _jsxFileName$1,
-														lineNumber: 677,
+														lineNumber: 665,
 														columnNumber: 33
 													}, this),
 													" Score",
@@ -914,34 +907,34 @@ function OutreachView({ userId, defaultSelectedId }) {
 												]
 											}, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 676,
+												lineNumber: 664,
 												columnNumber: 31
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 670,
+											lineNumber: 658,
 											columnNumber: 27
 										}, this)
 									]
 								}, record.id, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 643,
+									lineNumber: 631,
 									columnNumber: 25
 								}, this))
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 641,
+								lineNumber: 629,
 								columnNumber: 21
 							}, this)]
 						}, colStatus, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 629,
+							lineNumber: 617,
 							columnNumber: 19
 						}, this);
 					})
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 616,
+					lineNumber: 604,
 					columnNumber: 13
 				}, this),
 				viewMode === "pipeline" && selected && /* @__PURE__ */ (void 0)("div", {
@@ -976,28 +969,28 @@ function OutreachView({ userId, defaultSelectedId }) {
 							})
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 695,
+							lineNumber: 683,
 							columnNumber: 17
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 694,
+						lineNumber: 682,
 						columnNumber: 15
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 693,
+					lineNumber: 681,
 					columnNumber: 13
 				}, this)
 			]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 502,
+			lineNumber: 490,
 			columnNumber: 9
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 388,
+		lineNumber: 376,
 		columnNumber: 5
 	}, this);
 }
@@ -1041,7 +1034,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							children: outreach.brand?.company_name
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 800,
+							lineNumber: 788,
 							columnNumber: 13
 						}, this), outreach.brand?.website && /* @__PURE__ */ (void 0)("a", {
 							href: outreach.brand.website,
@@ -1050,17 +1043,17 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							className: "text-muted-foreground hover:text-brand transition-colors p-1 bg-muted rounded-md",
 							children: /* @__PURE__ */ (void 0)(ExternalLink, { size: 16 }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 810,
+								lineNumber: 798,
 								columnNumber: 17
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 804,
+							lineNumber: 792,
 							columnNumber: 15
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 799,
+						lineNumber: 787,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 						className: "text-sm text-muted-foreground flex items-center gap-4 flex-wrap",
@@ -1069,7 +1062,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							children: [
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Briefcase, { size: 14 }, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 816,
+									lineNumber: 804,
 									columnNumber: 15
 								}, this),
 								" ",
@@ -1077,14 +1070,14 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 815,
+							lineNumber: 803,
 							columnNumber: 13
 						}, this), outreach.brand?.country && /* @__PURE__ */ (void 0)("span", {
 							className: "flex items-center gap-1.5",
 							children: [
 								/* @__PURE__ */ (void 0)(Globe, { size: 14 }, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 821,
+									lineNumber: 809,
 									columnNumber: 17
 								}, this),
 								" ",
@@ -1092,17 +1085,17 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 820,
+							lineNumber: 808,
 							columnNumber: 15
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 814,
+						lineNumber: 802,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 798,
+					lineNumber: 786,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 					className: "flex items-center gap-3 shrink-0",
@@ -1113,7 +1106,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							children: "Current Status"
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 829,
+							lineNumber: 817,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("select", {
 							value: outreach.status,
@@ -1124,39 +1117,39 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 								children: s
 							}, s, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 838,
+								lineNumber: 826,
 								columnNumber: 17
 							}, this))
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 832,
+							lineNumber: 820,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 828,
+						lineNumber: 816,
 						columnNumber: 11
 					}, this), onClose && /* @__PURE__ */ (void 0)("button", {
 						onClick: onClose,
 						className: "p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors ml-2 self-start flex",
 						children: /* @__PURE__ */ (void 0)(X, { size: 20 }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 849,
+							lineNumber: 837,
 							columnNumber: 15
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 845,
+						lineNumber: 833,
 						columnNumber: 13
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 827,
+					lineNumber: 815,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 797,
+				lineNumber: 785,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -1183,7 +1176,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 					children: [
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(t.icon, { size: 16 }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 873,
+							lineNumber: 861,
 							columnNumber: 13
 						}, this),
 						" ",
@@ -1191,12 +1184,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 					]
 				}, t.id, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 862,
+					lineNumber: 850,
 					columnNumber: 11
 				}, this))
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 856,
+				lineNumber: 844,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -1215,12 +1208,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "text-brand"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 886,
+										lineNumber: 874,
 										columnNumber: 19
 									}, this), " Key Contact"]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 885,
+									lineNumber: 873,
 									columnNumber: 17
 								}, this), outreach.brand?.contact_person ? /* @__PURE__ */ (void 0)("div", {
 									className: "space-y-3",
@@ -1229,18 +1222,18 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										children: outreach.brand.contact_person
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 891,
+										lineNumber: 879,
 										columnNumber: 23
 									}, this), outreach.brand.contact_role && /* @__PURE__ */ (void 0)("p", {
 										className: "text-sm text-muted-foreground",
 										children: outreach.brand.contact_role
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 895,
+										lineNumber: 883,
 										columnNumber: 25
 									}, this)] }, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 890,
+										lineNumber: 878,
 										columnNumber: 21
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "flex flex-col gap-2 pt-2",
@@ -1251,24 +1244,24 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 												className: "w-8 h-8 rounded-full bg-brand/10 text-brand flex items-center justify-center shrink-0",
 												children: /* @__PURE__ */ (void 0)(Mail, { size: 14 }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 907,
+													lineNumber: 895,
 													columnNumber: 29
 												}, this)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 906,
+												lineNumber: 894,
 												columnNumber: 27
 											}, this), /* @__PURE__ */ (void 0)("span", {
 												className: "truncate",
 												children: outreach.brand.email
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 909,
+												lineNumber: 897,
 												columnNumber: 27
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 902,
+											lineNumber: 890,
 											columnNumber: 25
 										}, this), outreach.brand.phone && /* @__PURE__ */ (void 0)("a", {
 											href: `tel:${outreach.brand.phone}`,
@@ -1277,31 +1270,31 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 												className: "w-8 h-8 rounded-full bg-brand/10 text-brand flex items-center justify-center shrink-0",
 												children: /* @__PURE__ */ (void 0)(Phone, { size: 14 }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 920,
+													lineNumber: 908,
 													columnNumber: 29
 												}, this)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 919,
+												lineNumber: 907,
 												columnNumber: 27
 											}, this), /* @__PURE__ */ (void 0)("span", { children: outreach.brand.phone }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 922,
+												lineNumber: 910,
 												columnNumber: 27
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 915,
+											lineNumber: 903,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 900,
+										lineNumber: 888,
 										columnNumber: 21
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 889,
+									lineNumber: 877,
 									columnNumber: 19
 								}, this) : /* @__PURE__ */ (void 0)("div", {
 									className: "h-full min-h-[100px] flex items-center justify-center text-center",
@@ -1310,17 +1303,17 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										children: "No contact information available for this brand."
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 929,
+										lineNumber: 917,
 										columnNumber: 21
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 928,
+									lineNumber: 916,
 									columnNumber: 19
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 884,
+								lineNumber: 872,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "bg-card rounded-2xl p-5 border border-border/60 subtle-shadow flex flex-col",
@@ -1331,12 +1324,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "text-brand"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 939,
+										lineNumber: 927,
 										columnNumber: 19
 									}, this), " Next Action"]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 938,
+									lineNumber: 926,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "flex-1 flex flex-col gap-3",
@@ -1347,7 +1340,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "w-full px-3 py-2 bg-transparent border-b border-border/50 focus:border-brand focus:outline-none text-sm font-medium transition-colors"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 942,
+										lineNumber: 930,
 										columnNumber: 19
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "mt-auto flex justify-end",
@@ -1358,27 +1351,27 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 											children: "Save Action"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 949,
+											lineNumber: 937,
 											columnNumber: 21
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 948,
+										lineNumber: 936,
 										columnNumber: 19
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 941,
+									lineNumber: 929,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 937,
+								lineNumber: 925,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 882,
+							lineNumber: 870,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "bg-card rounded-2xl p-5 border border-border/60 subtle-shadow flex flex-col min-h-[250px]",
@@ -1390,12 +1383,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "text-brand"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 964,
+										lineNumber: 952,
 										columnNumber: 17
 									}, this), " Workspace Notes"]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 963,
+									lineNumber: 951,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("p", {
@@ -1403,7 +1396,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 									children: "These notes are private to your workspace and not visible to the brand."
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 967,
+									lineNumber: 955,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("textarea", {
@@ -1413,7 +1406,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 									className: "w-full flex-1 min-h-[150px] p-4 bg-muted/30 border border-border/50 rounded-xl focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-sm leading-relaxed resize-y custom-scrollbar"
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 971,
+									lineNumber: 959,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("div", {
@@ -1424,28 +1417,28 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "flex items-center gap-2 px-5 py-2.5 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-colors shadow-sm disabled:opacity-50 disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
 										children: [/* @__PURE__ */ (void 0)(Save, { size: 14 }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 983,
+											lineNumber: 971,
 											columnNumber: 19
 										}, this), " Save Notes"]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 978,
+										lineNumber: 966,
 										columnNumber: 17
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 977,
+									lineNumber: 965,
 									columnNumber: 15
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 962,
+							lineNumber: 950,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 881,
+						lineNumber: 869,
 						columnNumber: 11
 					}, this),
 					activeTab === "email" && /* @__PURE__ */ (void 0)("div", {
@@ -1460,29 +1453,29 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "text-brand"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 994,
+										lineNumber: 982,
 										columnNumber: 17
 									}, this), " Email Drafter"]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 993,
+									lineNumber: 981,
 									columnNumber: 15
 								}, this), outreach.status === "Saved" && /* @__PURE__ */ (void 0)("button", {
 									onClick: onMarkContacted,
 									className: "flex items-center gap-2 px-4 py-2 bg-brand/10 text-brand rounded-xl text-sm font-semibold hover:bg-brand/20 transition-colors border border-brand/20",
 									children: [/* @__PURE__ */ (void 0)(Check, { size: 14 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1001,
+										lineNumber: 989,
 										columnNumber: 19
 									}, this), " Mark as Contacted"]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 997,
+									lineNumber: 985,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 992,
+								lineNumber: 980,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -1494,7 +1487,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										children: "Subject"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1008,
+										lineNumber: 996,
 										columnNumber: 17
 									}, this), /* @__PURE__ */ (void 0)("input", {
 										value: emailSubject,
@@ -1503,12 +1496,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "w-full px-4 py-3 bg-muted/30 border border-border/50 rounded-xl focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-sm font-semibold transition-colors"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1011,
+										lineNumber: 999,
 										columnNumber: 17
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1007,
+									lineNumber: 995,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "flex-1 flex flex-col space-y-1.5 min-h-[300px]",
@@ -1519,12 +1512,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 											children: "Use personalized details for best results"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1022,
+											lineNumber: 1010,
 											columnNumber: 19
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1020,
+										lineNumber: 1008,
 										columnNumber: 17
 									}, this), /* @__PURE__ */ (void 0)("textarea", {
 										value: emailBody,
@@ -1533,17 +1526,17 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										className: "w-full flex-1 p-4 bg-muted/30 border border-border/50 rounded-xl focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-sm leading-relaxed resize-y custom-scrollbar"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1026,
+										lineNumber: 1014,
 										columnNumber: 17
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1019,
+									lineNumber: 1007,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 1006,
+								lineNumber: 994,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -1553,7 +1546,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 									children: "Branzly does not send emails automatically. Copy and send via your client."
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1036,
+									lineNumber: 1024,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "flex flex-wrap items-center gap-2",
@@ -1567,7 +1560,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 											children: "Copy Content"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1041,
+											lineNumber: 1029,
 											columnNumber: 17
 										}, this),
 										/* @__PURE__ */ (void 0)("button", {
@@ -1576,12 +1569,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 											className: "flex items-center gap-2 px-4 py-2.5 bg-muted text-foreground rounded-xl text-sm font-semibold hover:bg-muted/80 transition-colors disabled:opacity-50",
 											children: [/* @__PURE__ */ (void 0)(Save, { size: 16 }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 1060,
+												lineNumber: 1048,
 												columnNumber: 19
 											}, this), " Save Draft"]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1052,
+											lineNumber: 1040,
 											columnNumber: 17
 										}, this),
 										/* @__PURE__ */ (void 0)("a", {
@@ -1589,29 +1582,29 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 											className: "flex items-center gap-2 px-5 py-2.5 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-colors shadow-sm",
 											children: [/* @__PURE__ */ (void 0)(Send, { size: 16 }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 1066,
+												lineNumber: 1054,
 												columnNumber: 19
 											}, this), " Open Mail Client"]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1062,
+											lineNumber: 1050,
 											columnNumber: 17
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1040,
+									lineNumber: 1028,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 1035,
+								lineNumber: 1023,
 								columnNumber: 13
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 991,
+						lineNumber: 979,
 						columnNumber: 11
 					}, this),
 					activeTab === "history" && /* @__PURE__ */ (void 0)("div", {
@@ -1620,12 +1613,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 							className: "flex justify-center p-8",
 							children: /* @__PURE__ */ (void 0)("div", { className: "w-6 h-6 animate-spin rounded-full border-2 border-brand border-t-transparent" }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 1077,
+								lineNumber: 1065,
 								columnNumber: 17
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 1076,
+							lineNumber: 1064,
 							columnNumber: 15
 						}, this) : activityQuery.data?.length === 0 ? /* @__PURE__ */ (void 0)("div", {
 							className: "text-center p-12 bg-card rounded-2xl border border-border/60",
@@ -1634,12 +1627,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 								children: "No activity recorded yet."
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 1081,
+								lineNumber: 1069,
 								columnNumber: 17
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 1080,
+							lineNumber: 1068,
 							columnNumber: 15
 						}, this) : /* @__PURE__ */ (void 0)("div", {
 							className: "relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-[11px] before:w-px before:bg-border/60",
@@ -1649,12 +1642,12 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 									className: "absolute -left-6 top-1 w-6 h-6 rounded-full bg-background border-2 border-muted flex items-center justify-center",
 									children: /* @__PURE__ */ (void 0)("div", { className: `w-2.5 h-2.5 rounded-full ${activity.activity_type === "status_changed" ? "bg-brand" : activity.activity_type === "contacted" ? "bg-green-500" : activity.activity_type === "created" ? "bg-blue-500" : "bg-muted-foreground"}` }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1090,
+										lineNumber: 1078,
 										columnNumber: 23
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1089,
+									lineNumber: 1077,
 									columnNumber: 21
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "pl-4",
@@ -1668,7 +1661,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 										})
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1103,
+										lineNumber: 1091,
 										columnNumber: 23
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "bg-card p-4 rounded-2xl border border-border/60 subtle-shadow",
@@ -1682,7 +1675,7 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 													children: activity.old_status
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 1118,
+													lineNumber: 1106,
 													columnNumber: 29
 												}, this),
 												" ",
@@ -1693,71 +1686,71 @@ function OutreachDetailPane({ outreach, userId, onClose, onStatusChange, onMarkC
 													children: activity.new_status
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 1122,
+													lineNumber: 1110,
 													columnNumber: 29
 												}, this)
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1116,
+											lineNumber: 1104,
 											columnNumber: 27
 										}, this) : activity.activity_type === "contacted" ? /* @__PURE__ */ (void 0)("p", {
 											className: "text-sm font-semibold text-foreground",
 											children: "Marked as Contacted"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1127,
+											lineNumber: 1115,
 											columnNumber: 27
 										}, this) : activity.activity_type === "created" ? /* @__PURE__ */ (void 0)("p", {
 											className: "text-sm font-semibold text-foreground",
 											children: "Outreach Started"
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1131,
+											lineNumber: 1119,
 											columnNumber: 27
 										}, this) : /* @__PURE__ */ (void 0)("p", {
 											className: "text-sm text-foreground",
 											children: activity.description
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 1135,
+											lineNumber: 1123,
 											columnNumber: 27
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 1114,
+										lineNumber: 1102,
 										columnNumber: 23
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 1102,
+									lineNumber: 1090,
 									columnNumber: 21
 								}, this)]
 							}, activity.id, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 1088,
+								lineNumber: 1076,
 								columnNumber: 19
 							}, this))
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 1086,
+							lineNumber: 1074,
 							columnNumber: 15
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 1074,
+						lineNumber: 1062,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 879,
+				lineNumber: 867,
 				columnNumber: 7
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 795,
+		lineNumber: 783,
 		columnNumber: 5
 	}, this);
 }

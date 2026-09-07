@@ -3,62 +3,65 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Sparkles, Bookmark, Send, TrendingUp, Compass } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useMonetization } from "@/lib/useMonetization";
 
 export const Route = createFileRoute("/_dashboard/dashboard")({
   component: DashboardOverview,
 });
 
 function DashboardOverview() {
-  const { data: profile } = useQuery({
-    queryKey: ["profile"],
+  const { data: sessionData } = useQuery({
+    queryKey: ["auth_session"],
     queryFn: async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) return null;
+      const { data } = await supabase.auth.getSession();
+      return data.session;
+    }
+  });
+
+  const userId = sessionData?.user?.id || null;
+
+  // Dedupes with _dashboard.tsx
+  const { data: profile } = useQuery({
+    queryKey: ["profile", userId],
+    enabled: !!userId,
+    queryFn: async () => {
       const { data } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", sessionData.session.user.id)
+        .eq("id", userId!)
         .single();
       return data;
     },
   });
 
+  const { workspaceId } = useMonetization(userId);
+
   const { data: workspace } = useQuery({
-    queryKey: ["active-workspace"],
+    queryKey: ["workspace_details", workspaceId],
+    enabled: !!workspaceId,
     queryFn: async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) return null;
-
-      const { data: members } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", sessionData.session.user.id);
-
-      if (!members || members.length === 0) return null;
-
       const { data } = await supabase
         .from("workspaces")
         .select("*")
-        .eq("id", members[0].workspace_id)
+        .eq("id", workspaceId!)
         .single();
-
       return data;
     },
   });
 
   const { data: counts } = useQuery({
-    queryKey: ["dashboard-counts"],
+    queryKey: ["dashboard-counts", workspaceId],
+    enabled: !!workspaceId,
     queryFn: async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) return { saved: 0, outreach: 0 };
-
       const { count: savedCount } = await supabase
         .from("saved_brands")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("workspace_id", workspaceId!);
 
       const { count: outreachCount } = await supabase
         .from("outreach")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("workspace_id", workspaceId!);
 
       return {
         saved: savedCount || 0,

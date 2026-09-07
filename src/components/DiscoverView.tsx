@@ -66,38 +66,7 @@ export function DiscoverView({
     return () => clearTimeout(t);
   }, [searchTerm]);
 
-  const workspacesQuery = useQuery({
-    queryKey: ["workspaces", userId],
-    enabled: !!userId,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", userId!);
-
-      if (error) throw error;
-      if (!data || data.length === 0) {
-        const { data: newWs, error: createError } = await supabase
-          .from("workspaces")
-          .insert({ name: "Personal Workspace", workspace_type: "creator" })
-          .select("id")
-          .single();
-
-        if (createError) throw createError;
-
-        await supabase.from("workspace_members").insert({
-          workspace_id: newWs.id,
-          user_id: userId,
-          role: "owner",
-        });
-
-        return [newWs.id];
-      }
-      return data.map((d) => d.workspace_id);
-    },
-  });
-
-  const workspaceId = workspacesQuery.data?.[0];
+  const { workspaceId } = useMonetization(userId);
 
   const savedQuery = useQuery({
     queryKey: ["saved_brands_ids", workspaceId],

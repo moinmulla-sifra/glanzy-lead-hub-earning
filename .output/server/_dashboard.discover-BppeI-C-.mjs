@@ -4,9 +4,10 @@ import { a as useQueryClient, n as useMutation, r as useQuery, s as require_reac
 import { v as useNavigate } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { B as CircleAlert, H as Check, N as Globe, O as LoaderCircle, V as ChevronDown, _ as Search, c as TrendingUp, d as Star, f as Sparkles, n as X, p as SlidersHorizontal, y as Plus } from "./_libs/lucide-react.mjs";
+import { t as useMonetization } from "./_ssr/useMonetization-C8GPMWTs.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
 import { t as BrandProfileModal } from "./_ssr/BrandProfileModal-D1ZK3FLE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.discover-CgMkpmfS.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.discover-BppeI-C-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$2 = "/app/applet/src/components/ui/AdSlot.tsx";
@@ -128,28 +129,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 		const t = setTimeout(() => setDebouncedSearch(searchTerm.trim()), 400);
 		return () => clearTimeout(t);
 	}, [searchTerm]);
-	const workspaceId = useQuery({
-		queryKey: ["workspaces", userId],
-		enabled: !!userId,
-		queryFn: async () => {
-			const { data, error } = await supabase.from("workspace_members").select("workspace_id").eq("user_id", userId);
-			if (error) throw error;
-			if (!data || data.length === 0) {
-				const { data: newWs, error: createError } = await supabase.from("workspaces").insert({
-					name: "Personal Workspace",
-					workspace_type: "creator"
-				}).select("id").single();
-				if (createError) throw createError;
-				await supabase.from("workspace_members").insert({
-					workspace_id: newWs.id,
-					user_id: userId,
-					role: "owner"
-				});
-				return [newWs.id];
-			}
-			return data.map((d) => d.workspace_id);
-		}
-	}).data?.[0];
+	const { workspaceId } = useMonetization(userId);
 	const savedIds = useQuery({
 		queryKey: ["saved_brands_ids", workspaceId],
 		enabled: !!workspaceId,
@@ -285,19 +265,19 @@ function DiscoverView({ userId, onStartOutreach }) {
 					children: "Discover Brands"
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 296,
+					lineNumber: 265,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 					className: "text-muted-foreground text-lg max-w-2xl",
 					children: "Find brands that could be a strong fit for your next collaboration."
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 299,
+					lineNumber: 268,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 295,
+				lineNumber: 264,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -311,7 +291,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 308,
+										lineNumber: 277,
 										columnNumber: 13
 									}, this),
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("input", {
@@ -322,7 +302,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 										className: "w-full pl-10 pr-4 py-3 bg-transparent border-none focus:ring-0 text-base placeholder:text-muted-foreground"
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 309,
+										lineNumber: 278,
 										columnNumber: 13
 									}, this),
 									searchTerm && /* @__PURE__ */ (void 0)("button", {
@@ -330,23 +310,23 @@ function DiscoverView({ userId, onStartOutreach }) {
 										className: "absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted",
 										children: /* @__PURE__ */ (void 0)(X, { size: 16 }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 321,
+											lineNumber: 290,
 											columnNumber: 17
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 317,
+										lineNumber: 286,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 307,
+								lineNumber: 276,
 								columnNumber: 11
 							}, this),
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "hidden sm:block w-px h-8 bg-border" }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 326,
+								lineNumber: 295,
 								columnNumber: 11
 							}, this),
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -359,7 +339,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(SlidersHorizontal, { className: "w-4 h-4" }, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 339,
+											lineNumber: 308,
 											columnNumber: 15
 										}, this),
 										"Filters",
@@ -368,13 +348,13 @@ function DiscoverView({ userId, onStartOutreach }) {
 											children: activeFiltersCount
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 342,
+											lineNumber: 311,
 											columnNumber: 17
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 329,
+									lineNumber: 298,
 									columnNumber: 13
 								}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 									className: "relative group flex-1 sm:flex-none",
@@ -388,7 +368,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: "Best Match"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 354,
+												lineNumber: 323,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -396,7 +376,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: "Highest Lead Score"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 355,
+												lineNumber: 324,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -404,7 +384,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: "Highest Creator Fit"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 356,
+												lineNumber: 325,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -412,7 +392,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: "Recently Verified"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 357,
+												lineNumber: 326,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("option", {
@@ -420,33 +400,33 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: "Company A–Z"
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 358,
+												lineNumber: 327,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 349,
+										lineNumber: 318,
 										columnNumber: 15
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ChevronDown, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none group-hover:text-foreground" }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 360,
+										lineNumber: 329,
 										columnNumber: 15
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName$1,
-									lineNumber: 348,
+									lineNumber: 317,
 									columnNumber: 13
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 328,
+								lineNumber: 297,
 								columnNumber: 11
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 306,
+						lineNumber: 275,
 						columnNumber: 9
 					}, this),
 					isFilterOpen && /* @__PURE__ */ (void 0)("div", {
@@ -458,7 +438,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: "Advanced Filters"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 369,
+								lineNumber: 338,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("button", {
 								onClick: clearFilters,
@@ -466,12 +446,12 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: "Clear all"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 370,
+								lineNumber: 339,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 368,
+							lineNumber: 337,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8",
@@ -512,7 +492,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: category.replace("_", " ")
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 382,
+								lineNumber: 351,
 								columnNumber: 19
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar",
@@ -527,12 +507,12 @@ function DiscoverView({ userId, onStartOutreach }) {
                           `,
 												children: isActive && /* @__PURE__ */ (void 0)(Check, { className: "w-3 h-3 text-white" }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 402,
+													lineNumber: 371,
 													columnNumber: 31
 												}, this)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 396,
+												lineNumber: 365,
 												columnNumber: 27
 											}, this),
 											/* @__PURE__ */ (void 0)("span", {
@@ -540,7 +520,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 												children: option
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 405,
+												lineNumber: 374,
 												columnNumber: 27
 											}, this),
 											/* @__PURE__ */ (void 0)("input", {
@@ -550,33 +530,33 @@ function DiscoverView({ userId, onStartOutreach }) {
 												onChange: () => toggleFilter(category, option)
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 410,
+												lineNumber: 379,
 												columnNumber: 27
 											}, this)
 										]
 									}, option, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 392,
+										lineNumber: 361,
 										columnNumber: 25
 									}, this);
 								})
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 385,
+								lineNumber: 354,
 								columnNumber: 19
 							}, this)] }, category, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 381,
+								lineNumber: 350,
 								columnNumber: 17
 							}, this))
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 378,
+							lineNumber: 347,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 367,
+						lineNumber: 336,
 						columnNumber: 11
 					}, this),
 					activeFiltersCount > 0 && !isFilterOpen && /* @__PURE__ */ (void 0)("div", {
@@ -587,7 +567,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: "Active filters:"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 434,
+								lineNumber: 403,
 								columnNumber: 13
 							}, this),
 							Object.entries(activeFilters).map(([category, values]) => values.map((val) => /* @__PURE__ */ (void 0)("span", {
@@ -597,17 +577,17 @@ function DiscoverView({ userId, onStartOutreach }) {
 									className: "text-muted-foreground hover:text-foreground",
 									children: /* @__PURE__ */ (void 0)(X, { size: 12 }, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 450,
+										lineNumber: 419,
 										columnNumber: 21
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName$1,
-									lineNumber: 444,
+									lineNumber: 413,
 									columnNumber: 19
 								}, this)]
 							}, `${category}-${val}`, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 439,
+								lineNumber: 408,
 								columnNumber: 17
 							}, this))),
 							/* @__PURE__ */ (void 0)("button", {
@@ -616,19 +596,19 @@ function DiscoverView({ userId, onStartOutreach }) {
 								children: "Clear all"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 455,
+								lineNumber: 424,
 								columnNumber: 13
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 433,
+						lineNumber: 402,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 305,
+				lineNumber: 274,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -637,17 +617,17 @@ function DiscoverView({ userId, onStartOutreach }) {
 					className: "text-sm font-medium text-muted-foreground",
 					children: isBrandsLoading ? "Searching..." : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [totalCount === 1 ? "1 brand" : `${totalCount} brands`, " found"] }, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 471,
+						lineNumber: 440,
 						columnNumber: 13
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 467,
+					lineNumber: 436,
 					columnNumber: 9
 				}, this)
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 466,
+				lineNumber: 435,
 				columnNumber: 7
 			}, this),
 			isBrandsError ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -655,7 +635,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(CircleAlert, { className: "w-12 h-12 text-destructive mb-4" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 479,
+						lineNumber: 448,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -663,7 +643,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: "We couldn't load brands"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 480,
+						lineNumber: 449,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -671,7 +651,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: "Something went wrong while loading opportunities. Please check your connection and try again."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 481,
+						lineNumber: 450,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
@@ -680,13 +660,13 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: "Try again"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 485,
+						lineNumber: 454,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 478,
+				lineNumber: 447,
 				columnNumber: 9
 			}, this) : isBrandsLoading ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6",
@@ -695,36 +675,36 @@ function DiscoverView({ userId, onStartOutreach }) {
 					children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: [
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-7 w-2/3 bg-muted rounded-lg mb-4" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 502,
+							lineNumber: 471,
 							columnNumber: 17
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-5 w-1/3 bg-muted rounded-md mb-2" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 503,
+							lineNumber: 472,
 							columnNumber: 17
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-5 w-1/2 bg-muted rounded-md" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 504,
+							lineNumber: 473,
 							columnNumber: 17
 						}, this)
 					] }, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 501,
+						lineNumber: 470,
 						columnNumber: 15
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-11 w-full bg-muted rounded-xl mt-6" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 506,
+						lineNumber: 475,
 						columnNumber: 15
 					}, this)]
 				}, i, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 497,
+					lineNumber: 466,
 					columnNumber: 13
 				}, this))
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 495,
+				lineNumber: 464,
 				columnNumber: 9
 			}, this) : allBrands.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl",
@@ -733,12 +713,12 @@ function DiscoverView({ userId, onStartOutreach }) {
 						className: "w-20 h-20 rounded-3xl bg-muted/50 flex items-center justify-center mb-6 border border-border/50 shadow-sm",
 						children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Search, { className: "w-10 h-10 text-muted-foreground" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 513,
+							lineNumber: 482,
 							columnNumber: 13
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 512,
+						lineNumber: 481,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -746,7 +726,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: debouncedSearch || activeFiltersCount > 0 ? "No brands found" : "No brands yet"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 515,
+						lineNumber: 484,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -754,7 +734,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: debouncedSearch || activeFiltersCount > 0 ? "Try changing your search or removing some filters to see more opportunities." : "Branzly hasn't added any brand opportunities to your instance yet. New opportunities will appear here once the database is populated."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 520,
+						lineNumber: 489,
 						columnNumber: 11
 					}, this),
 					(debouncedSearch || activeFiltersCount > 0) && /* @__PURE__ */ (void 0)("button", {
@@ -766,25 +746,25 @@ function DiscoverView({ userId, onStartOutreach }) {
 						children: "Clear search & filters"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 526,
+						lineNumber: 495,
 						columnNumber: 13
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 511,
+				lineNumber: 480,
 				columnNumber: 9
 			}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [
 				!planConfig?.features?.removeAds && showAd && /* @__PURE__ */ (void 0)("div", {
 					className: "mb-8",
 					children: /* @__PURE__ */ (void 0)(AdSlot, { placement: "discover-feed" }, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 541,
+						lineNumber: 510,
 						columnNumber: 15
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 540,
+					lineNumber: 509,
 					columnNumber: 13
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -817,24 +797,24 @@ function DiscoverView({ userId, onStartOutreach }) {
 											children: brand.company_name
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 567,
+											lineNumber: 536,
 											columnNumber: 23
 										}, this), brand.lead_score != null && /* @__PURE__ */ (void 0)("div", {
 											className: "flex items-center gap-1 bg-muted text-foreground px-2.5 py-1 rounded-full text-xs font-bold border border-border/50 shrink-0",
 											title: "Lead Score",
 											children: [/* @__PURE__ */ (void 0)(TrendingUp, { className: "w-3 h-3 text-muted-foreground" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 575,
+												lineNumber: 544,
 												columnNumber: 27
 											}, this), brand.lead_score]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 571,
+											lineNumber: 540,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 566,
+										lineNumber: 535,
 										columnNumber: 21
 									}, this),
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -844,23 +824,23 @@ function DiscoverView({ userId, onStartOutreach }) {
 											children: brand.industry
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 583,
+											lineNumber: 552,
 											columnNumber: 25
 										}, this), brand.country && /* @__PURE__ */ (void 0)("span", {
 											className: "flex items-center gap-1 px-2.5 py-1 bg-muted/50 text-muted-foreground border border-border/50 rounded-lg text-xs font-medium",
 											children: [/* @__PURE__ */ (void 0)(Globe, { className: "w-3 h-3" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 589,
+												lineNumber: 558,
 												columnNumber: 27
 											}, this), brand.country]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 588,
+											lineNumber: 557,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 581,
+										lineNumber: 550,
 										columnNumber: 21
 									}, this),
 									signal && /* @__PURE__ */ (void 0)("div", {
@@ -871,17 +851,17 @@ function DiscoverView({ userId, onStartOutreach }) {
                         `,
 											children: [/* @__PURE__ */ (void 0)(Sparkles, { className: "w-3 h-3" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 608,
+												lineNumber: 577,
 												columnNumber: 27
 											}, this), signal.text]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 597,
+											lineNumber: 566,
 											columnNumber: 25
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 596,
+										lineNumber: 565,
 										columnNumber: 23
 									}, this),
 									brand.influencer_fit_score != null && /* @__PURE__ */ (void 0)("div", {
@@ -892,24 +872,24 @@ function DiscoverView({ userId, onStartOutreach }) {
 												className: "font-semibold text-foreground flex items-center gap-1",
 												children: [/* @__PURE__ */ (void 0)(Star, { className: "w-3 h-3 text-brand" }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 618,
+													lineNumber: 587,
 													columnNumber: 29
 												}, this), " Creator Fit"]
 											}, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 617,
+												lineNumber: 586,
 												columnNumber: 27
 											}, this), /* @__PURE__ */ (void 0)("span", {
 												className: "font-bold text-foreground",
 												children: [brand.influencer_fit_score, "/100"]
 											}, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 620,
+												lineNumber: 589,
 												columnNumber: 27
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName$1,
-											lineNumber: 616,
+											lineNumber: 585,
 											columnNumber: 25
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "h-1.5 w-full bg-muted rounded-full overflow-hidden",
@@ -918,17 +898,17 @@ function DiscoverView({ userId, onStartOutreach }) {
 												style: { width: `${brand.influencer_fit_score}%` }
 											}, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 625,
+												lineNumber: 594,
 												columnNumber: 27
 											}, this)
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 624,
+											lineNumber: 593,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName$1,
-										lineNumber: 615,
+										lineNumber: 584,
 										columnNumber: 23
 									}, this),
 									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -942,17 +922,17 @@ function DiscoverView({ userId, onStartOutreach }) {
                         `,
 											children: saveMutation.isPending && saveMutation.variables === brand.id ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LoaderCircle, { className: "w-4 h-4 animate-spin" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 653,
+												lineNumber: 622,
 												columnNumber: 27
 											}, this) : isSaved ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [
 												/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Check, { className: "w-4 h-4 group-hover/btn:hidden" }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 656,
+													lineNumber: 625,
 													columnNumber: 29
 												}, this),
 												/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(X, { className: "w-4 h-4 hidden group-hover/btn:block" }, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 657,
+													lineNumber: 626,
 													columnNumber: 29
 												}, this),
 												/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
@@ -960,7 +940,7 @@ function DiscoverView({ userId, onStartOutreach }) {
 													children: "Saved"
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 658,
+													lineNumber: 627,
 													columnNumber: 29
 												}, this),
 												/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
@@ -968,47 +948,47 @@ function DiscoverView({ userId, onStartOutreach }) {
 													children: "Remove"
 												}, void 0, false, {
 													fileName: _jsxFileName$1,
-													lineNumber: 661,
+													lineNumber: 630,
 													columnNumber: 29
 												}, this)
 											] }, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 655,
+												lineNumber: 624,
 												columnNumber: 27
 											}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Plus, { className: "w-4 h-4" }, void 0, false, {
 												fileName: _jsxFileName$1,
-												lineNumber: 667,
+												lineNumber: 636,
 												columnNumber: 29
 											}, this), "Save Brand"] }, void 0, true, {
 												fileName: _jsxFileName$1,
-												lineNumber: 666,
+												lineNumber: 635,
 												columnNumber: 27
 											}, this)
 										}, void 0, false, {
 											fileName: _jsxFileName$1,
-											lineNumber: 637,
+											lineNumber: 606,
 											columnNumber: 23
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName$1,
-										lineNumber: 633,
+										lineNumber: 602,
 										columnNumber: 21
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName$1,
-								lineNumber: 562,
+								lineNumber: 531,
 								columnNumber: 19
 							}, this)
 						}, brand.id, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 558,
+							lineNumber: 527,
 							columnNumber: 17
 						}, this);
 					})
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 544,
+					lineNumber: 513,
 					columnNumber: 11
 				}, this),
 				hasNextPage && /* @__PURE__ */ (void 0)("div", {
@@ -1019,26 +999,26 @@ function DiscoverView({ userId, onStartOutreach }) {
 						className: "flex items-center gap-2 px-8 py-3 bg-muted text-foreground rounded-xl text-sm font-semibold hover:bg-muted/80 transition-colors border border-border/50 shadow-sm disabled:opacity-50",
 						children: isFetchingNextPage ? /* @__PURE__ */ (void 0)(import_jsx_dev_runtime.Fragment, { children: [/* @__PURE__ */ (void 0)(LoaderCircle, { className: "w-4 h-4 animate-spin" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 688,
+							lineNumber: 657,
 							columnNumber: 21
 						}, this), "Loading more..."] }, void 0, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 687,
+							lineNumber: 656,
 							columnNumber: 19
 						}, this) : "Load More Brands"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 681,
+						lineNumber: 650,
 						columnNumber: 15
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 680,
+					lineNumber: 649,
 					columnNumber: 13
 				}, this)
 			] }, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 538,
+				lineNumber: 507,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(BrandProfileModal, {
@@ -1056,13 +1036,13 @@ function DiscoverView({ userId, onStartOutreach }) {
 				}
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 701,
+				lineNumber: 670,
 				columnNumber: 7
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 293,
+		lineNumber: 262,
 		columnNumber: 5
 	}, this);
 }

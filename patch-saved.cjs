@@ -1,10 +1,12 @@
 const fs = require('fs');
-let content = fs.readFileSync('src/components/DiscoverView.tsx', 'utf8');
+let content = fs.readFileSync('src/components/SavedView.tsx', 'utf8');
 
+// Add import if missing
 if (!content.includes('import { useMonetization }')) {
-  content = content.replace('import { supabase', 'import { useMonetization } from "@/lib/useMonetization";\nimport { supabase');
+  content = content.replace('import { BrandProfileModal } from "./BrandProfileModal";', 'import { BrandProfileModal } from "./BrandProfileModal";\nimport { useMonetization } from "@/lib/useMonetization";');
 }
 
+// Replace spaces query
 const oldQuery = `  const workspacesQuery = useQuery({
     queryKey: ["workspaces", userId],
     enabled: !!userId,
@@ -13,16 +15,12 @@ const oldQuery = `  const workspacesQuery = useQuery({
         .from("workspace_members")
         .select("workspace_id")
         .eq("user_id", userId!);
-
       if (error) throw error;
-      if (!data || data.length === 0) {
-        throw new Error("No workspace found");
-      }
-      return data[0].workspace_id;
+      return data.map((d) => d.workspace_id);
     },
   });
 
-  const workspaceId = workspacesQuery.data;`;
+  const workspaceId = workspacesQuery.data?.[0];`;
 
 content = content.replace(oldQuery, `  const { workspaceId } = useMonetization(userId);`);
-fs.writeFileSync('src/components/DiscoverView.tsx', content);
+fs.writeFileSync('src/components/SavedView.tsx', content);

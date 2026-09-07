@@ -125,6 +125,21 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1C4EYN1KVD');
+`,
+          }}
+        />
         <HeadContent />
       </head>
       <body suppressHydrationWarning>

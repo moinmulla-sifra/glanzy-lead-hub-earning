@@ -4,7 +4,7 @@ import { a as useQueryClient, n as useMutation, r as useQuery, s as require_reac
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { O as LoaderCircle, a as UserPlus, m as Shield, o as UserMinus, r as Users } from "./_libs/lucide-react.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.team-euhch0oR.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.team-BTl5WyhQ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$1 = "/app/applet/src/components/TeamView.tsx";
@@ -12,7 +12,7 @@ function TeamView({ userId }) {
 	useQueryClient();
 	const [inviteEmail, setInviteEmail] = (0, import_react.useState)("");
 	const workspaceMemberQuery = useQuery({
-		queryKey: ["workspace_member", userId],
+		queryKey: ["workspace_member_team", userId],
 		enabled: !!userId,
 		queryFn: async () => {
 			const { data, error } = await supabase.from("workspace_members").select("workspace_id, role, workspaces(name, workspace_type)").eq("user_id", userId).single();

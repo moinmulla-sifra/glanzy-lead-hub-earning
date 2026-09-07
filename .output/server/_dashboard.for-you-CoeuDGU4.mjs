@@ -4,9 +4,10 @@ import { a as useQueryClient, n as useMutation, r as useQuery, s as require_reac
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { c as TrendingUp, d as Star, f as Sparkles, q as Bookmark } from "./_libs/lucide-react.mjs";
+import { t as useMonetization } from "./_ssr/useMonetization-C8GPMWTs.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
 import { t as BrandProfileModal } from "./_ssr/BrandProfileModal-D1ZK3FLE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.for-you-DG-TO7vT.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.for-you-CoeuDGU4.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$1 = "/app/applet/src/components/ForYouView.tsx";
@@ -23,15 +24,7 @@ function ForYouView({ userId }) {
 			return data;
 		}
 	});
-	const workspaceId = useQuery({
-		queryKey: ["workspaces", userId],
-		enabled: !!userId,
-		queryFn: async () => {
-			const { data, error } = await supabase.from("workspace_members").select("workspace_id").eq("user_id", userId);
-			if (error) throw error;
-			return data.map((d) => d.workspace_id);
-		}
-	}).data?.[0];
+	const { workspaceId } = useMonetization(userId);
 	useQuery({
 		queryKey: ["saved_brands_set", workspaceId],
 		enabled: !!workspaceId,
@@ -149,24 +142,24 @@ function ForYouView({ userId }) {
 						size: 32
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 223,
+						lineNumber: 211,
 						columnNumber: 11
 					}, this), " For You"]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 222,
+					lineNumber: 210,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 					className: "text-muted-foreground text-lg max-w-2xl",
 					children: "Brand opportunities picked for your profile and interests."
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 225,
+					lineNumber: 213,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 221,
+				lineNumber: 209,
 				columnNumber: 7
 			}, this),
 			isLoading ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -180,12 +173,12 @@ function ForYouView({ userId }) {
 					6
 				].map((i) => /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "bg-card rounded-3xl p-6 border border-border/50 shadow-sm animate-pulse h-64" }, i, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 233,
+					lineNumber: 221,
 					columnNumber: 13
 				}, this))
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 231,
+				lineNumber: 219,
 				columnNumber: 9
 			}, this) : isProfileIncomplete ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex-1 flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl subtle-shadow",
@@ -194,12 +187,12 @@ function ForYouView({ userId }) {
 						className: "w-20 h-20 rounded-3xl bg-brand/10 flex items-center justify-center mb-6 border border-brand/20 shadow-sm",
 						children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Sparkles, { className: "w-10 h-10 text-brand" }, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 242,
+							lineNumber: 230,
 							columnNumber: 13
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 241,
+						lineNumber: 229,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
@@ -207,7 +200,7 @@ function ForYouView({ userId }) {
 						children: "Let's improve your matches"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 244,
+						lineNumber: 232,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -215,7 +208,7 @@ function ForYouView({ userId }) {
 						children: "Tell us a little more about your content and we'll personalize your brand opportunities."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 247,
+						lineNumber: 235,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
@@ -224,13 +217,13 @@ function ForYouView({ userId }) {
 						children: "Complete Profile"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 251,
+						lineNumber: 239,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 240,
+				lineNumber: 228,
 				columnNumber: 9
 			}, this) : brandsQuery.data?.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex-1 flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl subtle-shadow",
@@ -239,19 +232,19 @@ function ForYouView({ userId }) {
 					children: "No opportunities yet"
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 260,
+					lineNumber: 248,
 					columnNumber: 11
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 					className: "text-muted-foreground max-w-md text-lg",
 					children: "Branzly doesn't have enough brand data to build recommendations yet."
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 261,
+					lineNumber: 249,
 					columnNumber: 11
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 259,
+				lineNumber: 247,
 				columnNumber: 9
 			}, this) : recommendations.length === 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex-1 flex flex-col items-center justify-center text-center p-16 bg-card border border-border/60 rounded-3xl subtle-shadow",
@@ -261,7 +254,7 @@ function ForYouView({ userId }) {
 						children: "We couldn't find a strong match yet"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 267,
+						lineNumber: 255,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -269,7 +262,7 @@ function ForYouView({ userId }) {
 						children: "Try expanding your profile or checking Discover for more opportunities."
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 270,
+						lineNumber: 258,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -280,7 +273,7 @@ function ForYouView({ userId }) {
 							children: "Complete Profile"
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 275,
+							lineNumber: 263,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
 							to: "/discover",
@@ -288,18 +281,18 @@ function ForYouView({ userId }) {
 							children: "Explore Discover"
 						}, void 0, false, {
 							fileName: _jsxFileName$1,
-							lineNumber: 281,
+							lineNumber: 269,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 274,
+						lineNumber: 262,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 266,
+				lineNumber: 254,
 				columnNumber: 9
 			}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 				className: "flex flex-col gap-10",
@@ -310,12 +303,12 @@ function ForYouView({ userId }) {
 						size: 20
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 294,
+						lineNumber: 282,
 						columnNumber: 15
 					}, this), " Top Matches"]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 293,
+					lineNumber: 281,
 					columnNumber: 13
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 					className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
@@ -329,16 +322,16 @@ function ForYouView({ userId }) {
 						onClickView: () => setSelectedBrand(rec.brand)
 					}, rec.brand.id, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 299,
+						lineNumber: 287,
 						columnNumber: 17
 					}, this))
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 297,
+					lineNumber: 285,
 					columnNumber: 13
 				}, this)] }, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 292,
+					lineNumber: 280,
 					columnNumber: 11
 				}, this), recommendations.length > 6 && /* @__PURE__ */ (void 0)("section", { children: [/* @__PURE__ */ (void 0)("h2", {
 					className: "text-xl font-bold mb-4 flex items-center gap-2",
@@ -347,12 +340,12 @@ function ForYouView({ userId }) {
 						size: 20
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 319,
+						lineNumber: 307,
 						columnNumber: 17
 					}, this), " Trending For You"]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 318,
+					lineNumber: 306,
 					columnNumber: 15
 				}, this), /* @__PURE__ */ (void 0)("div", {
 					className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
@@ -366,21 +359,21 @@ function ForYouView({ userId }) {
 						onClickView: () => setSelectedBrand(rec.brand)
 					}, rec.brand.id, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 323,
+						lineNumber: 311,
 						columnNumber: 19
 					}, this))
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 321,
+					lineNumber: 309,
 					columnNumber: 15
 				}, this)] }, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 317,
+					lineNumber: 305,
 					columnNumber: 13
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName$1,
-				lineNumber: 290,
+				lineNumber: 278,
 				columnNumber: 9
 			}, this),
 			selectedBrand && workspaceId && /* @__PURE__ */ (void 0)(BrandProfileModal, {
@@ -394,13 +387,13 @@ function ForYouView({ userId }) {
 				})
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 343,
+				lineNumber: 331,
 				columnNumber: 9
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 219,
+		lineNumber: 207,
 		columnNumber: 5
 	}, this);
 }
@@ -420,14 +413,14 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 						children: brand.company_name
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 381,
+						lineNumber: 369,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 						className: "flex items-center gap-1 bg-brand/10 text-brand px-2.5 py-1 rounded-full text-xs font-bold border border-brand/20 shrink-0",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Star, { className: "w-3 h-3" }, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 385,
+								lineNumber: 373,
 								columnNumber: 13
 							}, this),
 							matchPercentage,
@@ -435,12 +428,12 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName$1,
-						lineNumber: 384,
+						lineNumber: 372,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 380,
+					lineNumber: 368,
 					columnNumber: 9
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -450,19 +443,19 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 						children: brand.industry
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 392,
+						lineNumber: 380,
 						columnNumber: 13
 					}, this), brand.country && /* @__PURE__ */ (void 0)("span", {
 						className: "px-2.5 py-1 bg-muted/50 text-muted-foreground border border-border/50 rounded-lg text-xs font-medium",
 						children: brand.country
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 397,
+						lineNumber: 385,
 						columnNumber: 13
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 390,
+					lineNumber: 378,
 					columnNumber: 9
 				}, this),
 				reasons.length > 0 && /* @__PURE__ */ (void 0)("div", {
@@ -472,7 +465,7 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 						children: "Why this brand?"
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 405,
+						lineNumber: 393,
 						columnNumber: 13
 					}, this), /* @__PURE__ */ (void 0)("ul", {
 						className: "text-sm space-y-1",
@@ -483,35 +476,35 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 								className: "text-brand shrink-0 mt-0.5"
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 414,
+								lineNumber: 402,
 								columnNumber: 19
 							}, this), /* @__PURE__ */ (void 0)("span", {
 								className: "line-clamp-2 leading-tight",
 								children: reason
 							}, void 0, false, {
 								fileName: _jsxFileName$1,
-								lineNumber: 415,
+								lineNumber: 403,
 								columnNumber: 19
 							}, this)]
 						}, i, true, {
 							fileName: _jsxFileName$1,
-							lineNumber: 410,
+							lineNumber: 398,
 							columnNumber: 17
 						}, this))
 					}, void 0, false, {
 						fileName: _jsxFileName$1,
-						lineNumber: 408,
+						lineNumber: 396,
 						columnNumber: 13
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$1,
-					lineNumber: 404,
+					lineNumber: 392,
 					columnNumber: 11
 				}, this)
 			]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 376,
+			lineNumber: 364,
 			columnNumber: 7
 		}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 			className: "p-4 border-t border-border/50 bg-muted/10 flex items-center gap-3",
@@ -524,7 +517,7 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 				children: "View Brand"
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 424,
+				lineNumber: 412,
 				columnNumber: 9
 			}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 				onClick: (e) => {
@@ -538,22 +531,22 @@ function RecommendationCard({ rec, isSaved, onToggleSave, onClickView }) {
 					className: isSaved ? "fill-brand" : ""
 				}, void 0, false, {
 					fileName: _jsxFileName$1,
-					lineNumber: 445,
+					lineNumber: 433,
 					columnNumber: 11
 				}, this)
 			}, void 0, false, {
 				fileName: _jsxFileName$1,
-				lineNumber: 433,
+				lineNumber: 421,
 				columnNumber: 9
 			}, this)]
 		}, void 0, true, {
 			fileName: _jsxFileName$1,
-			lineNumber: 423,
+			lineNumber: 411,
 			columnNumber: 7
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName$1,
-		lineNumber: 375,
+		lineNumber: 363,
 		columnNumber: 5
 	}, this);
 }
@@ -570,12 +563,12 @@ function Check$1({ size, className }) {
 		className,
 		children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("polyline", { points: "20 6 9 17 4 12" }, void 0, false, {
 			fileName: _jsxFileName$1,
-			lineNumber: 465,
+			lineNumber: 453,
 			columnNumber: 7
 		}, this)
 	}, void 0, false, {
 		fileName: _jsxFileName$1,
-		lineNumber: 454,
+		lineNumber: 442,
 		columnNumber: 5
 	}, this);
 }

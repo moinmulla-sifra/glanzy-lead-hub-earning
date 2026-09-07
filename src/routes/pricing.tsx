@@ -24,27 +24,32 @@ function PricingPage() {
         return;
       }
 
-      // Get workspace
-      const { data: memberData } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", session.session.user.id)
-        .limit(1)
-        .single();
+      try {
+        // Get workspace
+        const { data: memberData } = await supabase
+          .from("workspace_members")
+          .select("workspace_id")
+          .eq("user_id", session.session.user.id)
+          .limit(1)
+          .maybeSingle();
 
-      if (memberData) {
-        setWorkspaceId(memberData.workspace_id);
-        const { data: subData } = await supabase
-          .from("subscriptions")
-          .select("plan")
-          .eq("workspace_id", memberData.workspace_id)
-          .single();
+        if (memberData) {
+          setWorkspaceId(memberData.workspace_id);
+          const { data: subData } = await supabase
+            .from("subscriptions")
+            .select("plan")
+            .eq("workspace_id", memberData.workspace_id)
+            .maybeSingle();
 
-        if (subData) {
-          setCurrentPlan(subData.plan as PlanType);
+          if (subData) {
+            setCurrentPlan(subData.plan as PlanType);
+          }
         }
+      } catch (err) {
+        console.error("Failed to load plan:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     loadPlan();
   }, []);

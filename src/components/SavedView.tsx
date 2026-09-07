@@ -22,6 +22,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { BrandProfileModal } from "./BrandProfileModal";
+import { useMonetization } from "@/lib/useMonetization";
 import { Link } from "@tanstack/react-router";
 
 type SortOption =
@@ -65,21 +66,7 @@ export function SavedView({
     return () => clearTimeout(t);
   }, [searchTerm]);
 
-  const workspacesQuery = useQuery({
-    queryKey: ["workspaces", userId],
-    enabled: !!userId,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", userId!);
-
-      if (error) throw error;
-      return data.map((d) => d.workspace_id);
-    },
-  });
-
-  const workspaceId = workspacesQuery.data?.[0];
+  const { workspaceId } = useMonetization(userId);
 
   const fetchSavedBrands = async ({ pageParam = 0 }) => {
     if (!workspaceId) throw new Error("No workspace found");

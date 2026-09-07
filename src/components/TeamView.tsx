@@ -9,7 +9,7 @@ export function TeamView({ userId }: { userId: string | null }) {
   const [inviteEmail, setInviteEmail] = useState("");
 
   const workspaceMemberQuery = useQuery({
-    queryKey: ["workspace_member", userId],
+    queryKey: ["workspace_member_team", userId],
     enabled: !!userId,
     queryFn: async () => {
       const { data, error } = await supabase

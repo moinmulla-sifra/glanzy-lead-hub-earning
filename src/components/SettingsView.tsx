@@ -63,7 +63,7 @@ export function SettingsView({ userId }: { userId: string | null }) {
   });
 
   const workspaceMemberQuery = useQuery({
-    queryKey: ["workspace_member", userId],
+    queryKey: ["workspace_member_settings", userId],
     enabled: !!userId,
     queryFn: async () => {
       const { data, error } = await supabase
@@ -103,7 +103,7 @@ export function SettingsView({ userId }: { userId: string | null }) {
     },
     onSuccess: () => {
       toast.success("Workspace settings saved");
-      queryClient.invalidateQueries({ queryKey: ["workspace_member"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace_member_settings"] });
     },
     onError: (err: Error) =>
       toast.error(err.message || "Failed to update workspace"),

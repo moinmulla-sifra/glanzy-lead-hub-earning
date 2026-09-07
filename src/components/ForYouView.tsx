@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase, type Brand, type Profile } from "@/lib/supabase";
 import { toast } from "sonner";
+import { useMonetization } from "@/lib/useMonetization";
 import { Link } from "@tanstack/react-router";
 import {
   Sparkles,
@@ -37,20 +38,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
   });
 
   // 2. Fetch Workspace
-  const workspacesQuery = useQuery({
-    queryKey: ["workspaces", userId],
-    enabled: !!userId,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", userId!);
-      if (error) throw error;
-      return data.map((d) => d.workspace_id);
-    },
-  });
-
-  const workspaceId = workspacesQuery.data?.[0];
+  const { workspaceId } = useMonetization(userId);
 
   // 3. Fetch Saved Brands mapping
   const savedBrandsQuery = useQuery({
