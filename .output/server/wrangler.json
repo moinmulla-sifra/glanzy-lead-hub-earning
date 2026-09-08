@@ -5,7 +5,7 @@
     "binding": "ASSETS",
     "directory": "../public"
   },
-  "name": "moinmulla-sifra-glanzy-lead-hub-earning",
+  "name": "tanstack-start-ts",
   "compatibility_flags": [
     "nodejs_compat"
   ],

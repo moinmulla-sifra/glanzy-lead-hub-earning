@@ -57,10 +57,13 @@ export const triggerAutomatedResearch = createServerFn({ method: "POST" })
 
     // We must use SERVICE ROLE KEY because automated background jobs need full access
     const serviceRoleKey = process.env["SERVICE_ROLE_KEY"]; // Or use anon key if RLS allows it?
-    // Wait, the automated job needs to bypass RLS to read all brands for deduplication, or we just rely on the anon/user.
-    // Actually, we use the user's supabase client but if they are an admin, they should have access.
+    
+    const elevatedSupabase = serviceRoleKey ? createClient(
+      process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
+      serviceRoleKey
+    ) : supabase;
 
     // Execute the hourly job logic
-    const result = await ResearchEngine.runAutomatedHourlyJob(supabase);
+    const result = await ResearchEngine.runAutomatedHourlyJob(elevatedSupabase);
     return result;
   });

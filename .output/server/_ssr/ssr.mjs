@@ -234,10 +234,79 @@ var ResearchEngine = class {
 			console.log("An automated job is already running or queued.");
 			return { status: "locked" };
 		}
-		const { data: queueItem } = await supabase.from("research_queue").select("*").eq("enabled", true).order("next_run", { ascending: true }).limit(1).single();
+		let { data: queueItem } = await supabase.from("research_queue").select("*").eq("enabled", true).order("next_run", { ascending: true }).limit(1).single();
 		if (!queueItem) {
-			console.log("No active items in research queue.");
-			return { status: "empty_queue" };
+			console.log("No active items in research queue. Seeding defaults...");
+			await supabase.from("research_queue").insert([
+				{
+					category: "D2C",
+					country: "US",
+					niche: "Beauty",
+					research_query: {
+						keywords: [
+							"D2C",
+							"Beauty",
+							"startup"
+						],
+						industry: "Beauty",
+						country: "US"
+					}
+				},
+				{
+					category: "Consumer",
+					country: "US",
+					niche: "Fashion",
+					research_query: {
+						keywords: [
+							"Consumer",
+							"Fashion",
+							"brand"
+						],
+						industry: "Fashion",
+						country: "US"
+					}
+				},
+				{
+					category: "Food",
+					country: "UK",
+					niche: "Health",
+					research_query: {
+						keywords: [
+							"Food",
+							"Health",
+							"startup"
+						],
+						industry: "Food",
+						country: "UK"
+					}
+				},
+				{
+					category: "SaaS",
+					country: "US",
+					niche: "Creators",
+					research_query: {
+						keywords: [
+							"SaaS",
+							"Creator Economy",
+							"startup"
+						],
+						industry: "Software",
+						country: "US"
+					}
+				},
+				{
+					category: "D2C",
+					country: "Global",
+					niche: "Wellness",
+					research_query: {
+						keywords: ["Wellness", "D2C"],
+						industry: "Wellness"
+					}
+				}
+			]);
+			const { data: retryItem } = await supabase.from("research_queue").select("*").eq("enabled", true).order("next_run", { ascending: true }).limit(1).single();
+			if (!retryItem) return { status: "empty_queue" };
+			queueItem = retryItem;
 		}
 		await supabase.from("research_queue").update({
 			last_run: (/* @__PURE__ */ new Date()).toISOString(),
@@ -332,7 +401,7 @@ function setupCronJobs() {
 	nodeCron.schedule("0 * * * *", async () => {
 		try {
 			console.log("Automated hourly node-cron scheduler triggered...");
-			const supabaseUrl = processModule.env["VITE_SUPABASE_URL"] || "";
+			const supabaseUrl = processModule.env["VITE_SUPABASE_URL"] || "https://placeholder.supabase.co";
 			const supabaseKey = processModule.env["SERVICE_ROLE_KEY"] || processModule.env["VITE_SUPABASE_ANON_KEY"] || "";
 			if (!supabaseUrl || !supabaseKey) {
 				console.error("Missing Supabase credentials for automated job");
@@ -439,7 +508,7 @@ function renderErrorPage() {
 }
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-C7O7JL5l.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-CD9Y0F_0.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
