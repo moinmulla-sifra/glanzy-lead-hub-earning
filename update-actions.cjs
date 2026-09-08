@@ -1,0 +1,7 @@
+const fs = require('fs');
+let code = fs.readFileSync('src/lib/research/actions.ts', 'utf8');
+
+code = code.replace(/process\.env\["VITE_SUPABASE_URL"\] \|\| ""/g, 'process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || ""');
+code = code.replace(/process\.env\["VITE_SUPABASE_ANON_KEY"\] \|\| ""/g, 'process.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env.VITE_SUPABASE_ANON_KEY || ""');
+
+fs.writeFileSync('src/lib/research/actions.ts', code);

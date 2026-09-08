@@ -50,6 +50,24 @@ function AdminPage() {
     },
   });
 
+  const isAdmin = profileQuery.data?.account_type === "admin";
+
+  const statsQuery = useQuery({
+    queryKey: ["admin_stats"],
+    enabled: !!isAdmin,
+    queryFn: async () => {
+      const [users, brands] = await Promise.all([
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
+        supabase.from("brands").select("id", { count: "exact", head: true }),
+      ]);
+      return {
+        users: users.count || 0,
+        brands: brands.count || 0,
+        subscriptions: 0,
+      };
+    },
+  });
+
   if (!userId || profileQuery.isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -57,9 +75,6 @@ function AdminPage() {
       </div>
     );
   }
-
-  // Basic role check - in a real app this should be enforced strictly via RLS and claims
-  const isAdmin = profileQuery.data?.account_type === "admin";
 
   if (!isAdmin) {
     return (
@@ -119,19 +134,37 @@ function AdminPage() {
             <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
               Total Users
             </h3>
-            <p className="text-3xl font-bold">---</p>
+            <p className="text-3xl font-bold">
+              {statsQuery.isLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                statsQuery.data?.users || 0
+              )}
+            </p>
           </div>
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
               Total Brands
             </h3>
-            <p className="text-3xl font-bold">---</p>
+            <p className="text-3xl font-bold">
+              {statsQuery.isLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                statsQuery.data?.brands || 0
+              )}
+            </p>
           </div>
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-1">
               Active Subscriptions
             </h3>
-            <p className="text-3xl font-bold">---</p>
+            <p className="text-3xl font-bold">
+              {statsQuery.isLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                statsQuery.data?.subscriptions || 0
+              )}
+            </p>
           </div>
         </div>
 

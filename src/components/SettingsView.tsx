@@ -10,19 +10,14 @@ import {
 } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
 import {
   User,
   Building2,
-  Paintbrush,
   Shield,
   Bell,
   CreditCard,
   AlertTriangle,
   LogOut,
-  Moon,
-  Sun,
-  Monitor,
   Save,
   Loader2,
   Key,
@@ -32,21 +27,7 @@ import {
 export function SettingsView({ userId }: { userId: string | null }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<Theme>("system");
   const [activeTab, setActiveTab] = useState("account");
-
-  useEffect(() => {
-    setTheme(getStoredTheme());
-    const handleThemeChange = (e: CustomEvent<Theme>) => {
-      setTheme(e.detail);
-    };
-    window.addEventListener("theme-change", handleThemeChange as EventListener);
-    return () =>
-      window.removeEventListener(
-        "theme-change",
-        handleThemeChange as EventListener,
-      );
-  }, []);
 
   const profileQuery = useQuery({
     queryKey: ["profile", userId],
@@ -134,14 +115,9 @@ export function SettingsView({ userId }: { userId: string | null }) {
     navigate({ to: "/auth", replace: true });
   }
 
-  const handleThemeChange = (newTheme: Theme) => {
-    applyTheme(newTheme);
-  };
-
   const tabs = [
     { id: "account", label: "Account", icon: User },
     { id: "workspace", label: "Workspace", icon: Building2 },
-    { id: "appearance", label: "Appearance", icon: Paintbrush },
     { id: "security", label: "Security", icon: Shield },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "subscription", label: "Subscription", icon: CreditCard },
@@ -341,52 +317,6 @@ export function SettingsView({ userId }: { userId: string | null }) {
                 </button>
               </div>
             )}
-          </div>
-        )}
-
-        {/* APPEARANCE TAB */}
-        {activeTab === "appearance" && (
-          <div className="space-y-8 animate-in fade-in">
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">
-                Appearance
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Customize how Branzly looks on your device.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl">
-              <button
-                onClick={() => handleThemeChange("light")}
-                className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${theme === "light" ? "border-brand bg-brand/5" : "border-border/50 bg-muted/20 hover:bg-muted/50"}`}
-              >
-                <div className="w-12 h-12 rounded-full bg-background border border-border shadow-sm flex items-center justify-center">
-                  <Sun className="text-amber-500" />
-                </div>
-                <span className="font-semibold text-sm">Light</span>
-              </button>
-
-              <button
-                onClick={() => handleThemeChange("dark")}
-                className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${theme === "dark" ? "border-brand bg-brand/5" : "border-border/50 bg-muted/20 hover:bg-muted/50"}`}
-              >
-                <div className="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 shadow-sm flex items-center justify-center">
-                  <Moon className="text-blue-400" />
-                </div>
-                <span className="font-semibold text-sm">Dark</span>
-              </button>
-
-              <button
-                onClick={() => handleThemeChange("system")}
-                className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${theme === "system" ? "border-brand bg-brand/5" : "border-border/50 bg-muted/20 hover:bg-muted/50"}`}
-              >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-background to-muted border border-border shadow-sm flex items-center justify-center">
-                  <Monitor className="text-foreground/70" />
-                </div>
-                <span className="font-semibold text-sm">System</span>
-              </button>
-            </div>
           </div>
         )}
 

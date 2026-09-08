@@ -16,7 +16,7 @@ export function setupCronJobs() {
   cron.schedule("0 * * * *", async () => {
     try {
       console.log("Automated hourly node-cron scheduler triggered...");
-      const supabaseUrl = process.env["VITE_SUPABASE_URL"] || "";
+      const supabaseUrl = process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
       const supabaseKey =
         process.env["SERVICE_ROLE_KEY"] ||
         process.env["VITE_SUPABASE_ANON_KEY"] ||
