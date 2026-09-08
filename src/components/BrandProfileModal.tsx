@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { type Brand } from "@/lib/supabase";
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 import { toast } from "sonner";
 
@@ -60,8 +61,8 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-12 animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 animate-in fade-in duration-200">
       <div
         className="absolute inset-0 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
@@ -388,6 +389,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 });

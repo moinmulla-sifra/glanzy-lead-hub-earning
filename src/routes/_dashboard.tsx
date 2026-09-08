@@ -16,6 +16,8 @@ import {
   Menu,
   X,
   Users,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboard")({
@@ -30,6 +32,7 @@ function DashboardLayout() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -142,18 +145,28 @@ function DashboardLayout() {
       {/* Sidebar Navigation */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border/50 flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]
+        fixed inset-y-0 left-0 z-40 bg-card border-r border-border/50 flex flex-col transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]
         lg:relative lg:translate-x-0
-        ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isMobileMenuOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}
+        ${isSidebarCollapsed ? "lg:w-0 lg:border-r-0 lg:opacity-0 lg:overflow-hidden lg:invisible" : "lg:w-64 lg:opacity-100 lg:visible"}
       `}
       >
-        <div className="p-6 hidden lg:flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center shadow-lg shadow-brand/20">
-            <span className="text-brand-foreground font-bold text-lg leading-none">
-              B
-            </span>
+        <div className="p-6 hidden lg:flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center shadow-lg shadow-brand/20">
+              <span className="text-brand-foreground font-bold text-lg leading-none">
+                B
+              </span>
+            </div>
+            <span className="font-bold text-xl tracking-tight">Branzly</span>
           </div>
-          <span className="font-bold text-xl tracking-tight">Branzly</span>
+          <button
+            onClick={() => setIsSidebarCollapsed(true)}
+            className="p-1 text-muted-foreground hover:bg-muted rounded-md transition-colors"
+            title="Close sidebar"
+          >
+            <PanelLeftClose size={20} />
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto py-6 lg:py-2 px-3">
@@ -258,6 +271,19 @@ function DashboardLayout() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-[100dvh] pt-16 lg:pt-0 overflow-hidden relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/5 via-background to-background pointer-events-none" />
+        
+        {/* Toggle button when sidebar is collapsed (desktop only) */}
+        {isSidebarCollapsed && (
+          <div className="hidden lg:flex fixed top-4 left-4 z-20">
+            <button
+              onClick={() => setIsSidebarCollapsed(false)}
+              className="p-2 bg-card border border-border/50 text-muted-foreground hover:bg-muted rounded-md shadow-sm transition-all hover:text-foreground"
+              title="Open sidebar"
+            >
+              <PanelLeftOpen size={20} />
+            </button>
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto p-4 lg:p-8 relative z-10">
           <div className="max-w-6xl mx-auto h-full">

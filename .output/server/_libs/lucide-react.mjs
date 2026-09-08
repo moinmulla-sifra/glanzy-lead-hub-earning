@@ -701,18 +701,46 @@ var Moon = createLucideIcon("moon", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var Paintbrush = createLucideIcon("paintbrush", [
-	["path", {
-		d: "m14.622 17.897-10.68-2.913",
-		key: "vj2p1u"
+var PanelLeftClose = createLucideIcon("panel-left-close", [
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "3",
+		rx: "2",
+		key: "afitv7"
 	}],
 	["path", {
-		d: "M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z",
-		key: "18tc5c"
+		d: "M9 3v18",
+		key: "fh3hqa"
 	}],
 	["path", {
-		d: "M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15",
-		key: "ytzfxy"
+		d: "m16 15-3-3 3-3",
+		key: "14y99z"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var PanelLeftOpen = createLucideIcon("panel-left-open", [
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "3",
+		rx: "2",
+		key: "afitv7"
+	}],
+	["path", {
+		d: "M9 3v18",
+		key: "fh3hqa"
+	}],
+	["path", {
+		d: "m14 9 3 3-3 3",
+		key: "8010ee"
 	}]
 ]);
 /**
@@ -1120,4 +1148,4 @@ var Zap = createLucideIcon("zap", [["path", {
 	key: "1xq2db"
 }]]);
 //#endregion
-export { Linkedin as A, CircleCheck as B, Monitor as C, LogOut as D, Mail as E, ExternalLink as F, Calendar as G, ChevronDown as H, CreditCard as I, Bookmark as J, Building2 as K, Compass as L, Key as M, Globe as N, LoaderCircle as O, FileText as P, Activity as Q, Clock as R, Moon as S, Menu as T, Check as U, CircleAlert as V, ChartNoAxesColumnIncreasing as W, ArrowRight as X, Bell as Y, ArrowLeft as Z, Search as _, UserPlus as a, Phone as b, TrendingUp as c, Star as d, Sparkles as f, Send as g, Settings as h, User as i, LayoutGrid as j, List as k, Trash2 as l, Shield as m, X as n, UserMinus as o, SlidersHorizontal as p, Briefcase as q, Users as r, TriangleAlert as s, Zap as t, Sun as u, Save as v, MessageSquare as w, Paintbrush as x, Plus as y, CirclePlay as z };
+export { Activity as $, List as A, CirclePlay as B, Moon as C, Mail as D, Menu as E, FileText as F, ChartNoAxesColumnIncreasing as G, CircleAlert as H, ExternalLink as I, Briefcase as J, Calendar as K, CreditCard as L, LayoutGrid as M, Key as N, LogOut as O, Globe as P, ArrowLeft as Q, Compass as R, PanelLeftClose as S, MessageSquare as T, ChevronDown as U, CircleCheck as V, Check as W, Bell as X, Bookmark as Y, ArrowRight as Z, Search as _, UserPlus as a, Phone as b, TrendingUp as c, Star as d, Sparkles as f, Send as g, Settings as h, User as i, Linkedin as j, LoaderCircle as k, Trash2 as l, Shield as m, X as n, UserMinus as o, SlidersHorizontal as p, Building2 as q, Users as r, TriangleAlert as s, Zap as t, Sun as u, Save as v, Monitor as w, PanelLeftOpen as x, Plus as y, Clock as z };
