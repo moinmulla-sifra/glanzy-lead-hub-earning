@@ -1,11 +1,14 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/components/ForYouView.tsx', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/components/ForYouView.tsx", "utf8");
 
-if (!content.includes('import { startResearchJob }')) {
-  content = content.replace(/import \{ supabase, type Brand, type Profile \} from "@\/lib\/supabase";/, 'import { supabase, type Brand, type Profile } from "@/lib/supabase";\nimport { startResearchJob } from "@/lib/research/actions";');
+if (!content.includes("import { startResearchJob }")) {
+  content = content.replace(
+    /import \{ supabase, type Brand, type Profile \} from "@\/lib\/supabase";/,
+    'import { supabase, type Brand, type Profile } from "@/lib/supabase";\nimport { startResearchJob } from "@/lib/research/actions";',
+  );
 }
 
-if (!content.includes('const refreshResearchMutation = useMutation')) {
+if (!content.includes("const refreshResearchMutation = useMutation")) {
   const mutation = `
   const workspaceId = memberData?.workspace_id;
   
@@ -29,7 +32,10 @@ if (!content.includes('const refreshResearchMutation = useMutation')) {
     onError: (err: Error) => toast.error(err.message || "Failed to start research"),
   });
 `;
-  content = content.replace(/const brandsQuery = useQuery/, mutation + '\n  const brandsQuery = useQuery');
+  content = content.replace(
+    /const brandsQuery = useQuery/,
+    mutation + "\n  const brandsQuery = useQuery",
+  );
 }
 
-fs.writeFileSync('src/components/ForYouView.tsx', content);
+fs.writeFileSync("src/components/ForYouView.tsx", content);

@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/lib/research/actions.ts', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/lib/research/actions.ts", "utf8");
 
 // Insert after startResearchJob
 const automatedAction = `
@@ -27,6 +27,6 @@ export const triggerAutomatedResearch = createServerFn({ method: 'POST' })
   });
 `;
 
-content = content + '\n' + automatedAction;
+content = content + "\n" + automatedAction;
 
-fs.writeFileSync('src/lib/research/actions.ts', content);
+fs.writeFileSync("src/lib/research/actions.ts", content);

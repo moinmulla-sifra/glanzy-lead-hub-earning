@@ -24,21 +24,65 @@ export function ProfileView({ userId }: { userId: string | null }) {
 
   useEffect(() => {
     if (profileQuery.data) {
-      setFormData(profileQuery.data);
+      setFormData({
+        ...profileQuery.data,
+        niche:
+          profileQuery.data.niche ||
+          (profileQuery.data as any).primary_niche ||
+          "",
+      });
     }
   }, [profileQuery.data]);
 
   const updateProfileMutation = useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq("id", userId!);
+      const selectedNiche =
+        updates.niche || (updates as any).primary_niche || null;
+
+      const payload: Record<string, any> = {
+        id: userId!,
+        full_name: updates.full_name ?? null,
+        country: updates.country ?? null,
+        bio: updates.bio ?? null,
+        niche: selectedNiche,
+        primary_niche: selectedNiche,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (isAgency && updates.agency_name !== undefined) {
+        payload.agency_name = updates.agency_name;
+      }
+
+      const { error } = await supabase.from("profiles").upsert(payload);
       if (error) throw error;
+
+      // If agency, also keep workspace name synced
+      if (isAgency && updates.agency_name) {
+        const { data: wsMember } = await supabase
+          .from("workspace_members")
+          .select("workspace_id")
+          .eq("user_id", userId!)
+          .eq("role", "owner")
+          .maybeSingle();
+
+        if (wsMember?.workspace_id) {
+          await supabase
+            .from("workspaces")
+            .update({
+              name: updates.agency_name,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", wsMember.workspace_id);
+        }
+      }
     },
     onSuccess: () => {
       toast.success("Profile updated successfully");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({
+        queryKey: ["workspace_member_settings"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["workspace_member"] });
     },
     onError: (err: Error) =>
       toast.error(err.message || "Failed to update profile"),

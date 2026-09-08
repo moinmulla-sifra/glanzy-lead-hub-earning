@@ -1,11 +1,14 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/components/DiscoverView.tsx', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/components/DiscoverView.tsx", "utf8");
 
-if (!content.includes('import { startResearchJob }')) {
-  content = content.replace(/import \{ supabase, type Brand \} from "@\/lib\/supabase";/, 'import { supabase, type Brand } from "@/lib/supabase";\nimport { startResearchJob } from "@/lib/research/actions";');
+if (!content.includes("import { startResearchJob }")) {
+  content = content.replace(
+    /import \{ supabase, type Brand \} from "@\/lib\/supabase";/,
+    'import { supabase, type Brand } from "@/lib/supabase";\nimport { startResearchJob } from "@/lib/research/actions";',
+  );
 }
 
-if (!content.includes('const refreshResearchMutation = useMutation')) {
+if (!content.includes("const refreshResearchMutation = useMutation")) {
   const mutation = `
   const refreshResearchMutation = useMutation({
     mutationFn: async (brand: Brand) => {
@@ -27,11 +30,17 @@ if (!content.includes('const refreshResearchMutation = useMutation')) {
     onError: (err: Error) => toast.error(err.message || "Failed to start research"),
   });
 `;
-  content = content.replace(/const fetchBrands = async/, mutation + '\n  const fetchBrands = async');
+  content = content.replace(
+    /const fetchBrands = async/,
+    mutation + "\n  const fetchBrands = async",
+  );
 }
 
-content = content.replace(/onStartOutreach=\{\(\) => \{/, `isRefreshing={refreshResearchMutation.isPending}
+content = content.replace(
+  /onStartOutreach=\{\(\) => \{/,
+  `isRefreshing={refreshResearchMutation.isPending}
         onRefreshResearch={() => selectedBrand && refreshResearchMutation.mutate(selectedBrand)}
-        onStartOutreach={() => {`);
+        onStartOutreach={() => {`,
+);
 
-fs.writeFileSync('src/components/DiscoverView.tsx', content);
+fs.writeFileSync("src/components/DiscoverView.tsx", content);

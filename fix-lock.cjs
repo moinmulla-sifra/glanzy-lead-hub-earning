@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/lib/research/engine.ts', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/lib/research/engine.ts", "utf8");
 
 const oldLock = `.in('status', ['queued', 'running'])
       .limit(1);`;
@@ -23,4 +23,4 @@ const newLock = `.in('status', ['queued', 'running'])
     }`;
 
 content = content.replace(oldLock, newLock);
-fs.writeFileSync('src/lib/research/engine.ts', content);
+fs.writeFileSync("src/lib/research/engine.ts", content);

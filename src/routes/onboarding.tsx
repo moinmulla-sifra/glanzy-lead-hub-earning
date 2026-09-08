@@ -68,6 +68,7 @@ function OnboardingPage() {
       if (accountType === "creator") {
         if (!primaryNiche) throw new Error("Please enter your primary niche.");
         updates.primary_niche = primaryNiche;
+        updates.niche = primaryNiche;
         updates.content_categories = contentCategories
           .split(",")
           .map((s) => s.trim())
@@ -82,6 +83,8 @@ function OnboardingPage() {
         // We will update the workspace name to the agency name
         updates.website = website;
         updates.primary_niche = primaryNiche; // Agency categories/niches
+        updates.niche = primaryNiche;
+        updates.agency_name = agencyName;
         updates.content_categories = contentCategories
           .split(",")
           .map((s) => s.trim())
@@ -104,21 +107,38 @@ function OnboardingPage() {
 
       if (profileError) throw profileError;
 
-      // 2. Update Workspace
-      if (accountType === "agency") {
-        const { data: wsMember } = await supabase
-          .from("workspace_members")
-          .select("workspace_id")
-          .eq("user_id", userId)
-          .eq("role", "owner")
-          .single();
+      // 2. Ensure workspace exists
+      const { data: wsMember } = await supabase
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-        if (wsMember) {
-          await supabase
-            .from("workspaces")
-            .update({ name: agencyName })
-            .eq("id", wsMember.workspace_id);
+      if (!wsMember) {
+        const wsName = accountType === "agency" ? agencyName || "My Agency" : "My Workspace";
+        const { data: newWs } = await supabase
+          .from("workspaces")
+          .insert({
+            name: wsName,
+            type: accountType,
+            workspace_type: accountType,
+            owner_id: userId,
+          })
+          .select()
+          .maybeSingle();
+
+        if (newWs) {
+          await supabase.from("workspace_members").insert({
+            workspace_id: newWs.id,
+            user_id: userId,
+            role: "owner",
+          });
         }
+      } else if (accountType === "agency" && agencyName) {
+        await supabase
+          .from("workspaces")
+          .update({ name: agencyName, updated_at: new Date().toISOString() })
+          .eq("id", wsMember.workspace_id);
       }
 
       toast.success("Welcome to Branzly!");
@@ -136,8 +156,35 @@ function OnboardingPage() {
     try {
       await supabase
         .from("profiles")
-        .upsert({ id: userId, onboarding_completed: true })
-        .eq("id", userId);
+        .upsert({ id: userId, onboarding_completed: true });
+
+      const { data: wsMember } = await supabase
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (!wsMember) {
+        const { data: newWs } = await supabase
+          .from("workspaces")
+          .insert({
+            name: "My Workspace",
+            type: accountType || "creator",
+            workspace_type: accountType || "creator",
+            owner_id: userId,
+          })
+          .select()
+          .maybeSingle();
+
+        if (newWs) {
+          await supabase.from("workspace_members").insert({
+            workspace_id: newWs.id,
+            user_id: userId,
+            role: "owner",
+          });
+        }
+      }
+
       navigate({ to: "/dashboard", replace: true });
     } catch (err) {
       toast.error("Failed to skip");

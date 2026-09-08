@@ -14,7 +14,7 @@ export function TeamView({ userId }: { userId: string | null }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("workspace_members")
-        .select("workspace_id, role, workspaces(name, workspace_type)")
+        .select("workspace_id, role, workspaces(name, type, workspace_type)")
         .eq("user_id", userId!)
         .single();
 
@@ -25,8 +25,12 @@ export function TeamView({ userId }: { userId: string | null }) {
 
   const workspaceId = workspaceMemberQuery.data?.workspace_id;
   const isOwner = workspaceMemberQuery.data?.role === "owner";
+  const wsData = Array.isArray(workspaceMemberQuery.data?.workspaces)
+    ? workspaceMemberQuery.data?.workspaces[0]
+    : workspaceMemberQuery.data?.workspaces;
   const isAgency =
-    ((Array.isArray(workspaceMemberQuery.data?.workspaces) ? workspaceMemberQuery.data?.workspaces[0] : workspaceMemberQuery.data?.workspaces) as any)?.workspace_type === "agency";
+    (wsData as any)?.workspace_type === "agency" ||
+    (wsData as any)?.type === "agency";
 
   const teamMembersQuery = useQuery({
     queryKey: ["team_members", workspaceId],
@@ -93,7 +97,14 @@ export function TeamView({ userId }: { userId: string | null }) {
           </h1>
           <p className="text-muted-foreground text-lg">
             Manage access to your agency workspace (
-            {((Array.isArray(workspaceMemberQuery.data?.workspaces) ? workspaceMemberQuery.data?.workspaces[0] : workspaceMemberQuery.data?.workspaces) as any)?.name}).
+            {
+              (
+                (Array.isArray(workspaceMemberQuery.data?.workspaces)
+                  ? workspaceMemberQuery.data?.workspaces[0]
+                  : workspaceMemberQuery.data?.workspaces) as any
+              )?.name
+            }
+            ).
           </p>
         </div>
       </div>

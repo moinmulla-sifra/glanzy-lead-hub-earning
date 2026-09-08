@@ -30,7 +30,8 @@ export function ForYouView({ userId }: { userId: string | null }) {
     enabled: !!userId,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles").select("*")
+        .from("profiles")
+        .select("*")
         .eq("id", userId!)
         .single();
       if (error) throw error;
@@ -73,30 +74,36 @@ export function ForYouView({ userId }: { userId: string | null }) {
   });
 
   // 5. Fetch Candidate Brands
-  
-  
-  
+
   const refreshResearchMutation = useMutation({
     mutationFn: async (brand: Brand) => {
       if (!workspaceId || !userId) throw new Error("Missing context");
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token || '';
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token || "";
       const job = await startResearchJob({
         data: {
           workspaceId,
           userId,
-          type: 'refresh',
-          query: { url: brand.website || brand.domain, keywords: [brand.company_name] },
-          provider: 'tinyfish',
-          token
-        }
+          type: "refresh",
+          query: {
+            url: brand.website || brand.domain,
+            keywords: [brand.company_name],
+          },
+          provider: "tinyfish",
+          token,
+        },
       });
       return job;
     },
     onSuccess: () => {
-      toast.success("Research started in background. Results will appear shortly.");
+      toast.success(
+        "Research started in background. Results will appear shortly.",
+      );
     },
-    onError: (err: Error) => toast.error(err.message || "Failed to start research"),
+    onError: (err: Error) =>
+      toast.error(err.message || "Failed to start research"),
   });
 
   const brandsQuery = useQuery({
@@ -171,14 +178,15 @@ export function ForYouView({ userId }: { userId: string | null }) {
       let isNicheMatch = false;
 
       // Niche matching
-      if (profile.niche && brand.industry) {
+      const userNiche = profile.niche || (profile as any).primary_niche;
+      if (userNiche && brand.industry) {
         if (
-          brand.industry.toLowerCase().includes(profile.niche.toLowerCase()) ||
-          profile.niche.toLowerCase().includes(brand.industry.toLowerCase())
+          brand.industry.toLowerCase().includes(userNiche.toLowerCase()) ||
+          userNiche.toLowerCase().includes(brand.industry.toLowerCase())
         ) {
           score += 40;
           isNicheMatch = true;
-          reasons.push(`Strong match for your ${profile.niche} niche`);
+          reasons.push(`Strong match for your ${userNiche} niche`);
         } else if (brand.industry === "General") {
           score += 10;
         }
@@ -228,6 +236,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
   const isProfileIncomplete =
     profileQuery.isSuccess &&
     !profileQuery.data?.niche &&
+    !(profileQuery.data as any)?.primary_niche &&
     !profileQuery.data?.platforms?.length;
 
   return (
@@ -315,7 +324,12 @@ export function ForYouView({ userId }: { userId: string | null }) {
                   key={rec.brand.id}
                   rec={rec}
                   isSaved={savedBrandIds.has(rec.brand.id)}
-                  onToggleSave={() => toggleSaveMutation.mutate({ brandId: rec.brand.id, isSaved: savedBrandIds.has(rec.brand.id) })}
+                  onToggleSave={() =>
+                    toggleSaveMutation.mutate({
+                      brandId: rec.brand.id,
+                      isSaved: savedBrandIds.has(rec.brand.id),
+                    })
+                  }
                   onClickView={() => setSelectedBrand(rec.brand)}
                 />
               ))}
@@ -353,11 +367,20 @@ export function ForYouView({ userId }: { userId: string | null }) {
         <BrandProfileModal
           brand={selectedBrand}
           isOpen={true}
-                    onClose={() => setSelectedBrand(null)}
+          onClose={() => setSelectedBrand(null)}
           isSaved={savedBrandIds.has(selectedBrand.id)}
-          isSaving={toggleSaveMutation.isPending} onSave={() => toggleSaveMutation.mutate({ brandId: selectedBrand.id, isSaved: savedBrandIds.has(selectedBrand.id) })} onStartOutreach={() => {}}
+          isSaving={toggleSaveMutation.isPending}
+          onSave={() =>
+            toggleSaveMutation.mutate({
+              brandId: selectedBrand.id,
+              isSaved: savedBrandIds.has(selectedBrand.id),
+            })
+          }
+          onStartOutreach={() => {}}
           isRefreshing={refreshResearchMutation.isPending}
-          onRefreshResearch={() => selectedBrand && refreshResearchMutation.mutate(selectedBrand)}
+          onRefreshResearch={() =>
+            selectedBrand && refreshResearchMutation.mutate(selectedBrand)
+          }
         />
       )}
     </div>

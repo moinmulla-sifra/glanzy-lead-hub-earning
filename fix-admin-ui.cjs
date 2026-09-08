@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/components/AdminResearchView.tsx', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/components/AdminResearchView.tsx", "utf8");
 
 const newImports = `
 import { useState } from "react";
@@ -8,7 +8,10 @@ import { toast } from "sonner";
 import { triggerAutomatedResearch } from "@/lib/research/actions";
 `;
 
-content = content.replace(/import \{ useQuery \} from "@tanstack\/react-query";/, newImports + '\nimport { useQuery } from "@tanstack/react-query";');
+content = content.replace(
+  /import \{ useQuery \} from "@tanstack\/react-query";/,
+  newImports + '\nimport { useQuery } from "@tanstack/react-query";',
+);
 
 const newLogic = `
   const queryClient = useQueryClient();
@@ -68,7 +71,10 @@ const newLogic = `
   });
 `;
 
-content = content.replace(/const jobsQuery = useQuery\(\{/, newLogic + '\n  const jobsQuery = useQuery({');
+content = content.replace(
+  /const jobsQuery = useQuery\(\{/,
+  newLogic + "\n  const jobsQuery = useQuery({",
+);
 
 const newHeader = `
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -130,6 +136,9 @@ const newHeader = `
       <div className="flex justify-between items-center">
 `;
 
-content = content.replace(/<div className="flex justify-between items-center">/, newHeader);
+content = content.replace(
+  /<div className="flex justify-between items-center">/,
+  newHeader,
+);
 
-fs.writeFileSync('src/components/AdminResearchView.tsx', content);
+fs.writeFileSync("src/components/AdminResearchView.tsx", content);

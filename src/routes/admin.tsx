@@ -37,17 +37,6 @@ function AdminPage() {
     },
   });
 
-  if (!userId || profileQuery.isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="w-8 h-8 animate-spin text-brand" />
-      </div>
-    );
-  }
-
-  // Basic role check - in a real app this should be enforced strictly via RLS and claims
-  const isAdmin = profileQuery.data?.account_type === "admin";
-
   const makeAdminMutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase
@@ -60,6 +49,17 @@ function AdminPage() {
       profileQuery.refetch();
     },
   });
+
+  if (!userId || profileQuery.isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-brand" />
+      </div>
+    );
+  }
+
+  // Basic role check - in a real app this should be enforced strictly via RLS and claims
+  const isAdmin = profileQuery.data?.account_type === "admin";
 
   if (!isAdmin) {
     return (
@@ -80,12 +80,14 @@ function AdminPage() {
           >
             <ArrowLeft size={16} /> Return to Dashboard
           </Link>
-          <button 
+          <button
             onClick={() => makeAdminMutation.mutate()}
             disabled={makeAdminMutation.isPending}
             className="text-xs text-muted-foreground underline mt-4 hover:text-foreground"
           >
-            {makeAdminMutation.isPending ? "Updating..." : "Dev Bypass: Make me an admin"}
+            {makeAdminMutation.isPending
+              ? "Updating..."
+              : "Dev Bypass: Make me an admin"}
           </button>
         </div>
       </div>

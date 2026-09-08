@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/components/AdminResearchView.tsx', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/components/AdminResearchView.tsx", "utf8");
 
 const newMetricsCode = `
   const totalJobs = jobs.length;
@@ -17,7 +17,10 @@ const newMetricsCode = `
     <div className="space-y-6">
 `;
 
-content = content.replace(/const jobs = jobsQuery\.data \|\| \[\];\s*return \(\s*<div className="space-y-6">/, newMetricsCode);
+content = content.replace(
+  /const jobs = jobsQuery\.data \|\| \[\];\s*return \(\s*<div className="space-y-6">/,
+  newMetricsCode,
+);
 
 const newMetricsUI = `
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -62,11 +65,16 @@ const afterEngineConfig = `
       <div className="flex justify-between items-center">
 `;
 
-content = content.replace(/<div className="flex justify-between items-center">/, afterEngineConfig);
+content = content.replace(
+  /<div className="flex justify-between items-center">/,
+  afterEngineConfig,
+);
 
-if (!content.includes('BarChart')) {
-  content = content.replace(/import \{([\s\S]*?)X,([\s\S]*?)\} from "lucide-react";/, 
-    'import { $1 X, BarChart, $2 } from "lucide-react";');
+if (!content.includes("BarChart")) {
+  content = content.replace(
+    /import \{([\s\S]*?)X,([\s\S]*?)\} from "lucide-react";/,
+    'import { $1 X, BarChart, $2 } from "lucide-react";',
+  );
 }
 
-fs.writeFileSync('src/components/AdminResearchView.tsx', content);
+fs.writeFileSync("src/components/AdminResearchView.tsx", content);

@@ -103,7 +103,9 @@ export function SettingsView({ userId }: { userId: string | null }) {
     },
     onSuccess: () => {
       toast.success("Workspace settings saved");
-      queryClient.invalidateQueries({ queryKey: ["workspace_member_settings"] });
+      queryClient.invalidateQueries({
+        queryKey: ["workspace_member_settings"],
+      });
     },
     onError: (err: Error) =>
       toast.error(err.message || "Failed to update workspace"),

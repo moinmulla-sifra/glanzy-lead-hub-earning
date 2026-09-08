@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/lib/research/engine.ts', 'utf8');
+const fs = require("fs");
+let content = fs.readFileSync("src/lib/research/engine.ts", "utf8");
 
 // Insert after processResult
 const automatedLogic = `
@@ -121,6 +121,9 @@ const automatedLogic = `
   }
 `;
 
-content = content.replace(/static calculateLeadScore/g, automatedLogic + '\n  static calculateLeadScore');
+content = content.replace(
+  /static calculateLeadScore/g,
+  automatedLogic + "\n  static calculateLeadScore",
+);
 
-fs.writeFileSync('src/lib/research/engine.ts', content);
+fs.writeFileSync("src/lib/research/engine.ts", content);

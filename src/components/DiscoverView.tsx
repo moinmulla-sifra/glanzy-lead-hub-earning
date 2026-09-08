@@ -84,33 +84,42 @@ export function DiscoverView({
 
   const savedIds = savedQuery.data || new Set();
 
-  
   const refreshResearchMutation = useMutation({
     mutationFn: async (brand: Brand) => {
       if (!workspaceId || !userId) throw new Error("Missing context");
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token || '';
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token || "";
       const job = await startResearchJob({
         data: {
           workspaceId,
           userId,
-          type: 'refresh',
-          query: { url: brand.website || brand.domain, keywords: [brand.company_name] },
-          provider: 'tinyfish',
-          token
-        }
+          type: "refresh",
+          query: {
+            url: brand.website || brand.domain,
+            keywords: [brand.company_name],
+          },
+          provider: "tinyfish",
+          token,
+        },
       });
       return job;
     },
     onSuccess: () => {
-      toast.success("Research started in background. Results will appear shortly.");
+      toast.success(
+        "Research started in background. Results will appear shortly.",
+      );
     },
-    onError: (err: Error) => toast.error(err.message || "Failed to start research"),
+    onError: (err: Error) =>
+      toast.error(err.message || "Failed to start research"),
   });
 
   const fetchBrands = async ({ pageParam = 0 }) => {
     const pageSize = 12;
-    let q = supabase.from("brands").select(BRAND_SELECT_FIELDS, { count: "exact" });
+    let q = supabase
+      .from("brands")
+      .select(BRAND_SELECT_FIELDS, { count: "exact" });
 
     if (debouncedSearch) {
       q = q.or(
@@ -530,7 +539,6 @@ export function DiscoverView({
         </div>
       ) : (
         <>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {allBrands.map((brand) => {
               const isSaved = savedIds.has(brand.id);
@@ -701,7 +709,9 @@ export function DiscoverView({
         }
         onSave={() => selectedBrand && saveMutation.mutate(selectedBrand.id)}
         isRefreshing={refreshResearchMutation.isPending}
-        onRefreshResearch={() => selectedBrand && refreshResearchMutation.mutate(selectedBrand)}
+        onRefreshResearch={() =>
+          selectedBrand && refreshResearchMutation.mutate(selectedBrand)
+        }
         onStartOutreach={() => {
           if (selectedBrand && onStartOutreach) {
             setSelectedBrand(null);
