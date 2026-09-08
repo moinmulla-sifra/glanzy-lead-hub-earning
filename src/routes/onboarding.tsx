@@ -88,11 +88,19 @@ function OnboardingPage() {
           .filter(Boolean);
       }
 
-      // 1. Update Profile
+      // 1. Upsert Profile
+      // Using upsert in case the profile row doesn't exist due to legacy account
+      const profilePayload = {
+        id: userId,
+        account_type: accountType,
+        ...updates
+      };
+      
       const { error: profileError } = await supabase
         .from("profiles")
-        .update(updates)
-        .eq("id", userId);
+        .upsert(profilePayload)
+        .select()
+        .single();
 
       if (profileError) throw profileError;
 
@@ -128,7 +136,7 @@ function OnboardingPage() {
     try {
       await supabase
         .from("profiles")
-        .update({ onboarding_completed: true })
+        .upsert({ id: userId, onboarding_completed: true })
         .eq("id", userId);
       navigate({ to: "/dashboard", replace: true });
     } catch (err) {

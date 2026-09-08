@@ -330,6 +330,21 @@ var CircleCheck = createLucideIcon("circle-check", [["circle", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var CirclePlay = createLucideIcon("circle-play", [["path", {
+	d: "M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z",
+	key: "kmsa83"
+}], ["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Clock = createLucideIcon("clock", [["circle", {
 	cx: "12",
 	cy: "12",
@@ -1105,4 +1120,4 @@ var Zap = createLucideIcon("zap", [["path", {
 	key: "1xq2db"
 }]]);
 //#endregion
-export { Linkedin as A, CircleAlert as B, Monitor as C, LogOut as D, Mail as E, ExternalLink as F, Building2 as G, Check as H, CreditCard as I, Bell as J, Briefcase as K, Compass as L, Key as M, Globe as N, LoaderCircle as O, FileText as P, Clock as R, Moon as S, Menu as T, ChartNoAxesColumnIncreasing as U, ChevronDown as V, Calendar as W, ArrowLeft as X, ArrowRight as Y, Activity as Z, Search as _, UserPlus as a, Phone as b, TrendingUp as c, Star as d, Sparkles as f, Send as g, Settings as h, User as i, LayoutGrid as j, List as k, Trash2 as l, Shield as m, X as n, UserMinus as o, SlidersHorizontal as p, Bookmark as q, Users as r, TriangleAlert as s, Zap as t, Sun as u, Save as v, MessageSquare as w, Paintbrush as x, Plus as y, CircleCheck as z };
+export { Linkedin as A, CircleCheck as B, Monitor as C, LogOut as D, Mail as E, ExternalLink as F, Calendar as G, ChevronDown as H, CreditCard as I, Bookmark as J, Building2 as K, Compass as L, Key as M, Globe as N, LoaderCircle as O, FileText as P, Activity as Q, Clock as R, Moon as S, Menu as T, Check as U, CircleAlert as V, ChartNoAxesColumnIncreasing as W, ArrowRight as X, Bell as Y, ArrowLeft as Z, Search as _, UserPlus as a, Phone as b, TrendingUp as c, Star as d, Sparkles as f, Send as g, Settings as h, User as i, LayoutGrid as j, List as k, Trash2 as l, Shield as m, X as n, UserMinus as o, SlidersHorizontal as p, Briefcase as q, Users as r, TriangleAlert as s, Zap as t, Sun as u, Save as v, MessageSquare as w, Paintbrush as x, Plus as y, CirclePlay as z };

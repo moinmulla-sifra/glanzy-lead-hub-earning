@@ -107,37 +107,6 @@ function AuthPage() {
             toast.error("User already exists or email is taken.");
           } else if (data.session) {
             toast.success("Account created!");
-
-            // Create profile
-            await supabase.from("profiles").upsert({
-              id: data.user.id,
-              full_name: fullName,
-              account_type: accountType,
-            });
-
-            // Create workspace
-            const workspaceName =
-              accountType === "agency"
-                ? `${fullName}'s Agency`
-                : `${fullName}'s Workspace`;
-            const { data: wsData, error: wsError } = await supabase
-              .from("workspaces")
-              .insert({
-                name: workspaceName,
-                type: accountType,
-                owner_id: data.user.id,
-              })
-              .select("id")
-              .single();
-
-            if (!wsError && wsData) {
-              await supabase.from("workspace_members").insert({
-                workspace_id: wsData.id,
-                user_id: data.user.id,
-                role: "owner",
-              });
-            }
-
             navigate({ to: "/onboarding", replace: true });
           } else {
             toast.success("Please check your email to verify your account.");

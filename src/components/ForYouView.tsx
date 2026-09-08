@@ -2,6 +2,7 @@ import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase, type Brand, type Profile } from "@/lib/supabase";
+import { startResearchJob } from "@/lib/research/actions";
 import { toast } from "sonner";
 import { useMonetization } from "@/lib/useMonetization";
 import { Link } from "@tanstack/react-router";
@@ -72,6 +73,32 @@ export function ForYouView({ userId }: { userId: string | null }) {
   });
 
   // 5. Fetch Candidate Brands
+  
+  
+  
+  const refreshResearchMutation = useMutation({
+    mutationFn: async (brand: Brand) => {
+      if (!workspaceId || !userId) throw new Error("Missing context");
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token || '';
+      const job = await startResearchJob({
+        data: {
+          workspaceId,
+          userId,
+          type: 'refresh',
+          query: { url: brand.website || brand.domain, keywords: [brand.company_name] },
+          provider: 'tinyfish',
+          token
+        }
+      });
+      return job;
+    },
+    onSuccess: () => {
+      toast.success("Research started in background. Results will appear shortly.");
+    },
+    onError: (err: Error) => toast.error(err.message || "Failed to start research"),
+  });
+
   const brandsQuery = useQuery({
     queryKey: ["foryou_brands"],
     enabled: !!profileQuery.data,
@@ -329,6 +356,8 @@ export function ForYouView({ userId }: { userId: string | null }) {
                     onClose={() => setSelectedBrand(null)}
           isSaved={savedBrandIds.has(selectedBrand.id)}
           isSaving={toggleSaveMutation.isPending} onSave={() => toggleSaveMutation.mutate({ brandId: selectedBrand.id, isSaved: savedBrandIds.has(selectedBrand.id) })} onStartOutreach={() => {}}
+          isRefreshing={refreshResearchMutation.isPending}
+          onRefreshResearch={() => selectedBrand && refreshResearchMutation.mutate(selectedBrand)}
         />
       )}
     </div>

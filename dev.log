@@ -1,0 +1,13 @@
+
+> dev
+> vite dev --host 0.0.0.0 --port 3000
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+Port 3000 is in use, trying another one...
+
+  VITE v8.1.5  ready in 1298 ms
+
+  ➜  Local:   http://localhost:3001/
+  ➜  Network: http://169.254.8.1:3001/
+  ➜  Network: http://169.254.9.1:3001/
+  ➜  Network: http://169.254.169.1:3001/

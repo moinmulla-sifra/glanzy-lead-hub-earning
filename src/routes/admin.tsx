@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Shield, Loader2, ArrowLeft } from "lucide-react";
+import { AdminResearchView } from "@/components/AdminResearchView";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -47,6 +48,19 @@ function AdminPage() {
   // Basic role check - in a real app this should be enforced strictly via RLS and claims
   const isAdmin = profileQuery.data?.account_type === "admin";
 
+  const makeAdminMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ account_type: "admin" })
+        .eq("id", userId!);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      profileQuery.refetch();
+    },
+  });
+
   if (!isAdmin) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
@@ -59,12 +73,21 @@ function AdminPage() {
         <p className="text-muted-foreground mb-6">
           You do not have permission to access the admin portal.
         </p>
-        <Link
-          to="/discover"
-          className="flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
-        >
-          <ArrowLeft size={16} /> Return to Dashboard
-        </Link>
+        <div className="flex flex-col gap-3 items-center">
+          <Link
+            to="/discover"
+            className="flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+          >
+            <ArrowLeft size={16} /> Return to Dashboard
+          </Link>
+          <button 
+            onClick={() => makeAdminMutation.mutate()}
+            disabled={makeAdminMutation.isPending}
+            className="text-xs text-muted-foreground underline mt-4 hover:text-foreground"
+          >
+            {makeAdminMutation.isPending ? "Updating..." : "Dev Bypass: Make me an admin"}
+          </button>
+        </div>
       </div>
     );
   }
@@ -110,13 +133,7 @@ function AdminPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border/50 rounded-2xl p-8 text-center text-muted-foreground">
-          <p>
-            Admin tools are currently in development. Database operations should
-            be performed via the Supabase Dashboard until the internal admin
-            suite is ready.
-          </p>
-        </div>
+        <AdminResearchView />
       </main>
     </div>
   );

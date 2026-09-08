@@ -25,6 +25,8 @@ interface BrandProfileModalProps {
   onSave: () => void;
   isSaving: boolean;
   onStartOutreach: () => void;
+  onRefreshResearch?: () => void;
+  isRefreshing?: boolean;
 }
 
 export const BrandProfileModal = React.memo(function BrandProfileModal({
@@ -35,6 +37,8 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
   onSave,
   isSaving,
   onStartOutreach,
+  onRefreshResearch,
+  isRefreshing,
 }: BrandProfileModalProps) {
   useEffect(() => {
     if (isOpen) {
@@ -330,8 +334,19 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
             Information gathered for discovery purposes.
           </p>
           <div className="flex items-center gap-3 w-full sm:w-auto">
+            
+          {onRefreshResearch && (
             <button
-              disabled={isSaving}
+              onClick={onRefreshResearch}
+              disabled={isRefreshing}
+              className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg flex items-center justify-center font-medium border border-border hover:bg-secondary/80 transition-colors shadow-sm disabled:opacity-50"
+            >
+              {isRefreshing ? <span className="animate-pulse">Researching...</span> : 'Refresh Research'}
+            </button>
+          )}
+
+          <button
+            disabled={isSaving}
               onClick={onSave}
               className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200
                 ${

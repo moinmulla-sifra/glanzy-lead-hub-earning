@@ -2,10 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 
 // Browser-safe configuration for the user's own external Supabase project.
 // Publishable (anon) key only — never a service-role/secret key.
-export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "";
+export const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || "";
 export const SUPABASE_PUBLISHABLE_KEY =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env['VITE_SUPABASE_ANON_KEY'] ||
+  import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] ||
   "";
 
 if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
@@ -43,6 +43,11 @@ export interface Profile {
   agency_name: string | null;
   created_at: string;
   updated_at: string;
+  last_researched_at?: string | null;
+  last_verified_at?: string | null;
+  data_confidence?: 'high' | 'medium' | 'low' | 'unverified' | null;
+  research_status?: 'candidate' | 'verified' | 'needs_review' | 'rejected' | null;
+  source_count?: number;
 }
 
 export interface Workspace {
@@ -152,5 +157,45 @@ export interface OutreachActivity {
   description: string | null;
   old_status: string | null;
   new_status: string | null;
+  created_at: string;
+}
+
+export interface ResearchJob {
+  id: string;
+  workspace_id: string;
+  requested_by: string;
+  research_type: string;
+  query: any;
+  provider: string | null;
+  status: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+  started_at: string | null;
+  completed_at: string | null;
+  error: string | null;
+  result_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ResearchRun {
+  id: string;
+  research_job_id: string;
+  provider: string;
+  status: 'running' | 'completed' | 'failed';
+  raw_results: any;
+  error: string | null;
+  started_at: string;
+  completed_at: string | null;
+}
+
+export interface BrandEvidence {
+  id: string;
+  brand_id: string;
+  research_run_id: string | null;
+  source_url: string | null;
+  source_type: string | null;
+  field_name: string;
+  evidence: any;
+  confidence: 'high' | 'medium' | 'low' | 'unverified' | null;
+  discovered_at: string;
   created_at: string;
 }

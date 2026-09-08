@@ -1,7 +1,7 @@
-import { t as supabase } from "./supabase-BEO93jmY.mjs";
+import { t as supabase } from "./supabase-CzmrzPTc.mjs";
 import { r as useQuery } from "../_libs/react+tanstack__react-query.mjs";
 import { t as PLANS } from "./monetization-mD78bnGP.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/useMonetization-C8GPMWTs.js
+//#region node_modules/.nitro/vite/services/ssr/assets/useMonetization-Dm9pnDla.js
 function useMonetization(userId) {
 	const { data: memberData } = useQuery({
 		queryKey: ["workspace_member", userId],
