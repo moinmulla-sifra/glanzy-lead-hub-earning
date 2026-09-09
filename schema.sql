@@ -718,3 +718,29 @@ CREATE TABLE IF NOT EXISTS public.brand_funding (
 ALTER TABLE public.brand_funding ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Authenticated users can view brand_funding" ON public.brand_funding FOR SELECT USING (auth.role() = 'authenticated');
 
+-- ADD MISSING BRAND INTELLIGENCE METADATA TO THE MAIN BRANDS TABLE
+ALTER TABLE public.brands
+ADD COLUMN IF NOT EXISTS logo_url text,
+ADD COLUMN IF NOT EXISTS city text,
+ADD COLUMN IF NOT EXISTS category text,
+ADD COLUMN IF NOT EXISTS subcategory text,
+ADD COLUMN IF NOT EXISTS company_type text,
+ADD COLUMN IF NOT EXISTS founded_year integer,
+ADD COLUMN IF NOT EXISTS company_description text,
+ADD COLUMN IF NOT EXISTS product_description text,
+ADD COLUMN IF NOT EXISTS target_audience text,
+ADD COLUMN IF NOT EXISTS target_market text,
+ADD COLUMN IF NOT EXISTS target_demographic text,
+ADD COLUMN IF NOT EXISTS price_positioning text,
+ADD COLUMN IF NOT EXISTS business_model text,
+ADD COLUMN IF NOT EXISTS opportunity_score integer,
+ADD COLUMN IF NOT EXISTS creator_fit_score integer,
+ADD COLUMN IF NOT EXISTS marketing_activity_score integer,
+ADD COLUMN IF NOT EXISTS creator_signals jsonb,
+ADD COLUMN IF NOT EXISTS opportunity_signals jsonb,
+ADD COLUMN IF NOT EXISTS target_customer text,
+ADD COLUMN IF NOT EXISTS data_confidence text,
+ADD COLUMN IF NOT EXISTS recent_collaborations text,
+ADD COLUMN IF NOT EXISTS research_status text,
+ADD COLUMN IF NOT EXISTS last_researched_at timestamptz,
+ADD COLUMN IF NOT EXISTS source_count integer;
