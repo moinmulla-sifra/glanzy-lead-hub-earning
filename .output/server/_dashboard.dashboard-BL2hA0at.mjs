@@ -2,7 +2,7 @@ import { t as supabase } from "./_ssr/supabase-CzmrzPTc.mjs";
 import { r as useQuery } from "./_libs/react+tanstack__react-query.mjs";
 import { y as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
-import { U as Compass, _ as Send, c as TrendingUp, et as Bookmark, p as Sparkles } from "./_libs/lucide-react.mjs";
+import { h as Sparkles, it as Bookmark, q as Compass, u as TrendingUp, y as Send } from "./_libs/lucide-react.mjs";
 import { t as useMonetization } from "./_ssr/useMonetization-Dm9pnDla.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.dashboard-BL2hA0at.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();

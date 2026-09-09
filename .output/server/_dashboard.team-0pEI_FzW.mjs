@@ -2,7 +2,7 @@ import { n as __toESM } from "./_runtime.mjs";
 import { t as supabase } from "./_ssr/supabase-CzmrzPTc.mjs";
 import { a as useQueryClient, n as useMutation, r as useQuery, s as require_react } from "./_libs/react+tanstack__react-query.mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
-import { a as UserPlus, h as Shield, j as LoaderCircle, o as UserMinus, r as Users } from "./_libs/lucide-react.mjs";
+import { N as LoaderCircle, _ as Shield, i as Users, o as UserPlus, s as UserMinus } from "./_libs/lucide-react.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.team-0pEI_FzW.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

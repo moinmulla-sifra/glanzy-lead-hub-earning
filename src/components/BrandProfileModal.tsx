@@ -1,26 +1,5 @@
 import {
-  X,
-  ExternalLink,
-  Mail,
-  Phone,
-  Linkedin,
-  Building2,
-  TrendingUp,
-  Sparkles,
-  AlertCircle,
-  Save,
-  Check,
-  Send,
-  MapPin,
-  Globe,
-  Tag,
-  DollarSign,
-  Users,
-  Activity,
-  Briefcase,
-  History,
-  Info,
-  Calendar,
+  X, ExternalLink, Mail, Phone, Linkedin, Building2, TrendingUp, Sparkles, AlertCircle, Save, Check, Send, MapPin, Globe, Tag, DollarSign, Users, Activity, Briefcase, History, Info, Calendar, Instagram, Youtube, Twitter, Facebook
 } from "lucide-react";
 import { type Brand } from "@/lib/supabase";
 import React, { useEffect, useState } from "react";
@@ -66,6 +45,51 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
     };
   }, [isOpen]);
 
+  const { data: contactsData } = useQuery({
+    queryKey: ["brand-contacts", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data } = await supabase.from("brand_contacts").select("*").eq("brand_id", brand!.id);
+      return data || [];
+    }
+  });
+
+  const { data: productsData } = useQuery({
+    queryKey: ["brand-products", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data } = await supabase.from("brand_products").select("*").eq("brand_id", brand!.id);
+      return data || [];
+    }
+  });
+
+  const { data: socialProfilesData } = useQuery({
+    queryKey: ["brand-social-profiles", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data } = await supabase.from("brand_social_profiles").select("*").eq("brand_id", brand!.id);
+      return data || [];
+    }
+  });
+
+  const { data: activitiesData } = useQuery({
+    queryKey: ["brand-activities", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data } = await supabase.from("brand_activities").select("*").eq("brand_id", brand!.id).order('date', { ascending: false });
+      return data || [];
+    }
+  });
+
+  const { data: fundingData } = useQuery({
+    queryKey: ["brand-funding", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data } = await supabase.from("brand_funding").select("*").eq("brand_id", brand!.id);
+      return data || [];
+    }
+  });
+
   // Fetch current user/workspace context and contacted status
   const { data: contactedData, refetch: refetchContacted } = useQuery({
     queryKey: ["brand-contacted-status", brand?.id],
@@ -104,7 +128,9 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
           brand_id: brand.id,
           status: "contacted",
           contacted_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
+          contacted_by: session.session.user.id,
+          contact_channel: 'platform'
         }, { onConflict: 'workspace_id, brand_id' });
         
       if (error) throw error;
@@ -122,14 +148,14 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
 
   if (!isOpen || !brand) return null;
 
-  const copyEmail = () => {
-    if (brand.email) {
-      navigator.clipboard.writeText(brand.email);
+  const copyEmail = (email: string) => {
+    if (email) {
+      navigator.clipboard.writeText(email);
       toast.success("Email copied to clipboard");
     }
   };
 
-  const hasContactInfo = brand.contact_person || brand.email || brand.phone || brand.linkedin;
+  const hasContactInfo = brand.contact_person || brand.email || brand.phone || brand.linkedin || (contactsData && contactsData.length > 0);
   const isContacted = !!contactedData;
 
   const ScoreCircle = ({ score, label }: { score: number | null, label: string }) => {
@@ -141,6 +167,19 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
         <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mt-1">{label}</div>
       </div>
     );
+  };
+
+  const PlatformIcon = ({ platform }: { platform: string }) => {
+    switch (platform.toLowerCase()) {
+      case 'instagram': return <Instagram size={14} />;
+      case 'youtube': return <Youtube size={14} />;
+      case 'tiktok': return <Sparkles size={14} />;
+      case 'linkedin': return <Linkedin size={14} />;
+      case 'twitter':
+      case 'x': return <Twitter size={14} />;
+      case 'facebook': return <Facebook size={14} />;
+      default: return <Globe size={14} />;
+    }
   };
 
   return createPortal(
@@ -283,7 +322,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                               <div className="text-sm font-medium truncate">{brand.email}</div>
                               <div className="text-xs text-muted-foreground">Business Email</div>
                             </div>
-                            <button onClick={copyEmail} className="p-1.5 text-muted-foreground hover:bg-muted rounded-md transition-colors">
+                            <button onClick={() => copyEmail(brand.email!)} className="p-1.5 text-muted-foreground hover:bg-muted rounded-md transition-colors">
                               <span className="text-xs font-medium px-2">Copy</span>
                             </button>
                           </div>
@@ -301,6 +340,27 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                           </div>
                         )}
                       </div>
+
+                      {contactsData && contactsData.length > 0 && (
+                        <div className="mt-6">
+                           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Additional Contacts</div>
+                           <div className="space-y-4">
+                              {contactsData.map((contact: any) => (
+                                <div key={contact.id} className="pt-4 border-t border-border/50">
+                                   <div className="text-sm font-medium">{contact.name || 'Unnamed Contact'}</div>
+                                   {contact.role && <div className="text-sm text-muted-foreground">{contact.role} {contact.department ? `(${contact.department})` : ''}</div>}
+                                   {contact.email && (
+                                     <div className="flex items-center gap-2 mt-2">
+                                       <Mail size={12} className="text-muted-foreground" />
+                                       <div className="text-xs font-medium truncate flex-1">{contact.email}</div>
+                                       <button onClick={() => copyEmail(contact.email)} className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground hover:text-foreground">Copy</button>
+                                     </div>
+                                   )}
+                                </div>
+                              ))}
+                           </div>
+                        </div>
+                      )}
                     </div>
                     
                     <div className="bg-card p-6">
@@ -318,6 +378,23 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                             </div>
                           </div>
                         )}
+                        {socialProfilesData && socialProfilesData.map((profile: any) => (
+                          <div key={profile.id} className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 text-foreground">
+                              <PlatformIcon platform={profile.platform} />
+                            </div>
+                            <div className="flex-1 min-w-0 flex justify-between items-center">
+                              <a href={profile.url.startsWith('http') ? profile.url : `https://${profile.url}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:underline truncate block capitalize">
+                                {profile.platform}
+                              </a>
+                              {profile.follower_count && (
+                                <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                                  {new Intl.NumberFormat('en-US', { notation: "compact", compactDisplay: "short" }).format(profile.follower_count)} followers
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -383,7 +460,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                   {(brand.why_now || brand.opportunity_signals) && (
                     <section>
                       <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                        <Sparkles size={18} className="text-brand" /> Why This Brand?
+                        <Sparkles size={18} className="text-brand" /> Opportunity Signals
                       </h3>
                       <div className="bg-brand/5 border border-brand/10 rounded-2xl p-5">
                         {brand.why_now && (
@@ -410,7 +487,20 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                         {brand.product_description ? (
                           <p>{brand.product_description}</p>
                         ) : (
-                          <p className="italic">Not available</p>
+                          <p className="italic">No product overview available.</p>
+                        )}
+                        
+                        {productsData && productsData.length > 0 && (
+                          <div className="mt-4 space-y-3">
+                            {productsData.map((prod: any) => (
+                              <div key={prod.id} className="bg-muted/30 p-3 rounded-lg border border-border/50">
+                                <div className="font-medium text-foreground">{prod.name}</div>
+                                {prod.category && <div className="text-xs mt-0.5">{prod.category}</div>}
+                                {prod.description && <div className="text-xs mt-1.5 opacity-80">{prod.description}</div>}
+                                {prod.price && <div className="text-xs mt-1.5 font-medium">{prod.price}</div>}
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </div>
                     </section>
@@ -462,10 +552,10 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                     </div>
                   </section>
                   
-                  {/* Recent Activity */}
+                  {/* Recent Activity & Funding */}
                   <section>
                     <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                      <History size={18} className="text-muted-foreground" /> Recent Activity
+                      <History size={18} className="text-muted-foreground" /> Recent Activity & Funding
                     </h3>
                     <div className="space-y-3">
                       {brand.recent_launch && (
@@ -486,8 +576,33 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                           </div>
                         </div>
                       )}
+
+                      {fundingData && fundingData.length > 0 && fundingData.map((funding: any) => (
+                        <div key={funding.id} className="flex gap-3 items-start border border-border/50 p-4 rounded-xl">
+                          <DollarSign size={16} className="text-green-500 mt-0.5 shrink-0" />
+                          <div>
+                            <h4 className="text-sm font-semibold capitalize">{funding.funding_stage || 'Funding Round'}</h4>
+                            <div className="text-sm text-foreground font-medium">{funding.funding_amount}</div>
+                            <div className="text-xs text-muted-foreground mt-1">
+                                {funding.funding_date ? new Date(funding.funding_date).toLocaleDateString() : ''} 
+                                {funding.investors ? ` • Investors: ${funding.investors}` : ''}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {activitiesData && activitiesData.length > 0 && activitiesData.map((activity: any) => (
+                        <div key={activity.id} className="flex gap-3 items-start border border-border/50 p-4 rounded-xl">
+                          <Activity size={16} className="text-muted-foreground mt-0.5 shrink-0" />
+                          <div>
+                            <h4 className="text-sm font-semibold capitalize">{activity.activity_type.replace('_', ' ')}</h4>
+                            <p className="text-sm text-muted-foreground">{activity.description}</p>
+                            {activity.date && <div className="text-xs text-muted-foreground mt-1">{new Date(activity.date).toLocaleDateString()}</div>}
+                          </div>
+                        </div>
+                      ))}
                       
-                      {!brand.recent_launch && !brand.recent_funding && (
+                      {!brand.recent_launch && !brand.recent_funding && (!activitiesData || activitiesData.length === 0) && (!fundingData || fundingData.length === 0) && (
                         <p className="text-sm text-muted-foreground italic">No recent activities tracked.</p>
                       )}
                     </div>

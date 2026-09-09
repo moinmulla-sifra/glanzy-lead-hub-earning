@@ -431,6 +431,16 @@ var ExternalLink = createLucideIcon("external-link", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Facebook = createLucideIcon("facebook", [["path", {
+	d: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z",
+	key: "1jg4f8"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var FileText = createLucideIcon("file-text", [
 	["path", {
 		d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",
@@ -515,6 +525,34 @@ var Info = createLucideIcon("info", [
 	["path", {
 		d: "M12 8h.01",
 		key: "e9boi3"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Instagram = createLucideIcon("instagram", [
+	["rect", {
+		width: "20",
+		height: "20",
+		x: "2",
+		y: "2",
+		rx: "5",
+		ry: "5",
+		key: "2e1cvw"
+	}],
+	["path", {
+		d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z",
+		key: "9exkf1"
+	}],
+	["line", {
+		x1: "17.5",
+		x2: "17.51",
+		y1: "6.5",
+		y2: "6.5",
+		key: "r4j83e"
 	}]
 ]);
 /**
@@ -1121,6 +1159,16 @@ var TriangleAlert = createLucideIcon("triangle-alert", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Twitter = createLucideIcon("twitter", [["path", {
+	d: "M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z",
+	key: "pff0z6"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var UserMinus = createLucideIcon("user-minus", [
 	["path", {
 		d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
@@ -1232,9 +1280,22 @@ var X = createLucideIcon("x", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Youtube = createLucideIcon("youtube", [["path", {
+	d: "M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17",
+	key: "1q2vi4"
+}], ["path", {
+	d: "m10 15 5-3-5-3z",
+	key: "1jp15x"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Zap = createLucideIcon("zap", [["path", {
 	d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
 	key: "1xq2db"
 }]]);
 //#endregion
-export { Briefcase as $, LogOut as A, ExternalLink as B, PanelLeftClose as C, Menu as D, MessageSquare as E, Key as F, CirclePlay as G, CreditCard as H, Info as I, ChevronDown as J, CircleCheck as K, History as L, List as M, Linkedin as N, MapPin as O, LayoutGrid as P, Building2 as Q, Globe as R, PanelLeftOpen as S, Monitor as T, Compass as U, DollarSign as V, Clock as W, ChartNoAxesColumnIncreasing as X, Check as Y, Calendar as Z, Send as _, UserPlus as a, Plus as b, TrendingUp as c, Sun as d, Bookmark as et, Star as f, Settings as g, Shield as h, User as i, Activity as it, LoaderCircle as j, Mail as k, Trash2 as l, SlidersHorizontal as m, X as n, ArrowRight as nt, UserMinus as o, Sparkles as p, CircleAlert as q, Users as r, ArrowLeft as rt, TriangleAlert as s, Zap as t, Bell as tt, Tag as u, Search as v, Moon as w, Phone as x, Save as y, FileText as z };
+export { Check as $, MapPin as A, History as B, Phone as C, Monitor as D, Moon as E, Linkedin as F, DollarSign as G, FileText as H, LayoutGrid as I, Clock as J, CreditCard as K, Key as L, LogOut as M, LoaderCircle as N, MessageSquare as O, List as P, ChevronDown as Q, Instagram as R, Plus as S, PanelLeftClose as T, Facebook as U, Globe as V, ExternalLink as W, CircleCheck as X, CirclePlay as Y, CircleAlert as Z, Shield as _, User as a, Bell as at, Search as b, Twitter as c, Activity as ct, Trash2 as d, ChartNoAxesColumnIncreasing as et, Tag as f, SlidersHorizontal as g, Sparkles as h, Users as i, Bookmark as it, Mail as j, Menu as k, TriangleAlert as l, Star as m, Youtube as n, Building2 as nt, UserPlus as o, ArrowRight as ot, Sun as p, Compass as q, X as r, Briefcase as rt, UserMinus as s, ArrowLeft as st, Zap as t, Calendar as tt, TrendingUp as u, Settings as v, PanelLeftOpen as w, Save as x, Send as y, Info as z };

@@ -146,6 +146,8 @@ export interface SavedBrand {
 }
 
 export interface Outreach {
+  contacted_by: string | null;
+  contact_channel: string | null;
   id: string;
   workspace_id: string;
   brand_id: string;
@@ -247,6 +249,9 @@ export interface BrandEvidence {
 }
 
 export interface BrandSocialProfile {
+  source: string | null;
+  discovered_at: string | null;
+  updated_at: string | null;
   id: string;
   brand_id: string;
   platform: string;
@@ -259,6 +264,7 @@ export interface BrandSocialProfile {
 }
 
 export interface BrandActivity {
+  confidence: string | null;
   id: string;
   brand_id: string;
   activity_type: string;
@@ -282,6 +288,10 @@ export interface BrandFunding {
 }
 
 export interface BrandContact {
+  source: string | null;
+  source_url: string | null;
+  updated_at: string | null;
+  verified_at: string | null;
   id: string;
   brand_id: string;
   name: string | null;
@@ -294,4 +304,18 @@ export interface BrandContact {
   verification_status: string | null;
   discovered_at: string | null;
   created_at: string;
+}
+
+export interface BrandProduct {
+  id: string;
+  brand_id: string;
+  name: string;
+  category: string | null;
+  description: string | null;
+  positioning: string | null;
+  url: string | null;
+  price: string | null;
+  source: string | null;
+  created_at: string;
+  updated_at: string;
 }
