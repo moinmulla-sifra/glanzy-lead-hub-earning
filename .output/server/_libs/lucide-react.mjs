@@ -395,6 +395,22 @@ var CreditCard = createLucideIcon("credit-card", [["rect", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var DollarSign = createLucideIcon("dollar-sign", [["line", {
+	x1: "12",
+	x2: "12",
+	y1: "2",
+	y2: "22",
+	key: "7eqyqh"
+}], ["path", {
+	d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
+	key: "1b0p4s"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var ExternalLink = createLucideIcon("external-link", [
 	["path", {
 		d: "M15 3h6v6",
@@ -457,6 +473,48 @@ var Globe = createLucideIcon("globe", [
 	["path", {
 		d: "M2 12h20",
 		key: "9i4pu4"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var History = createLucideIcon("history", [
+	["path", {
+		d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8",
+		key: "1357e3"
+	}],
+	["path", {
+		d: "M3 3v5h5",
+		key: "1xhq8a"
+	}],
+	["path", {
+		d: "M12 7v5l4 2",
+		key: "1fdv2h"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Info = createLucideIcon("info", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M12 16v-4",
+		key: "1dtifu"
+	}],
+	["path", {
+		d: "M12 8h.01",
+		key: "e9boi3"
 	}]
 ]);
 /**
@@ -624,6 +682,21 @@ var Mail = createLucideIcon("mail", [["path", {
 	height: "16",
 	rx: "2",
 	key: "izxlao"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var MapPin = createLucideIcon("map-pin", [["path", {
+	d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
+	key: "1r0f0z"
+}], ["circle", {
+	cx: "12",
+	cy: "10",
+	r: "3",
+	key: "ilqhr7"
 }]]);
 /**
 * @license lucide-react v0.575.0 - ISC
@@ -971,6 +1044,22 @@ var Sun = createLucideIcon("sun", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Tag = createLucideIcon("tag", [["path", {
+	d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+	key: "vktsd0"
+}], ["circle", {
+	cx: "7.5",
+	cy: "7.5",
+	r: ".5",
+	fill: "currentColor",
+	key: "kqv944"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Trash2 = createLucideIcon("trash-2", [
 	["path", {
 		d: "M10 11v6",
@@ -1148,4 +1237,4 @@ var Zap = createLucideIcon("zap", [["path", {
 	key: "1xq2db"
 }]]);
 //#endregion
-export { Activity as $, List as A, CirclePlay as B, Moon as C, Mail as D, Menu as E, FileText as F, ChartNoAxesColumnIncreasing as G, CircleAlert as H, ExternalLink as I, Briefcase as J, Calendar as K, CreditCard as L, LayoutGrid as M, Key as N, LogOut as O, Globe as P, ArrowLeft as Q, Compass as R, PanelLeftClose as S, MessageSquare as T, ChevronDown as U, CircleCheck as V, Check as W, Bell as X, Bookmark as Y, ArrowRight as Z, Search as _, UserPlus as a, Phone as b, TrendingUp as c, Star as d, Sparkles as f, Send as g, Settings as h, User as i, Linkedin as j, LoaderCircle as k, Trash2 as l, Shield as m, X as n, UserMinus as o, SlidersHorizontal as p, Building2 as q, Users as r, TriangleAlert as s, Zap as t, Sun as u, Save as v, Monitor as w, PanelLeftOpen as x, Plus as y, Clock as z };
+export { Briefcase as $, LogOut as A, ExternalLink as B, PanelLeftClose as C, Menu as D, MessageSquare as E, Key as F, CirclePlay as G, CreditCard as H, Info as I, ChevronDown as J, CircleCheck as K, History as L, List as M, Linkedin as N, MapPin as O, LayoutGrid as P, Building2 as Q, Globe as R, PanelLeftOpen as S, Monitor as T, Compass as U, DollarSign as V, Clock as W, ChartNoAxesColumnIncreasing as X, Check as Y, Calendar as Z, Send as _, UserPlus as a, Plus as b, TrendingUp as c, Sun as d, Bookmark as et, Star as f, Settings as g, Shield as h, User as i, Activity as it, LoaderCircle as j, Mail as k, Trash2 as l, SlidersHorizontal as m, X as n, ArrowRight as nt, UserMinus as o, Sparkles as p, CircleAlert as q, Users as r, ArrowLeft as rt, TriangleAlert as s, Zap as t, Bell as tt, Tag as u, Search as v, Moon as w, Phone as x, Save as y, FileText as z };

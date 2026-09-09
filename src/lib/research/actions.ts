@@ -15,8 +15,8 @@ export const startResearchJob = createServerFn({ method: "POST" })
   )
   .handler(async ({ data: payload }) => {
     const supabase = createClient(
-      process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
-      process.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder",
+      process.env["VITE_SUPABASE_URL"] || import.meta.env['VITE_SUPABASE_URL'] || "https://placeholder.supabase.co",
+      process.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env['VITE_SUPABASE_ANON_KEY'] || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder",
       {
         global: { headers: { Authorization: `Bearer ${payload.token}` } },
       },
@@ -40,8 +40,8 @@ export const triggerAutomatedResearch = createServerFn({ method: "POST" })
   .validator((d: { token: string }) => d)
   .handler(async ({ data: payload }) => {
     const supabase = createClient(
-      process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
-      process.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder",
+      process.env["VITE_SUPABASE_URL"] || import.meta.env['VITE_SUPABASE_URL'] || "https://placeholder.supabase.co",
+      process.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env['VITE_SUPABASE_ANON_KEY'] || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder",
       {
         global: { headers: { Authorization: `Bearer ${payload.token}` } },
       },
@@ -59,7 +59,7 @@ export const triggerAutomatedResearch = createServerFn({ method: "POST" })
     const serviceRoleKey = process.env["SERVICE_ROLE_KEY"]; // Or use anon key if RLS allows it?
     
     const elevatedSupabase = serviceRoleKey ? createClient(
-      process.env["VITE_SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
+      process.env["VITE_SUPABASE_URL"] || import.meta.env['VITE_SUPABASE_URL'] || "https://placeholder.supabase.co",
       serviceRoleKey
     ) : supabase;
 

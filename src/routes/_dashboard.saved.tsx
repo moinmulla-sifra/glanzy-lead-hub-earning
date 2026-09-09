@@ -23,7 +23,7 @@ function SavedPage() {
     <SavedView
       userId={userId}
       onStartOutreach={(brandId) =>
-        navigate({ to: "/outreach", search: { brandId } })
+        navigate({ to: "/contacted", search: { brandId } })
       }
     />
   );

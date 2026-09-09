@@ -49,15 +49,15 @@ export function ProfileView({ userId }: { userId: string | null }) {
         updated_at: new Date().toISOString(),
       };
 
-      if (isAgency && updates.agency_name !== undefined) {
-        payload.agency_name = updates.agency_name;
+      if (isAgency && updates['agency_name'] !== undefined) {
+        payload['agency_name'] = updates['agency_name'];
       }
 
       const { error } = await supabase.from("profiles").upsert(payload);
       if (error) throw error;
 
       // If agency, also keep workspace name synced
-      if (isAgency && updates.agency_name) {
+      if (isAgency && updates['agency_name']) {
         const { data: wsMember } = await supabase
           .from("workspace_members")
           .select("workspace_id")
@@ -69,7 +69,7 @@ export function ProfileView({ userId }: { userId: string | null }) {
           await supabase
             .from("workspaces")
             .update({
-              name: updates.agency_name,
+              name: updates['agency_name'],
               updated_at: new Date().toISOString(),
             })
             .eq("id", wsMember.workspace_id);
@@ -153,7 +153,7 @@ export function ProfileView({ userId }: { userId: string | null }) {
                 <input
                   type="text"
                   name="agency_name"
-                  value={formData.agency_name || ""}
+                  value={formData['agency_name'] || ""}
                   onChange={handleChange}
                   className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand/50"
                 />

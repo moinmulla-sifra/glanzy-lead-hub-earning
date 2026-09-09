@@ -3,7 +3,7 @@ import { t as supabase } from "./supabase-CzmrzPTc.mjs";
 import { s as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { L as CreditCard, W as Check, f as Sparkles, n as X, q as Building2, t as Zap } from "../_libs/lucide-react.mjs";
+import { H as CreditCard, Q as Building2, Y as Check, n as X, p as Sparkles, t as Zap } from "../_libs/lucide-react.mjs";
 import { t as PLANS } from "./monetization-mD78bnGP.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/pricing-CUGPxiIT.js

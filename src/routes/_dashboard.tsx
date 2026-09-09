@@ -107,7 +107,7 @@ function DashboardLayout() {
     { id: "dashboard", label: "Dashboard", icon: BarChart, to: "/dashboard" },
     { id: "discover", label: "Discover", icon: Compass, to: "/discover" },
     { id: "saved", label: "Saved", icon: Bookmark, to: "/saved" },
-    { id: "outreach", label: "Outreach", icon: Send, to: "/outreach" },
+    { id: "contacted", label: "Contacted", icon: Send, to: "/contacted" },
     {
       id: "for-you",
       label: "For You",

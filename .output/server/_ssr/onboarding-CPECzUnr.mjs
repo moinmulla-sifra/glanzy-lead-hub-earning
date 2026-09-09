@@ -3,7 +3,7 @@ import { t as supabase } from "./supabase-CzmrzPTc.mjs";
 import { s as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { Z as ArrowRight, k as LoaderCircle } from "../_libs/lucide-react.mjs";
+import { j as LoaderCircle, nt as ArrowRight } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/onboarding-CPECzUnr.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

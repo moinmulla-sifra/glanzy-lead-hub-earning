@@ -41,6 +41,7 @@ export interface Profile {
   platforms: string[] | null;
   bio: string | null;
   agency_name: string | null;
+
   created_at: string;
   updated_at: string;
   last_researched_at?: string | null;
@@ -54,6 +55,7 @@ export interface Workspace {
   id: string;
   name: string;
   workspace_type: "creator" | "agency" | null;
+
   created_at: string;
   updated_at: string;
 }
@@ -63,6 +65,7 @@ export interface WorkspaceMember {
   workspace_id: string;
   user_id: string;
   role: string;
+
   created_at: string;
 }
 
@@ -88,6 +91,42 @@ export interface Brand {
   marketing_activity: string | null;
   existing_creator_activity: string | null;
   why_now: string | null;
+
+  // New Brand Intelligence fields
+  logo_url: string | null;
+  city: string | null;
+  category: string | null;
+  subcategory: string | null;
+  company_type: string | null;
+  founded_year: number | null;
+  company_description: string | null;
+  product_description: string | null;
+  target_audience: string | null;
+  target_market: string | null;
+  price_positioning: string | null;
+  business_model: string | null;
+  opportunity_score: number | null;
+  creator_fit_score: number | null;
+  marketing_activity_score: number | null;
+  creator_signals: any | null;
+  target_customer: string | null;
+  target_demographic: string | null;
+  geographic_target: string | null;
+  audience_type: string | null;
+  market_positioning: string | null;
+  works_with_creators: boolean | null;
+  recent_collaborations: string | null;
+  creator_campaign_activity: string | null;
+  platforms_used: any | null;
+  ugc_activity: string | null;
+  ambassador_activity: string | null;
+  opportunity_signals: any | null;
+  data_confidence: string | null;
+  research_status: string | null;
+  last_researched_at: string | null;
+  last_verified_at: string | null;
+  source_count: number | null;
+
   created_at: string;
   updated_at: string;
 }
@@ -100,6 +139,7 @@ export interface SavedBrand {
   email_subject: string | null;
   email_body: string | null;
   notes: string | null;
+
   created_at: string;
   updated_at: string;
   brand?: Brand; // For joined queries
@@ -116,6 +156,7 @@ export interface Outreach {
   next_action: string | null;
   contacted_at: string | null;
   last_activity_at: string;
+
   created_at: string;
   updated_at: string;
   brand?: Brand; // For joined queries
@@ -131,6 +172,7 @@ export interface Subscription {
   provider_subscription_id: string | null;
   current_period_start: string | null;
   current_period_end: string | null;
+
   created_at: string;
   updated_at: string;
 }
@@ -144,6 +186,7 @@ export interface Usage {
   brand_views: number;
   saved_brands: number;
   outreach_activity: number;
+
   created_at: string;
   updated_at: string;
 }
@@ -157,6 +200,7 @@ export interface OutreachActivity {
   description: string | null;
   old_status: string | null;
   new_status: string | null;
+
   created_at: string;
 }
 
@@ -172,6 +216,7 @@ export interface ResearchJob {
   completed_at: string | null;
   error: string | null;
   result_count: number;
+
   created_at: string;
   updated_at: string;
 }
@@ -197,5 +242,56 @@ export interface BrandEvidence {
   evidence: any;
   confidence: 'high' | 'medium' | 'low' | 'unverified' | null;
   discovered_at: string;
+
+  created_at: string;
+}
+
+export interface BrandSocialProfile {
+  id: string;
+  brand_id: string;
+  platform: string;
+  url: string;
+  follower_count: number | null;
+  subscriber_count: number | null;
+  activity_level: string | null;
+  last_activity: string | null;
+  created_at: string;
+}
+
+export interface BrandActivity {
+  id: string;
+  brand_id: string;
+  activity_type: string;
+  date: string | null;
+  description: string;
+  source: string | null;
+  created_at: string;
+}
+
+export interface BrandFunding {
+  id: string;
+  brand_id: string;
+  latest_funding_round: string | null;
+  funding_amount: string | null;
+  total_funding: string | null;
+  funding_date: string | null;
+  funding_stage: string | null;
+  investors: string | null;
+  source: string | null;
+  created_at: string;
+}
+
+export interface BrandContact {
+  id: string;
+  brand_id: string;
+  name: string | null;
+  role: string | null;
+  department: string | null;
+  email: string | null;
+  phone: string | null;
+  linkedin: string | null;
+  contact_type: string | null;
+  verification_status: string | null;
+  discovered_at: string | null;
   created_at: string;
 }
