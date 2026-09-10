@@ -744,3 +744,8 @@ ADD COLUMN IF NOT EXISTS recent_collaborations text,
 ADD COLUMN IF NOT EXISTS research_status text,
 ADD COLUMN IF NOT EXISTS last_researched_at timestamptz,
 ADD COLUMN IF NOT EXISTS source_count integer;
+-- Safely remove deprecated internal research automation tables
+DROP TABLE IF EXISTS public.research_queue CASCADE;
+DROP TABLE IF EXISTS public.research_runs CASCADE;
+DROP TABLE IF EXISTS public.research_jobs CASCADE;
+DROP TABLE IF EXISTS public.app_config CASCADE;

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Shield, Loader2, ArrowLeft } from "lucide-react";
-import { AdminResearchView } from "@/components/AdminResearchView";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -167,8 +166,6 @@ function AdminPage() {
             </p>
           </div>
         </div>
-
-        <AdminResearchView />
       </main>
     </div>
   );

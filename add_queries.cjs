@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let code = fs.readFileSync('src/components/BrandProfileModal.tsx', 'utf8');
+let code = fs.readFileSync("src/components/BrandProfileModal.tsx", "utf8");
 
 const queries = `
   const { data: contactsData } = useQuery({
@@ -49,6 +49,10 @@ const queries = `
   });
 `;
 
-code = code.replace(/const \{ data: contactedData, refetch: refetchContacted \} = useQuery\(\{/, queries + '\n  const { data: contactedData, refetch: refetchContacted } = useQuery({');
+code = code.replace(
+  /const \{ data: contactedData, refetch: refetchContacted \} = useQuery\(\{/,
+  queries +
+    "\n  const { data: contactedData, refetch: refetchContacted } = useQuery({",
+);
 
-fs.writeFileSync('src/components/BrandProfileModal.tsx', code);
+fs.writeFileSync("src/components/BrandProfileModal.tsx", code);

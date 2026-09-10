@@ -3,7 +3,7 @@ import { t as supabase } from "./_ssr/supabase-CzmrzPTc.mjs";
 import { a as useQueryClient, n as useMutation, r as useQuery, s as require_react } from "./_libs/react+tanstack__react-query.mjs";
 import { b as useNavigate, y as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
-import { K as CreditCard, L as Key, M as LogOut, N as LoaderCircle, _ as Shield, a as User, at as Bell, h as Sparkles, l as TriangleAlert, nt as Building2, x as Save } from "./_libs/lucide-react.mjs";
+import { K as CreditCard, L as Key, M as LogOut, N as LoaderCircle, _ as Shield, a as User, h as Sparkles, it as Bell, l as TriangleAlert, tt as Building2, x as Save } from "./_libs/lucide-react.mjs";
 import { t as useMonetization } from "./_ssr/useMonetization-Dm9pnDla.mjs";
 import { n as toast } from "./_libs/sonner.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_dashboard.settings-BjAf0RCN.js

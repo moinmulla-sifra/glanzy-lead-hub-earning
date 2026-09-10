@@ -10,7 +10,7 @@ type ContactedSearch = {
 export const Route = createFileRoute("/_dashboard/contacted")({
   validateSearch: (search: Record<string, unknown>): ContactedSearch => {
     return {
-      ...(search['brandId'] ? { brandId: search['brandId'] as string } : {}),
+      ...(search["brandId"] ? { brandId: search["brandId"] as string } : {}),
     };
   },
   component: ContactedPage,

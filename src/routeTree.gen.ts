@@ -11,14 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as SecurityRouteImport } from './routes/security'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as DashboardContactedRouteImport } from './routes/_dashboard.contacted'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
 import { Route as DashboardDiscoverRouteImport } from './routes/_dashboard.discover'
 import { Route as DashboardForYouRouteImport } from './routes/_dashboard.for-you'
-import { Route as DashboardOutreachRouteImport } from './routes/_dashboard.outreach'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard.profile'
 import { Route as DashboardSavedRouteImport } from './routes/_dashboard.saved'
 import { Route as DashboardSettingsRouteImport } from './routes/_dashboard.settings'
@@ -31,6 +35,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/_dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -48,10 +57,30 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardContactedRoute = DashboardContactedRouteImport.update({
+  id: '/contacted',
+  path: '/contacted',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
   id: '/dashboard',
@@ -66,11 +95,6 @@ const DashboardDiscoverRoute = DashboardDiscoverRouteImport.update({
 const DashboardForYouRoute = DashboardForYouRouteImport.update({
   id: '/for-you',
   path: '/for-you',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardOutreachRoute = DashboardOutreachRouteImport.update({
-  id: '/outreach',
-  path: '/outreach',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
@@ -96,14 +120,18 @@ const DashboardTeamRoute = DashboardTeamRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
+  '/policies': typeof PoliciesRoute
   '/pricing': typeof PricingRoute
+  '/security': typeof SecurityRoute
+  '/terms': typeof TermsRoute
+  '/contacted': typeof DashboardContactedRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/discover': typeof DashboardDiscoverRoute
   '/for-you': typeof DashboardForYouRoute
-  '/outreach': typeof DashboardOutreachRoute
   '/profile': typeof DashboardProfileRoute
   '/saved': typeof DashboardSavedRoute
   '/settings': typeof DashboardSettingsRoute
@@ -111,14 +139,18 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
+  '/policies': typeof PoliciesRoute
   '/pricing': typeof PricingRoute
+  '/security': typeof SecurityRoute
+  '/terms': typeof TermsRoute
+  '/contacted': typeof DashboardContactedRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/discover': typeof DashboardDiscoverRoute
   '/for-you': typeof DashboardForYouRoute
-  '/outreach': typeof DashboardOutreachRoute
   '/profile': typeof DashboardProfileRoute
   '/saved': typeof DashboardSavedRoute
   '/settings': typeof DashboardSettingsRoute
@@ -128,14 +160,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_dashboard': typeof DashboardRouteWithChildren
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
+  '/policies': typeof PoliciesRoute
   '/pricing': typeof PricingRoute
+  '/security': typeof SecurityRoute
+  '/terms': typeof TermsRoute
+  '/_dashboard/contacted': typeof DashboardContactedRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/discover': typeof DashboardDiscoverRoute
   '/_dashboard/for-you': typeof DashboardForYouRoute
-  '/_dashboard/outreach': typeof DashboardOutreachRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/_dashboard/saved': typeof DashboardSavedRoute
   '/_dashboard/settings': typeof DashboardSettingsRoute
@@ -145,14 +181,18 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/onboarding'
+    | '/policies'
     | '/pricing'
+    | '/security'
+    | '/terms'
+    | '/contacted'
     | '/dashboard'
     | '/discover'
     | '/for-you'
-    | '/outreach'
     | '/profile'
     | '/saved'
     | '/settings'
@@ -160,14 +200,18 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/onboarding'
+    | '/policies'
     | '/pricing'
+    | '/security'
+    | '/terms'
+    | '/contacted'
     | '/dashboard'
     | '/discover'
     | '/for-you'
-    | '/outreach'
     | '/profile'
     | '/saved'
     | '/settings'
@@ -176,14 +220,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_dashboard'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/onboarding'
+    | '/policies'
     | '/pricing'
+    | '/security'
+    | '/terms'
+    | '/_dashboard/contacted'
     | '/_dashboard/dashboard'
     | '/_dashboard/discover'
     | '/_dashboard/for-you'
-    | '/_dashboard/outreach'
     | '/_dashboard/profile'
     | '/_dashboard/saved'
     | '/_dashboard/settings'
@@ -193,10 +241,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   OnboardingRoute: typeof OnboardingRoute
+  PoliciesRoute: typeof PoliciesRoute
   PricingRoute: typeof PricingRoute
+  SecurityRoute: typeof SecurityRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -213,6 +265,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -236,12 +295,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard/contacted': {
+      id: '/_dashboard/contacted'
+      path: '/contacted'
+      fullPath: '/contacted'
+      preLoaderRoute: typeof DashboardContactedRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/_dashboard/dashboard': {
       id: '/_dashboard/dashboard'
@@ -262,13 +349,6 @@ declare module '@tanstack/react-router' {
       path: '/for-you'
       fullPath: '/for-you'
       preLoaderRoute: typeof DashboardForYouRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/outreach': {
-      id: '/_dashboard/outreach'
-      path: '/outreach'
-      fullPath: '/outreach'
-      preLoaderRoute: typeof DashboardOutreachRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/profile': {
@@ -303,10 +383,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteChildren {
+  DashboardContactedRoute: typeof DashboardContactedRoute
   DashboardDashboardRoute: typeof DashboardDashboardRoute
   DashboardDiscoverRoute: typeof DashboardDiscoverRoute
   DashboardForYouRoute: typeof DashboardForYouRoute
-  DashboardOutreachRoute: typeof DashboardOutreachRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardSavedRoute: typeof DashboardSavedRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
@@ -314,10 +394,10 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardContactedRoute: DashboardContactedRoute,
   DashboardDashboardRoute: DashboardDashboardRoute,
   DashboardDiscoverRoute: DashboardDiscoverRoute,
   DashboardForYouRoute: DashboardForYouRoute,
-  DashboardOutreachRoute: DashboardOutreachRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardSavedRoute: DashboardSavedRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
@@ -331,10 +411,14 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   OnboardingRoute: OnboardingRoute,
+  PoliciesRoute: PoliciesRoute,
   PricingRoute: PricingRoute,
+  SecurityRoute: SecurityRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

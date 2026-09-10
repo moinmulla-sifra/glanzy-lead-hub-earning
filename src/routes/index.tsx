@@ -108,13 +108,22 @@ function LandingPage() {
             </span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground">
+            <Link to="/policies" className="hover:text-foreground">
               Privacy
-            </a>
-            <a href="#" className="hover:text-foreground">
+            </Link>
+            <Link to="/terms" className="hover:text-foreground">
               Terms
-            </a>
-            <a href="#" className="hover:text-foreground">
+            </Link>
+            <Link to="/about" className="hover:text-foreground">
+              About
+            </Link>
+            <Link to="/security" className="hover:text-foreground">
+              Security
+            </Link>
+            <a
+              href="mailto:support@branzly.dedyn.io"
+              className="hover:text-foreground"
+            >
               Contact
             </a>
           </div>

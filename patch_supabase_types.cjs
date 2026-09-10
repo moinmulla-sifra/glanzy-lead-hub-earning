@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let code = fs.readFileSync('src/lib/supabase.ts', 'utf8');
+let code = fs.readFileSync("src/lib/supabase.ts", "utf8");
 
 const newBrandFields = `
   // New Brand Intelligence fields
@@ -40,7 +40,10 @@ const newBrandFields = `
 `;
 
 // Insert the new fields into the Brand interface before created_at
-code = code.replace(/  created_at: string;/g, newBrandFields + '\n  created_at: string;');
+code = code.replace(
+  /  created_at: string;/g,
+  newBrandFields + "\n  created_at: string;",
+);
 
 // Append the new table interfaces
 code += `
@@ -95,4 +98,4 @@ export interface BrandContact {
 }
 `;
 
-fs.writeFileSync('src/lib/supabase.ts', code);
+fs.writeFileSync("src/lib/supabase.ts", code);

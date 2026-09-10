@@ -22,8 +22,10 @@ const missing = [
   "recent_collaborations text",
   "research_status text",
   "last_researched_at timestamptz",
-  "source_count integer"
+  "source_count integer",
 ];
 
 console.log("ALTER TABLE public.brands");
-console.log(missing.map(m => `ADD COLUMN IF NOT EXISTS ${m}`).join(",\n") + ";");
+console.log(
+  missing.map((m) => `ADD COLUMN IF NOT EXISTS ${m}`).join(",\n") + ";",
+);

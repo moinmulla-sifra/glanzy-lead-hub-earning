@@ -271,7 +271,7 @@ function DashboardLayout() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-[100dvh] pt-16 lg:pt-0 overflow-hidden relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/5 via-background to-background pointer-events-none" />
-        
+
         {/* Toggle button when sidebar is collapsed (desktop only) */}
         {isSidebarCollapsed && (
           <div className="hidden lg:flex fixed top-4 left-4 z-20">

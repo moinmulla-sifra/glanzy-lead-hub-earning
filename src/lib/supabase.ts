@@ -2,10 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 
 // Browser-safe configuration for the user's own external Supabase project.
 // Publishable (anon) key only — never a service-role/secret key.
-export const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || "";
+export const SUPABASE_URL = import.meta.env["VITE_SUPABASE_URL"] || "";
 export const SUPABASE_PUBLISHABLE_KEY =
-  import.meta.env['VITE_SUPABASE_ANON_KEY'] ||
-  import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] ||
+  import.meta.env["VITE_SUPABASE_ANON_KEY"] ||
+  import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
   "";
 
 if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
@@ -46,8 +46,9 @@ export interface Profile {
   updated_at: string;
   last_researched_at?: string | null;
   last_verified_at?: string | null;
-  data_confidence?: 'high' | 'medium' | 'low' | 'unverified' | null;
-  research_status?: 'candidate' | 'verified' | 'needs_review' | 'rejected' | null;
+  data_confidence?: "high" | "medium" | "low" | "unverified" | null;
+  research_status?:
+    "candidate" | "verified" | "needs_review" | "rejected" | null;
   source_count?: number;
 }
 
@@ -213,7 +214,7 @@ export interface ResearchJob {
   research_type: string;
   query: any;
   provider: string | null;
-  status: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+  status: "queued" | "running" | "completed" | "failed" | "cancelled";
   started_at: string | null;
   completed_at: string | null;
   error: string | null;
@@ -227,7 +228,7 @@ export interface ResearchRun {
   id: string;
   research_job_id: string;
   provider: string;
-  status: 'running' | 'completed' | 'failed';
+  status: "running" | "completed" | "failed";
   raw_results: any;
   error: string | null;
   started_at: string;
@@ -242,7 +243,7 @@ export interface BrandEvidence {
   source_type: string | null;
   field_name: string;
   evidence: any;
-  confidence: 'high' | 'medium' | 'low' | 'unverified' | null;
+  confidence: "high" | "medium" | "low" | "unverified" | null;
   discovered_at: string;
 
   created_at: string;

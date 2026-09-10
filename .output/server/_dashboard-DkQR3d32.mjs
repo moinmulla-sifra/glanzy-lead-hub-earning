@@ -4,7 +4,7 @@ import { t as supabase } from "./_ssr/supabase-CzmrzPTc.mjs";
 import { a as useQueryClient, r as useQuery, s as require_react } from "./_libs/react+tanstack__react-query.mjs";
 import { b as useNavigate, f as useLocation, h as Outlet, y as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
-import { D as Monitor, E as Moon, M as LogOut, T as PanelLeftClose, a as User, et as ChartNoAxesColumnIncreasing, h as Sparkles, i as Users, it as Bookmark, k as Menu, p as Sun, q as Compass, r as X, v as Settings, w as PanelLeftOpen, y as Send } from "./_libs/lucide-react.mjs";
+import { $ as ChartNoAxesColumnIncreasing, D as Monitor, E as Moon, M as LogOut, T as PanelLeftClose, a as User, h as Sparkles, i as Users, k as Menu, p as Sun, q as Compass, r as X, rt as Bookmark, v as Settings, w as PanelLeftOpen, y as Send } from "./_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_dashboard-DkQR3d32.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();

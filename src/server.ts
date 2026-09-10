@@ -1,4 +1,3 @@
-import { setupCronJobs } from "./cron";
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
@@ -71,6 +70,3 @@ export default {
     }
   },
 };
-
-// Start the background cron jobs
-setupCronJobs();

@@ -96,9 +96,9 @@ function OnboardingPage() {
       const profilePayload = {
         id: userId,
         account_type: accountType,
-        ...updates
+        ...updates,
       };
-      
+
       const { error: profileError } = await supabase
         .from("profiles")
         .upsert(profilePayload)
@@ -115,7 +115,8 @@ function OnboardingPage() {
         .maybeSingle();
 
       if (!wsMember) {
-        const wsName = accountType === "agency" ? agencyName || "My Agency" : "My Workspace";
+        const wsName =
+          accountType === "agency" ? agencyName || "My Agency" : "My Workspace";
         const { data: newWs } = await supabase
           .from("workspaces")
           .insert({

@@ -1,6 +1,6 @@
 import { y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { et as ChartNoAxesColumnIncreasing, j as Mail, ot as ArrowRight, q as Compass } from "../_libs/lucide-react.mjs";
+import { $ as ChartNoAxesColumnIncreasing, at as ArrowRight, j as Mail, q as Compass } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/routes-CHqeBk6s.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName = "/app/applet/src/routes/index.tsx?tsr-split=component";

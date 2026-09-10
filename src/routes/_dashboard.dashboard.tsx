@@ -15,7 +15,7 @@ function DashboardOverview() {
     queryFn: async () => {
       const { data } = await supabase.auth.getSession();
       return data.session;
-    }
+    },
   });
 
   const userId = sessionData?.user?.id || null;
