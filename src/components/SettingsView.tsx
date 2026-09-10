@@ -732,7 +732,7 @@ function SubscriptionSettings({
   userId: string | null;
   workspaceId?: string;
 }) {
-  const { currentPlan, planConfig, limits } = useMonetization(userId);
+  const { currentPlan, pendingPlan, planConfig, limits } = useMonetization(userId);
   const navigate = useNavigate();
 
   return (
@@ -746,8 +746,13 @@ function SubscriptionSettings({
         </p>
       </div>
 
-      <div className="max-w-md bg-gradient-to-br from-brand/5 to-muted/20 border border-brand/20 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
+      <div className="max-w-md bg-gradient-to-br from-brand/5 to-muted/20 border border-brand/20 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+        {pendingPlan && (
+          <div className="absolute top-0 left-0 w-full bg-amber-500/10 text-amber-600 px-4 py-2 text-xs font-bold text-center border-b border-amber-500/20">
+            Upgrade Request Pending: {pendingPlan.toUpperCase()}
+          </div>
+        )}
+        <div className={`flex items-center justify-between mb-6 ${pendingPlan ? 'mt-6' : ''}`}>
           <div>
             <p className="text-xs font-bold text-brand uppercase tracking-wider mb-1">
               Current Plan

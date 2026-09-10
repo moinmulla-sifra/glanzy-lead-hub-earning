@@ -20,6 +20,7 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { MonetagScripts } from "@/components/MonetagScripts";
+import { useMonetization } from "@/lib/useMonetization";
 
 export const Route = createFileRoute("/_dashboard")({
   component: DashboardLayout,
@@ -34,6 +35,8 @@ function DashboardLayout() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  
+  const { shouldShowAds } = useMonetization(userId);
 
   useEffect(() => {
     let active = true;
@@ -295,8 +298,8 @@ function DashboardLayout() {
         />
       )}
 
-      {/* Monetag Scripts - Only rendered when logged in */}
-      <MonetagScripts />
+      {/* Monetag Scripts - Only rendered when allowed */}
+      {shouldShowAds && <MonetagScripts />}
     </div>
   );
 }

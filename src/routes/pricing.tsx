@@ -11,7 +11,9 @@ export const Route = createFileRoute("/pricing")({
 
 function PricingPage() {
   const [currentPlan, setCurrentPlan] = useState<PlanType>("free");
+  const [pendingPlan, setPendingPlan] = useState<PlanType | null>(null);
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState<PlanType | null>(null);
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ function PricingPage() {
         setLoading(false);
         return;
       }
+      
+      setUserId(session.session.user.id);
 
       try {
         // Get workspace
@@ -35,14 +39,39 @@ function PricingPage() {
 
         if (memberData) {
           setWorkspaceId(memberData.workspace_id);
-          const { data: subData } = await supabase
+          
+          const { data: legacySub } = await supabase
             .from("subscriptions")
             .select("plan")
             .eq("workspace_id", memberData.workspace_id)
             .maybeSingle();
 
-          if (subData) {
-            setCurrentPlan(subData.plan as PlanType);
+          const { data: approvedReq } = await supabase
+            .from("subscription_requests")
+            .select("requested_plan")
+            .eq("workspace_id", memberData.workspace_id)
+            .eq("status", "approved")
+            .order("reviewed_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          const { data: pendingReq } = await supabase
+            .from("subscription_requests")
+            .select("requested_plan")
+            .eq("workspace_id", memberData.workspace_id)
+            .eq("status", "pending")
+            .order("requested_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          const activePlan = approvedReq?.requested_plan
+            ? (approvedReq.requested_plan as PlanType)
+            : (legacySub?.plan as PlanType) || "free";
+
+          setCurrentPlan(activePlan);
+          
+          if (pendingReq?.requested_plan) {
+            setPendingPlan(pendingReq.requested_plan as PlanType);
           }
         }
       } catch (err) {
@@ -55,40 +84,40 @@ function PricingPage() {
   }, []);
 
   const handleUpgrade = async (plan: PlanType) => {
-    if (!workspaceId) {
+    if (!workspaceId || !userId) {
       navigate({ to: "/auth" });
       return;
     }
+    
+    if (pendingPlan === plan) {
+      toast.info("Upgrade request already pending");
+      return;
+    }
 
-    // Simulate checkout process
+    const confirmMessage = `You are requesting an upgrade to the ${PLANS[plan].name} plan. Your request will be reviewed manually.\n\nContinue with request?`;
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
     setUpgrading(plan);
     try {
-      // In a real app, we'd redirect to Stripe Checkout here.
-      // For now, we simulate a successful upgrade by directly updating the database.
-
-      const { data: existingSub } = await supabase
-        .from("subscriptions")
-        .select("id")
-        .eq("workspace_id", workspaceId)
-        .single();
-
-      if (existingSub) {
-        await supabase
-          .from("subscriptions")
-          .update({ plan, updated_at: new Date().toISOString() })
-          .eq("id", existingSub.id);
-      } else {
-        await supabase.from("subscriptions").insert({
-          workspace_id: workspaceId,
-          plan,
-          status: "active",
-        });
+      const { error } = await supabase.from("subscription_requests").insert({
+        workspace_id: workspaceId,
+        user_id: userId,
+        requested_plan: plan,
+        current_plan: currentPlan,
+        status: "pending"
+      });
+      
+      if (error) {
+        throw error;
       }
 
-      setCurrentPlan(plan);
-      toast.success(`Successfully upgraded to ${PLANS[plan].name} plan!`);
+      setPendingPlan(plan);
+      toast.success(`Your request for the ${PLANS[plan].name} plan has been submitted for review. Your current access remains unchanged until the request is approved.`);
     } catch (err) {
-      toast.error("Failed to process upgrade. Please try again.");
+      console.error("Upgrade request error:", err);
+      toast.error("Failed to submit request. Please try again.");
     } finally {
       setUpgrading(null);
     }
@@ -166,10 +195,10 @@ function PricingPage() {
 
                   <button
                     onClick={() => handleUpgrade(plan.type)}
-                    disabled={isCurrentPlan || upgrading !== null}
+                    disabled={isCurrentPlan || upgrading !== null || pendingPlan === plan.type}
                     className={`w-full py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-200 mb-8
                       ${
-                        isCurrentPlan
+                        isCurrentPlan || pendingPlan === plan.type
                           ? "bg-muted text-muted-foreground cursor-default"
                           : plan.type === "pro"
                             ? "bg-brand text-brand-foreground hover:bg-brand/90 shadow-sm"
@@ -181,12 +210,14 @@ function PricingPage() {
                       <span className="animate-pulse">Processing...</span>
                     ) : isCurrentPlan ? (
                       "Current Plan"
+                    ) : pendingPlan === plan.type ? (
+                      "Pending Approval"
                     ) : plan.priceMonthly === 0 ? (
                       "Get Started"
                     ) : (
                       <>
                         <CreditCard size={18} />
-                        Upgrade to {plan.name}
+                        Request Upgrade to {plan.name}
                       </>
                     )}
                   </button>

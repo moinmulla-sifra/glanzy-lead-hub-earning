@@ -78,19 +78,38 @@ export const PLANS: Record<PlanType, PlanConfig> = {
   },
 };
 
+export async function getEffectiveSubscription(workspaceId: string): Promise<PlanType> {
+  // 1. Get legacy subscription fallback
+  const { data: legacySub } = await supabase
+    .from("subscriptions")
+    .select("plan")
+    .eq("workspace_id", workspaceId)
+    .maybeSingle();
+    
+  // 2. Get latest approved manual request
+  // Note: Ignore errors if table doesn't exist yet to prevent crashes before user runs SQL
+  const { data: request } = await supabase
+    .from("subscription_requests")
+    .select("requested_plan")
+    .eq("workspace_id", workspaceId)
+    .eq("status", "approved")
+    .order("reviewed_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (request && request.requested_plan) {
+    return request.requested_plan as PlanType;
+  }
+
+  return (legacySub?.plan as PlanType) || "free";
+}
+
 export async function checkFeatureAccess(
   workspaceId: string,
   feature: keyof PlanConfig["features"],
 ) {
-  const { data: sub } = await supabase
-    .from("subscriptions")
-    .select("plan, status")
-    .eq("workspace_id", workspaceId)
-    .single();
-
-  const currentPlan = (sub?.plan as PlanType) || "free";
+  const currentPlan = await getEffectiveSubscription(workspaceId);
   const planConfig = PLANS[currentPlan];
-
   return planConfig.features[feature];
 }
 
@@ -98,13 +117,7 @@ export async function checkUsageLimit(
   workspaceId: string,
   limitKey: keyof PlanConfig["limits"],
 ) {
-  const { data: sub } = await supabase
-    .from("subscriptions")
-    .select("plan")
-    .eq("workspace_id", workspaceId)
-    .single();
-
-  const currentPlan = (sub?.plan as PlanType) || "free";
+  const currentPlan = await getEffectiveSubscription(workspaceId);
   const limit = PLANS[currentPlan].limits[limitKey];
 
   if (
@@ -137,8 +150,8 @@ export async function checkUsageLimit(
 
   const currentVal =
     limitKey === "searchesPerMonth"
-      ? (usage as unknown)?.searches || 0
-      : (usage as unknown)?.brand_views || 0;
+      ? (usage as unknown as { searches: number })?.searches || 0
+      : (usage as unknown as { brand_views: number })?.brand_views || 0;
 
   return { allowed: currentVal < limit, current: currentVal, limit };
 }
