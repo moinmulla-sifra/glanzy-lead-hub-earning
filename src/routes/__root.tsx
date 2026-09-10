@@ -96,6 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           content:
             "Discover brand opportunities and manage your outreach with Branzly.",
         },
+        { name: "monetag", content: "9bcbe965904ea59db203fd8d396c1a27" },
         { property: "og:title", content: "Branzly" },
         {
           property: "og:description",

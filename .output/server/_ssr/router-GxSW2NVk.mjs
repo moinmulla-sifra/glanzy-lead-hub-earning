@@ -8,7 +8,7 @@ import { t as Route$17 } from "../_dashboard.contacted-Fh3BKt7Y.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
 import { t as Route$18 } from "./auth-BfXWPgS2.mjs";
 import { t as Analytics } from "../_libs/vercel__analytics.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CVqfb_nR.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-GxSW2NVk.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-CCx5AMA8.css";
@@ -187,6 +187,10 @@ var Route$16 = createRootRouteWithContext()({
 				content: "Discover brand opportunities and manage your outreach with Branzly."
 			},
 			{
+				name: "monetag",
+				content: "9bcbe965904ea59db203fd8d396c1a27"
+			},
+			{
 				property: "og:title",
 				content: "Branzly"
 			},
@@ -245,7 +249,7 @@ function RootShell({ children }) {
 				src: "https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 135,
+				lineNumber: 136,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", { dangerouslySetInnerHTML: { __html: `
@@ -256,33 +260,33 @@ function RootShell({ children }) {
   gtag('config', 'G-1C4EYN1KVD');
 ` } }, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 139,
+				lineNumber: 140,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(HeadContent, {}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 150,
+				lineNumber: 151,
 				columnNumber: 9
 			}, this)
 		] }, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 134,
+			lineNumber: 135,
 			columnNumber: 7
 		}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", {
 			suppressHydrationWarning: true,
 			children: [children, /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Scripts, {}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 154,
+				lineNumber: 155,
 				columnNumber: 9
 			}, this)]
 		}, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 152,
+			lineNumber: 153,
 			columnNumber: 7
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 133,
+		lineNumber: 134,
 		columnNumber: 5
 	}, this);
 }
@@ -293,7 +297,7 @@ function RootComponent() {
 		children: [
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 166,
+				lineNumber: 167,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Toaster$1, {
@@ -301,18 +305,18 @@ function RootComponent() {
 				richColors: true
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 167,
+				lineNumber: 168,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Analytics, {}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 168,
+				lineNumber: 169,
 				columnNumber: 7
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 164,
+		lineNumber: 165,
 		columnNumber: 5
 	}, this);
 }
