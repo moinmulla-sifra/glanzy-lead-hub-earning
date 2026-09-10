@@ -1,5 +1,6 @@
-import { r as __toESM } from "../_runtime.mjs";
+import { n as __toESM } from "../_runtime.mjs";
 import { s as require_react } from "./react+tanstack__react-query.mjs";
+import processModule from "node:process";
 //#region node_modules/@vercel/analytics/dist/react/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var initQueue = () => {
@@ -92,12 +93,12 @@ function pageview({ route, path }) {
 	});
 }
 function getBasePath() {
-	if (typeof process === "undefined" || typeof process.env === "undefined") return;
-	return process.env.REACT_APP_VERCEL_OBSERVABILITY_BASEPATH;
+	if (typeof processModule === "undefined" || typeof processModule.env === "undefined") return;
+	return processModule.env.REACT_APP_VERCEL_OBSERVABILITY_BASEPATH;
 }
 function getConfigString() {
-	if (typeof process === "undefined" || typeof process.env === "undefined") return;
-	return process.env.REACT_APP_VERCEL_OBSERVABILITY_CLIENT_CONFIG;
+	if (typeof processModule === "undefined" || typeof processModule.env === "undefined") return;
+	return processModule.env.REACT_APP_VERCEL_OBSERVABILITY_CLIENT_CONFIG;
 }
 function Analytics(props) {
 	(0, import_react.useEffect)(() => {
