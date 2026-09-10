@@ -8,7 +8,7 @@ import { t as Route$17 } from "../_dashboard.contacted-Fh3BKt7Y.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
 import { t as Route$18 } from "./auth-D-rJ5I8x.mjs";
 import { t as Analytics } from "../_libs/vercel__analytics.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CEucPpQE.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CekK2M9y.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-BvxOqhd_.css";
@@ -227,8 +227,8 @@ var Route$16 = createRootRouteWithContext()({
 			},
 			{
 				rel: "icon",
-				href: "/favicon.png",
-				type: "image/png"
+				href: "/favicon.ico",
+				type: "image/x-icon"
 			}
 		],
 		scripts: [{ children: THEME_INIT_SCRIPT }]
