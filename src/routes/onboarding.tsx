@@ -60,7 +60,7 @@ function OnboardingPage() {
     setLoading(true);
 
     try {
-      const updates: any = {
+      const updates: Record<string, unknown> = {
         country,
         onboarding_completed: true,
       };
@@ -144,7 +144,7 @@ function OnboardingPage() {
 
       toast.success("Welcome to Branzly!");
       navigate({ to: "/dashboard", replace: true });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err.message || "Failed to save profile");
     } finally {
       setLoading(false);

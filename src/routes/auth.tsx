@@ -4,7 +4,7 @@ import {
   useSearch,
   Link,
 } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import {
@@ -25,7 +25,7 @@ type AccountType = "creator" | "agency";
 
 function AuthPage() {
   const navigate = useNavigate();
-  const search = Route.useSearch() as any;
+  const search = Route.useSearch() as Record<string, unknown>;
   const [mode, setMode] = useState<AuthMode>(search.mode || "signin");
   const [loading, setLoading] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
@@ -35,6 +35,37 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [accountType, setAccountType] = useState<AccountType>("creator");
+
+  const checkProfile = React.useCallback(
+    async (uid: string) => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("account_type, onboarding_completed")
+          .eq("id", uid)
+          .single();
+
+        if (error && error.code === "PGRST116") {
+          // Profile doesn't exist, go to onboarding
+          navigate({ to: "/onboarding", replace: true });
+        } else if (data) {
+          if (!data.onboarding_completed) {
+            navigate({ to: "/onboarding", replace: true });
+          } else {
+            navigate({ to: "/dashboard", replace: true });
+          }
+        } else {
+          navigate({ to: "/onboarding", replace: true });
+        }
+      } catch (err) {
+        console.error(err);
+        navigate({ to: "/onboarding", replace: true });
+      } finally {
+        setSessionChecked(true);
+      }
+    },
+    [navigate],
+  );
 
   useEffect(() => {
     // Check if coming from a password reset email
@@ -51,35 +82,7 @@ function AuthPage() {
         setSessionChecked(true);
       }
     });
-  }, [mode]);
-
-  const checkProfile = async (uid: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("account_type, onboarding_completed")
-        .eq("id", uid)
-        .single();
-
-      if (error && error.code === "PGRST116") {
-        // Profile doesn't exist, go to onboarding
-        navigate({ to: "/onboarding", replace: true });
-      } else if (data) {
-        if (!data.onboarding_completed) {
-          navigate({ to: "/onboarding", replace: true });
-        } else {
-          navigate({ to: "/dashboard", replace: true });
-        }
-      } else {
-        navigate({ to: "/onboarding", replace: true });
-      }
-    } catch (err) {
-      console.error(err);
-      navigate({ to: "/onboarding", replace: true });
-    } finally {
-      setSessionChecked(true);
-    }
-  };
+  }, [mode, checkProfile]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +142,7 @@ function AuthPage() {
         toast.success("Password updated successfully!");
         setMode("signin");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err.message || "Authentication failed");
     } finally {
       setLoading(false);

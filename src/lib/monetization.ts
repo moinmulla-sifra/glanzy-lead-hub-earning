@@ -137,8 +137,8 @@ export async function checkUsageLimit(
 
   const currentVal =
     limitKey === "searchesPerMonth"
-      ? (usage as any)?.searches || 0
-      : (usage as any)?.brand_views || 0;
+      ? (usage as unknown)?.searches || 0
+      : (usage as unknown)?.brand_views || 0;
 
   return { allowed: currentVal < limit, current: currentVal, limit };
 }

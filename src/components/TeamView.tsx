@@ -29,8 +29,8 @@ export function TeamView({ userId }: { userId: string | null }) {
     ? workspaceMemberQuery.data?.workspaces[0]
     : workspaceMemberQuery.data?.workspaces;
   const isAgency =
-    (wsData as any)?.workspace_type === "agency" ||
-    (wsData as any)?.type === "agency";
+    (wsData as unknown)?.workspace_type === "agency" ||
+    (wsData as unknown)?.type === "agency";
 
   const teamMembersQuery = useQuery({
     queryKey: ["team_members", workspaceId],
@@ -101,7 +101,7 @@ export function TeamView({ userId }: { userId: string | null }) {
               (
                 (Array.isArray(workspaceMemberQuery.data?.workspaces)
                   ? workspaceMemberQuery.data?.workspaces[0]
-                  : workspaceMemberQuery.data?.workspaces) as any
+                  : workspaceMemberQuery.data?.workspaces) as unknown
               )?.name
             }
             ).

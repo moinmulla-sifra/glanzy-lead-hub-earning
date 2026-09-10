@@ -340,7 +340,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
               className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 bg-brand text-white hover:bg-brand/90 shadow-md shadow-brand/20"
             >
               <Send size={16} />
-              Contact
+              contact details
             </button>
             <button
               onClick={onClose}
@@ -450,41 +450,43 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                             Additional Contacts
                           </div>
                           <div className="space-y-4">
-                            {contactsData.map((contact: any) => (
-                              <div
-                                key={contact.id}
-                                className="pt-4 border-t border-border/50"
-                              >
-                                <div className="text-sm font-medium">
-                                  {contact.name || "Unnamed Contact"}
-                                </div>
-                                {contact.role && (
-                                  <div className="text-sm text-muted-foreground">
-                                    {contact.role}{" "}
-                                    {contact.department
-                                      ? `(${contact.department})`
-                                      : ""}
+                            {contactsData.map(
+                              (contact: Record<string, unknown>) => (
+                                <div
+                                  key={contact.id}
+                                  className="pt-4 border-t border-border/50"
+                                >
+                                  <div className="text-sm font-medium">
+                                    {contact.name || "Unnamed Contact"}
                                   </div>
-                                )}
-                                {contact.email && (
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <Mail
-                                      size={12}
-                                      className="text-muted-foreground"
-                                    />
-                                    <div className="text-xs font-medium truncate flex-1">
-                                      {contact.email}
+                                  {contact.role && (
+                                    <div className="text-sm text-muted-foreground">
+                                      {contact.role}{" "}
+                                      {contact.department
+                                        ? `(${contact.department})`
+                                        : ""}
                                     </div>
-                                    <button
-                                      onClick={() => copyEmail(contact.email)}
-                                      className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground hover:text-foreground"
-                                    >
-                                      Copy
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
+                                  )}
+                                  {contact.email && (
+                                    <div className="flex items-center gap-2 mt-2">
+                                      <Mail
+                                        size={12}
+                                        className="text-muted-foreground"
+                                      />
+                                      <div className="text-xs font-medium truncate flex-1">
+                                        {contact.email}
+                                      </div>
+                                      <button
+                                        onClick={() => copyEmail(contact.email)}
+                                        className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground hover:text-foreground"
+                                      >
+                                        Copy
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              ),
+                            )}
                           </div>
                         </div>
                       )}
@@ -517,39 +519,41 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                           </div>
                         )}
                         {socialProfilesData &&
-                          socialProfilesData.map((profile: any) => (
-                            <div
-                              key={profile.id}
-                              className="flex items-center gap-3"
-                            >
-                              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 text-foreground">
-                                <PlatformIcon platform={profile.platform} />
+                          socialProfilesData.map(
+                            (profile: Record<string, unknown>) => (
+                              <div
+                                key={profile.id}
+                                className="flex items-center gap-3"
+                              >
+                                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 text-foreground">
+                                  <PlatformIcon platform={profile.platform} />
+                                </div>
+                                <div className="flex-1 min-w-0 flex justify-between items-center">
+                                  <a
+                                    href={
+                                      profile.url.startsWith("http")
+                                        ? profile.url
+                                        : `https://${profile.url}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm font-medium hover:underline truncate block capitalize"
+                                  >
+                                    {profile.platform}
+                                  </a>
+                                  {profile.follower_count && (
+                                    <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                                      {new Intl.NumberFormat("en-US", {
+                                        notation: "compact",
+                                        compactDisplay: "short",
+                                      }).format(profile.follower_count)}{" "}
+                                      followers
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                              <div className="flex-1 min-w-0 flex justify-between items-center">
-                                <a
-                                  href={
-                                    profile.url.startsWith("http")
-                                      ? profile.url
-                                      : `https://${profile.url}`
-                                  }
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-sm font-medium hover:underline truncate block capitalize"
-                                >
-                                  {profile.platform}
-                                </a>
-                                {profile.follower_count && (
-                                  <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
-                                    {new Intl.NumberFormat("en-US", {
-                                      notation: "compact",
-                                      compactDisplay: "short",
-                                    }).format(profile.follower_count)}{" "}
-                                    followers
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          ))}
+                            ),
+                          )}
                       </div>
                     </div>
                   </div>
@@ -667,31 +671,33 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
 
                         {productsData && productsData.length > 0 && (
                           <div className="mt-4 space-y-3">
-                            {productsData.map((prod: any) => (
-                              <div
-                                key={prod.id}
-                                className="bg-muted/30 p-3 rounded-lg border border-border/50"
-                              >
-                                <div className="font-medium text-foreground">
-                                  {prod.name}
+                            {productsData.map(
+                              (prod: Record<string, unknown>) => (
+                                <div
+                                  key={prod.id}
+                                  className="bg-muted/30 p-3 rounded-lg border border-border/50"
+                                >
+                                  <div className="font-medium text-foreground">
+                                    {prod.name}
+                                  </div>
+                                  {prod.category && (
+                                    <div className="text-xs mt-0.5">
+                                      {prod.category}
+                                    </div>
+                                  )}
+                                  {prod.description && (
+                                    <div className="text-xs mt-1.5 opacity-80">
+                                      {prod.description}
+                                    </div>
+                                  )}
+                                  {prod.price && (
+                                    <div className="text-xs mt-1.5 font-medium">
+                                      {prod.price}
+                                    </div>
+                                  )}
                                 </div>
-                                {prod.category && (
-                                  <div className="text-xs mt-0.5">
-                                    {prod.category}
-                                  </div>
-                                )}
-                                {prod.description && (
-                                  <div className="text-xs mt-1.5 opacity-80">
-                                    {prod.description}
-                                  </div>
-                                )}
-                                {prod.price && (
-                                  <div className="text-xs mt-1.5 font-medium">
-                                    {prod.price}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
+                              ),
+                            )}
                           </div>
                         )}
                       </div>
@@ -805,7 +811,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
 
                       {fundingData &&
                         fundingData.length > 0 &&
-                        fundingData.map((funding: any) => (
+                        fundingData.map((funding: Record<string, unknown>) => (
                           <div
                             key={funding.id}
                             className="flex gap-3 items-start border border-border/50 p-4 rounded-xl"
@@ -837,30 +843,34 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
 
                       {activitiesData &&
                         activitiesData.length > 0 &&
-                        activitiesData.map((activity: any) => (
-                          <div
-                            key={activity.id}
-                            className="flex gap-3 items-start border border-border/50 p-4 rounded-xl"
-                          >
-                            <Activity
-                              size={16}
-                              className="text-muted-foreground mt-0.5 shrink-0"
-                            />
-                            <div>
-                              <h4 className="text-sm font-semibold capitalize">
-                                {activity.activity_type.replace("_", " ")}
-                              </h4>
-                              <p className="text-sm text-muted-foreground">
-                                {activity.description}
-                              </p>
-                              {activity.date && (
-                                <div className="text-xs text-muted-foreground mt-1">
-                                  {new Date(activity.date).toLocaleDateString()}
-                                </div>
-                              )}
+                        activitiesData.map(
+                          (activity: Record<string, unknown>) => (
+                            <div
+                              key={activity.id}
+                              className="flex gap-3 items-start border border-border/50 p-4 rounded-xl"
+                            >
+                              <Activity
+                                size={16}
+                                className="text-muted-foreground mt-0.5 shrink-0"
+                              />
+                              <div>
+                                <h4 className="text-sm font-semibold capitalize">
+                                  {activity.activity_type.replace("_", " ")}
+                                </h4>
+                                <p className="text-sm text-muted-foreground">
+                                  {activity.description}
+                                </p>
+                                {activity.date && (
+                                  <div className="text-xs text-muted-foreground mt-1">
+                                    {new Date(
+                                      activity.date,
+                                    ).toLocaleDateString()}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ),
+                        )}
 
                       {!brand.recent_launch &&
                         !brand.recent_funding &&

@@ -28,7 +28,7 @@ export function ProfileView({ userId }: { userId: string | null }) {
         ...profileQuery.data,
         niche:
           profileQuery.data.niche ||
-          (profileQuery.data as any).primary_niche ||
+          (profileQuery.data as unknown).primary_niche ||
           "",
       });
     }
@@ -37,9 +37,9 @@ export function ProfileView({ userId }: { userId: string | null }) {
   const updateProfileMutation = useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
       const selectedNiche =
-        updates.niche || (updates as any).primary_niche || null;
+        updates.niche || (updates as unknown).primary_niche || null;
 
-      const payload: Record<string, any> = {
+      const payload: Record<string, unknown> = {
         id: userId!,
         full_name: updates.full_name ?? null,
         country: updates.country ?? null,

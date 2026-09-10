@@ -146,7 +146,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
       let isNicheMatch = false;
 
       // Niche matching
-      const userNiche = profile.niche || (profile as any).primary_niche;
+      const userNiche = profile.niche || (profile as unknown).primary_niche;
       if (userNiche && brand.industry) {
         if (
           brand.industry.toLowerCase().includes(userNiche.toLowerCase()) ||
@@ -204,7 +204,7 @@ export function ForYouView({ userId }: { userId: string | null }) {
   const isProfileIncomplete =
     profileQuery.isSuccess &&
     !profileQuery.data?.niche &&
-    !(profileQuery.data as any)?.primary_niche &&
+    !(profileQuery.data as unknown)?.primary_niche &&
     !profileQuery.data?.platforms?.length;
 
   return (

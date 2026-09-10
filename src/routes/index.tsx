@@ -133,7 +133,7 @@ function LandingPage() {
   );
 }
 
-function SparklesIcon(props: any) {
+function SparklesIcon(props: Record<string, unknown>) {
   return (
     <svg
       {...props}

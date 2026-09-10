@@ -17,6 +17,7 @@ import {
   Bell,
   CreditCard,
   AlertTriangle,
+  Info,
   LogOut,
   Save,
   Loader2,
@@ -121,6 +122,7 @@ export function SettingsView({ userId }: { userId: string | null }) {
     { id: "security", label: "Security", icon: Shield },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "subscription", label: "Subscription", icon: CreditCard },
+    { id: "about", label: "About", icon: Info },
     { id: "danger", label: "Danger Zone", icon: AlertTriangle, danger: true },
   ];
 
@@ -432,7 +434,7 @@ export function SettingsView({ userId }: { userId: string | null }) {
 
         {/* ABOUT TAB */}
         {activeTab === "about" && (
-          <div className="space-y-8 animate-in fade-in max-w-3xl">
+          <div className="space-y-8 animate-in fade-in max-w-3xl pb-12">
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-1">
                 About Branzly
@@ -442,142 +444,247 @@ export function SettingsView({ userId }: { userId: string | null }) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold mb-4 text-brand flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" /> Branzly
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  An AI-powered brand discovery and intelligence platform for
-                  creators and agencies.
+            <div className="space-y-12 mt-8">
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Who We Are
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Branzly is an AI-powered brand discovery and intelligence
+                  platform for creators and agencies. We exist to help creators,
+                  influencer marketers, agencies, talent managers, brands, and
+                  marketing professionals discover brands, understand their
+                  activity and opportunities, organize relevant brand
+                  information, evaluate potential partnerships, and make
+                  better-informed outreach and collaboration decisions.
                 </p>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Version</span>
-                    <span className="font-medium">1.0.0 (Preview)</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Founded</span>
-                    <span className="font-medium">September 16, 2026</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Country</span>
-                    <span className="font-medium">India</span>
-                  </div>
-                </div>
-              </div>
+                <p className="text-muted-foreground leading-relaxed">
+                  Branzly is a product and startup initiative operated through
+                  Glanzy Studio under the broader Mirza Group organization. We
+                  are currently being developed and operated as a
+                  startup/project and our legal structure may evolve over time.
+                </p>
+              </section>
 
-              <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold mb-4 text-foreground">
-                  Organization
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  What Branzly Does
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Branzly organizes useful brand intelligence into one
+                  professional workspace:
+                </p>
+                <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+                  <li>
+                    <strong>Discovery:</strong> Find relevant brands by niches,
+                    countries, and categories.
+                  </li>
+                  <li>
+                    <strong>Brand Intelligence:</strong> Access detailed company
+                    information, products, social presence, marketing activity,
+                    and creator activity.
+                  </li>
+                  <li>
+                    <strong>Opportunity Signals:</strong> Identify potential
+                    partnership opportunities based on recent launches, funding,
+                    and marketing signals.
+                  </li>
+                  <li>
+                    <strong>Organization:</strong> Save promising brands to
+                    custom lists and team workspaces.
+                  </li>
+                  <li>
+                    <strong>Contact Workflows:</strong> Reveal available
+                    business contact information and track outreach status
+                    manually (Contacted state).
+                  </li>
+                </ul>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Who Branzly Is For
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Branzly is designed to serve:
+                </p>
+                <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+                  <li>Creators and Influencers</li>
+                  <li>Creator Agencies and Talent Managers</li>
+                  <li>Marketing Professionals</li>
+                  <li>Brands and Businesses</li>
+                  <li>Creator-economy professionals</li>
+                </ul>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Why Branzly Exists
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Brand discovery is often fragmented across search engines,
+                  social platforms, websites, news, directories, spreadsheets,
+                  and disconnected research tools. Creators and agencies often
+                  need to discover brands, research company information,
+                  understand marketing signals, identify relevant business
+                  opportunities, save promising companies, and keep track of
+                  outreach. Branzly is intended to bring useful brand
+                  intelligence and discovery into a more structured, organized
+                  environment.
+                </p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  How Branzly Works
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  The Branzly workflow is designed to be simple and effective:
+                </p>
+                <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
+                  <li>
+                    <strong>Discover:</strong> Search for brands in your niche
+                    or explore curated recommendations.
+                  </li>
+                  <li>
+                    <strong>Understand:</strong> Review comprehensive brand
+                    profiles, products, social metrics, and funding information.
+                  </li>
+                  <li>
+                    <strong>Save:</strong> Organize relevant brands into lists
+                    or workspace folders.
+                  </li>
+                  <li>
+                    <strong>Contact:</strong> Uncover available business contact
+                    information and reach out to the brand directly outside the
+                    platform.
+                  </li>
+                  <li>
+                    <strong>Track:</strong> Mark brands as "Contacted" and track
+                    your outreach pipeline status.
+                  </li>
+                </ol>
+              </section>
+
+              <section className="space-y-4 bg-muted/20 border border-border/50 rounded-2xl p-8">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Founder & CEO
+                </h2>
+                <h3 className="text-lg font-bold text-foreground mt-4">
+                  Moin M
                 </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Founder & CEO</span>
-                    <span className="font-medium">Moin M</span>
+                <p className="text-muted-foreground leading-relaxed mt-2">
+                  Moin M is the Founder and CEO of Branzly, the brand discovery
+                  and intelligence platform built to help creators, agencies,
+                  and modern marketing teams discover better opportunities and
+                  make more informed decisions. Branzly was created around a
+                  simple idea: finding the right brands should be easier,
+                  faster, and more intelligent than relying on scattered
+                  searches, spreadsheets, and disconnected information sources.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-4">
+                  As the founder of Glanzy Studio and the creator behind
+                  Branzly, Moin M is focused on building practical technology
+                  for the creator economy and improving how creators, agencies,
+                  and brands discover and understand commercial opportunities.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-4">
+                  Branzly represents that vision in product form — combining
+                  structured brand intelligence, discovery, opportunity signals,
+                  and organization into one platform designed for the modern
+                  creator and marketing ecosystem.
+                </p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Company Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground">
+                      Parent Organization
+                    </h4>
+                    <p className="text-muted-foreground">Mirza Group</p>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Parent Org</span>
-                    <span className="font-medium">Mirza Group</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Operating Org</span>
-                    <span className="font-medium">Glanzy Studio</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Website</span>
+                  <div>
+                    <h4 className="font-semibold text-foreground">
+                      Operating Organization
+                    </h4>
+                    <p className="text-muted-foreground">Glanzy Studio</p>
                     <a
                       href="https://www.glanzystudio.dedyn.io"
                       target="_blank"
-                      className="font-medium text-brand hover:underline"
+                      rel="noreferrer"
+                      className="text-brand hover:underline text-sm"
                     >
                       glanzystudio.dedyn.io
                     </a>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-muted/20 border border-border/50 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-semibold mb-3 text-foreground">
-                Moin M — Founder & CEO
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Moin M is the Founder and CEO of Branzly, the brand discovery
-                and intelligence platform built to help creators, agencies, and
-                modern marketing teams discover better opportunities and make
-                more informed decisions. As the founder of Glanzy Studio and the
-                creator behind Branzly, Moin M is focused on building practical
-                technology for the creator economy.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold mb-4 text-foreground">
-                  Legal & Security
-                </h3>
-                <div className="flex flex-col gap-3 text-sm">
-                  <Link to="/about" className="text-brand hover:underline">
-                    About Page
-                  </Link>
-                  <Link to="/policies" className="text-brand hover:underline">
-                    Privacy Policy
-                  </Link>
-                  <Link to="/terms" className="text-brand hover:underline">
-                    Terms of Service
-                  </Link>
-                  <Link to="/security" className="text-brand hover:underline">
-                    Security Architecture
-                  </Link>
-                </div>
-              </div>
-
-              <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold mb-4 text-foreground">Contact</h3>
-                <div className="flex flex-col gap-3 text-sm">
                   <div>
-                    <span className="block text-muted-foreground text-xs uppercase mb-1">
-                      Support & Privacy
-                    </span>
+                    <h4 className="font-semibold text-foreground">Founded</h4>
+                    <p className="text-muted-foreground">September 16, 2026</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground">Location</h4>
+                    <p className="text-muted-foreground">India</p>
+                  </div>
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Contact Us
+                </h2>
+                <div className="space-y-6 mt-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground">
+                      General Support & Legal/Privacy
+                    </h4>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      For general inquiries, help with your account, or
+                      questions about our privacy policy.
+                    </p>
                     <a
                       href="mailto:support@branzly.dedyn.io"
-                      className="text-foreground hover:text-brand font-medium"
+                      className="text-brand hover:underline font-medium"
                     >
                       support@branzly.dedyn.io
                     </a>
                   </div>
                   <div>
-                    <span className="block text-muted-foreground text-xs uppercase mb-1">
+                    <h4 className="font-semibold text-foreground">
                       Leads & Additional Support
-                    </span>
+                    </h4>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      For help with brand discovery or issues regarding lead
+                      information.
+                    </p>
                     <a
                       href="mailto:leads@branzly.dedyn.io"
-                      className="text-foreground hover:text-brand font-medium"
+                      className="text-brand hover:underline font-medium"
                     >
                       leads@branzly.dedyn.io
                     </a>
                   </div>
                   <div>
-                    <span className="block text-muted-foreground text-xs uppercase mb-1">
-                      Partnerships
-                    </span>
+                    <h4 className="font-semibold text-foreground">
+                      Partnerships & Business
+                    </h4>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      For collaboration requests, API access, or enterprise
+                      features.
+                    </p>
                     <a
                       href="mailto:partners@branzly.dedyn.io"
-                      className="text-foreground hover:text-brand font-medium"
+                      className="text-brand hover:underline font-medium"
                     >
                       partners@branzly.dedyn.io
                     </a>
                   </div>
                 </div>
-              </div>
+              </section>
             </div>
-
-            <p className="text-xs text-muted-foreground text-center">
-              Branzly is a product and startup initiative operated through
-              Glanzy Studio under the broader Mirza Group organization.
-              <br />© {new Date().getFullYear()} Branzly. All rights reserved.
-            </p>
           </div>
         )}
 

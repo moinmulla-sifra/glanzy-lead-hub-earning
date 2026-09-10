@@ -109,7 +109,7 @@ export interface Brand {
   opportunity_score: number | null;
   creator_fit_score: number | null;
   marketing_activity_score: number | null;
-  creator_signals: any | null;
+  creator_signals: Record<string, unknown> | null;
   target_customer: string | null;
   target_demographic: string | null;
   geographic_target: string | null;
@@ -118,10 +118,10 @@ export interface Brand {
   works_with_creators: boolean | null;
   recent_collaborations: string | null;
   creator_campaign_activity: string | null;
-  platforms_used: any | null;
+  platforms_used: Record<string, unknown> | null;
   ugc_activity: string | null;
   ambassador_activity: string | null;
-  opportunity_signals: any | null;
+  opportunity_signals: Record<string, unknown> | null;
   data_confidence: string | null;
   research_status: string | null;
   last_researched_at: string | null;
@@ -212,7 +212,7 @@ export interface ResearchJob {
   workspace_id: string;
   requested_by: string;
   research_type: string;
-  query: any;
+  query: Record<string, unknown>;
   provider: string | null;
   status: "queued" | "running" | "completed" | "failed" | "cancelled";
   started_at: string | null;
@@ -229,7 +229,7 @@ export interface ResearchRun {
   research_job_id: string;
   provider: string;
   status: "running" | "completed" | "failed";
-  raw_results: any;
+  raw_results: Record<string, unknown>;
   error: string | null;
   started_at: string;
   completed_at: string | null;
@@ -242,7 +242,7 @@ export interface BrandEvidence {
   source_url: string | null;
   source_type: string | null;
   field_name: string;
-  evidence: any;
+  evidence: Record<string, unknown>;
   confidence: "high" | "medium" | "low" | "unverified" | null;
   discovered_at: string;
 
