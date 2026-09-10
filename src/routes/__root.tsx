@@ -134,6 +134,11 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11765692',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`,
+          }}
+        />
+        <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
         ></script>
