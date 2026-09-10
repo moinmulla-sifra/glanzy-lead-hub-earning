@@ -139,6 +139,11 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
         <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11765757',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`,
+          }}
+        />
+        <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
         ></script>
