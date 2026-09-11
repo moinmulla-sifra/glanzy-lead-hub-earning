@@ -19,7 +19,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
-import { MonetagScripts } from "@/components/MonetagScripts";
 import { useMonetization } from "@/lib/useMonetization";
 
 export const Route = createFileRoute("/_dashboard")({
@@ -297,9 +296,6 @@ function DashboardLayout() {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
-
-      {/* Monetag Scripts - Only rendered when allowed */}
-      {shouldShowAds && <MonetagScripts />}
     </div>
   );
 }

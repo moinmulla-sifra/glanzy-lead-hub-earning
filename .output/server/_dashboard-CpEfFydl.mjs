@@ -6,7 +6,7 @@ import { t as useMonetization } from "./_ssr/useMonetization-BgMG7Kz6.mjs";
 import { b as useNavigate, f as useLocation, h as Outlet, y as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "./_libs/react.mjs";
 import { $ as ChartNoAxesColumnIncreasing, D as Monitor, E as Moon, M as LogOut, T as PanelLeftClose, a as User, h as Sparkles, i as Users, k as Menu, p as Sun, q as Compass, r as X, rt as Bookmark, v as Settings, w as PanelLeftOpen, y as Send } from "./_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard-DyavtFLJ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_dashboard-CpEfFydl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$1 = "/app/applet/src/components/ThemeToggle.tsx";
@@ -46,26 +46,6 @@ function ThemeToggle() {
 		lineNumber: 30,
 		columnNumber: 5
 	}, this);
-}
-function MonetagScripts() {
-	(0, import_react.useEffect)(() => {
-		if (window.__MONETAG_INJECTED__) return;
-		window.__MONETAG_INJECTED__ = true;
-		const script1 = document.createElement("script");
-		script1.src = "https://quge5.com/88/tag.min.js";
-		script1.setAttribute("data-zone", "278481");
-		script1.async = true;
-		script1.setAttribute("data-cfasync", "false");
-		document.head.appendChild(script1);
-		const script2 = document.createElement("script");
-		script2.innerHTML = `(function(s){s.dataset.zone='11765692',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`;
-		document.head.appendChild(script2);
-		const script3 = document.createElement("script");
-		script3.innerHTML = `(function(s){s.dataset.zone='11765757',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`;
-		document.head.appendChild(script3);
-		return () => {};
-	}, []);
-	return null;
 }
 var _jsxFileName = "/app/applet/src/routes/_dashboard.tsx?tsr-split=component";
 function DashboardLayout() {
@@ -132,24 +112,24 @@ function DashboardLayout() {
 			className: "flex flex-col items-center gap-4",
 			children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-8 w-8 animate-spin rounded-full border-4 border-brand border-t-transparent" }, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 79,
+				lineNumber: 78,
 				columnNumber: 11
 			}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 				className: "text-sm font-medium text-muted-foreground animate-pulse",
 				children: "Loading Branzly..."
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 80,
+				lineNumber: 79,
 				columnNumber: 11
 			}, this)]
 		}, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 78,
+			lineNumber: 77,
 			columnNumber: 9
 		}, this)
 	}, void 0, false, {
 		fileName: _jsxFileName,
-		lineNumber: 77,
+		lineNumber: 76,
 		columnNumber: 12
 	}, this);
 	const isAgency = profileQuery.data?.account_type === "agency";
@@ -218,40 +198,40 @@ function DashboardLayout() {
 						className: "w-8 h-8 object-contain drop-shadow-sm"
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 133,
+						lineNumber: 132,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
 						className: "font-bold text-lg tracking-tight",
 						children: "Branzly"
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 134,
+						lineNumber: 133,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName,
-					lineNumber: 132,
+					lineNumber: 131,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 					onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen),
 					className: "p-2 -mr-2 text-muted-foreground hover:text-foreground transition-colors",
 					children: isMobileMenuOpen ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(X, { size: 24 }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 137,
+						lineNumber: 136,
 						columnNumber: 31
 					}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Menu, { size: 24 }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 137,
+						lineNumber: 136,
 						columnNumber: 49
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName,
-					lineNumber: 136,
+					lineNumber: 135,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 131,
+				lineNumber: 130,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("aside", {
@@ -272,19 +252,19 @@ function DashboardLayout() {
 								className: "w-8 h-8 object-contain drop-shadow-sm"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 150,
+								lineNumber: 149,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
 								className: "font-bold text-xl tracking-tight",
 								children: "Branzly"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 151,
+								lineNumber: 150,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 149,
+							lineNumber: 148,
 							columnNumber: 11
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 							onClick: () => setIsSidebarCollapsed(true),
@@ -292,17 +272,17 @@ function DashboardLayout() {
 							title: "Close sidebar",
 							children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(PanelLeftClose, { size: 20 }, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 154,
+								lineNumber: 153,
 								columnNumber: 13
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 153,
+							lineNumber: 152,
 							columnNumber: 11
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 148,
+						lineNumber: 147,
 						columnNumber: 9
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -314,7 +294,7 @@ function DashboardLayout() {
 								children: "Menu"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 160,
+								lineNumber: 159,
 								columnNumber: 13
 							}, this), navItems.map((item) => {
 								const Icon = item.icon;
@@ -331,18 +311,18 @@ function DashboardLayout() {
 										className: isActive ? "text-brand" : "opacity-70"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 170,
+										lineNumber: 169,
 										columnNumber: 19
 									}, this), item.label]
 								}, item.id, true, {
 									fileName: _jsxFileName,
-									lineNumber: 166,
+									lineNumber: 165,
 									columnNumber: 20
 								}, this);
 							})]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 159,
+							lineNumber: 158,
 							columnNumber: 11
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("nav", {
 							className: "space-y-1 mt-8",
@@ -351,7 +331,7 @@ function DashboardLayout() {
 								children: "Account"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 177,
+								lineNumber: 176,
 								columnNumber: 13
 							}, this), bottomNavItems.map((item) => {
 								const Icon = item.icon;
@@ -368,23 +348,23 @@ function DashboardLayout() {
 										className: isActive ? "text-brand" : "opacity-70"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 187,
+										lineNumber: 186,
 										columnNumber: 19
 									}, this), item.label]
 								}, item.id, true, {
 									fileName: _jsxFileName,
-									lineNumber: 183,
+									lineNumber: 182,
 									columnNumber: 20
 								}, this);
 							})]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 176,
+							lineNumber: 175,
 							columnNumber: 11
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 158,
+						lineNumber: 157,
 						columnNumber: 9
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -399,19 +379,19 @@ function DashboardLayout() {
 									className: "w-full h-full object-cover"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 197,
+									lineNumber: 196,
 									columnNumber: 48
 								}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(User, {
 									size: 14,
 									className: "text-muted-foreground"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 197,
+									lineNumber: 196,
 									columnNumber: 143
 								}, this)
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 196,
+								lineNumber: 195,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 								className: "flex-1 overflow-hidden",
@@ -420,58 +400,58 @@ function DashboardLayout() {
 									children: profileQuery.data?.full_name || userEmail?.split("@")[0]
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 200,
+									lineNumber: 199,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
 									className: "text-xs text-muted-foreground truncate",
 									children: userEmail
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 203,
+									lineNumber: 202,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 199,
+								lineNumber: 198,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 195,
+							lineNumber: 194,
 							columnNumber: 11
 						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 							className: "flex items-center justify-between gap-2",
 							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ThemeToggle, {}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 209,
+								lineNumber: 208,
 								columnNumber: 13
 							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 								onClick: signOut,
 								className: "flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors",
 								children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LogOut, { size: 16 }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 211,
+									lineNumber: 210,
 									columnNumber: 15
 								}, this), "Sign Out"]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 210,
+								lineNumber: 209,
 								columnNumber: 13
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 208,
+							lineNumber: 207,
 							columnNumber: 11
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 194,
+						lineNumber: 193,
 						columnNumber: 9
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 142,
+				lineNumber: 141,
 				columnNumber: 7
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("main", {
@@ -479,7 +459,7 @@ function DashboardLayout() {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/5 via-background to-background pointer-events-none" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 220,
+						lineNumber: 219,
 						columnNumber: 9
 					}, this),
 					isSidebarCollapsed && /* @__PURE__ */ (void 0)("div", {
@@ -490,17 +470,17 @@ function DashboardLayout() {
 							title: "Open sidebar",
 							children: /* @__PURE__ */ (void 0)(PanelLeftOpen, { size: 20 }, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 225,
+								lineNumber: 224,
 								columnNumber: 15
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 224,
+							lineNumber: 223,
 							columnNumber: 13
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 223,
+						lineNumber: 222,
 						columnNumber: 32
 					}, this),
 					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -509,23 +489,23 @@ function DashboardLayout() {
 							className: "max-w-6xl mx-auto h-full",
 							children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 231,
+								lineNumber: 230,
 								columnNumber: 13
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 230,
+							lineNumber: 229,
 							columnNumber: 11
 						}, this)
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 229,
+						lineNumber: 228,
 						columnNumber: 9
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 219,
+				lineNumber: 218,
 				columnNumber: 7
 			}, this),
 			isMobileMenuOpen && /* @__PURE__ */ (void 0)("div", {
@@ -533,18 +513,13 @@ function DashboardLayout() {
 				onClick: () => setIsMobileMenuOpen(false)
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 237,
+				lineNumber: 236,
 				columnNumber: 28
-			}, this),
-			shouldShowAds && /* @__PURE__ */ (void 0)(MonetagScripts, {}, void 0, false, {
-				fileName: _jsxFileName,
-				lineNumber: 240,
-				columnNumber: 25
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 129,
+		lineNumber: 128,
 		columnNumber: 10
 	}, this);
 }

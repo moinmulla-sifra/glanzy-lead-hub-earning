@@ -8,7 +8,7 @@ import { t as Route$17 } from "../_dashboard.contacted-CwkQzB3K.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
 import { t as Route$18 } from "./auth-D-rJ5I8x.mjs";
 import { t as Analytics } from "../_libs/vercel__analytics.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DUJ_TmtQ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-FF9KGeLG.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-B8OWbbbl.css";
@@ -187,10 +187,6 @@ var Route$16 = createRootRouteWithContext()({
 				content: "Discover brand opportunities and manage your outreach with Branzly."
 			},
 			{
-				name: "monetag",
-				content: "9bcbe965904ea59db203fd8d396c1a27"
-			},
-			{
 				property: "og:title",
 				content: "Branzly"
 			},
@@ -245,6 +241,16 @@ function RootShell({ children }) {
 		suppressHydrationWarning: true,
 		children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("head", { children: [
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", {
+				src: "https://quge5.com/88/tag.min.js",
+				"data-zone": "278844",
+				async: true,
+				"data-cfasync": "false"
+			}, void 0, false, {
+				fileName: _jsxFileName,
+				lineNumber: 135,
+				columnNumber: 9
+			}, this),
+			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", {
 				async: true,
 				src: "https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
 			}, void 0, false, {
@@ -270,7 +276,7 @@ function RootShell({ children }) {
 			}, this)
 		] }, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 135,
+			lineNumber: 134,
 			columnNumber: 7
 		}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", {
 			suppressHydrationWarning: true,
@@ -286,7 +292,7 @@ function RootShell({ children }) {
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 134,
+		lineNumber: 133,
 		columnNumber: 5
 	}, this);
 }
@@ -322,7 +328,7 @@ function RootComponent() {
 }
 var $$splitComponentImporter$15 = () => import("./routes-CEIfziUe.mjs");
 var Route$15 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$15, "component") });
-var $$splitComponentImporter$14 = () => import("../_dashboard-DyavtFLJ.mjs");
+var $$splitComponentImporter$14 = () => import("../_dashboard-CpEfFydl.mjs");
 var Route$14 = createFileRoute("/_dashboard")({ component: lazyRouteComponent($$splitComponentImporter$14, "component") });
 var $$splitComponentImporter$13 = () => import("./about-DxA7pRIH.mjs");
 var Route$13 = createFileRoute("/about")({ component: lazyRouteComponent($$splitComponentImporter$13, "component") });
