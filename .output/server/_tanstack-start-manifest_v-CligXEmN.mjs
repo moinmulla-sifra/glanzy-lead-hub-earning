@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BqeDDoVQ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-CligXEmN.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/app/applet/src/routes/__root.tsx",
@@ -15,7 +15,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/terms"
 		],
 		preloads: [
-			"/assets/index-BMA9npFr.js",
+			"/assets/index-BWAvfb8q.js",
 			"/assets/jsx-dev-runtime-BN4uJXNV.js",
 			"/assets/theme-nvo7oiL7.js",
 			"/assets/useMatch-0nMY29ej.js",
@@ -26,7 +26,7 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-BMA9npFr.js"
+			src: "/assets/index-BWAvfb8q.js"
 		} }]
 	},
 	"/": {
@@ -53,10 +53,10 @@ var tsrStartManifest = () => ({ routes: {
 			"/_dashboard/team"
 		],
 		preloads: [
-			"/assets/_dashboard-DFHDAUgA.js",
-			"/assets/useQuery-B_hjDu2j.js",
+			"/assets/_dashboard-B_0ujK7c.js",
+			"/assets/useQuery-CgsEIqQD.js",
 			"/assets/supabase-ClxXyGWb.js",
-			"/assets/useMonetization-CiLPCEJj.js",
+			"/assets/useMonetization-L5dLuOji.js",
 			"/assets/createLucideIcon-C-so-e7F.js",
 			"/assets/bookmark-DW2tSGOY.js",
 			"/assets/chart-no-axes-column-increasing-DD7wD4tZ.js",
@@ -78,9 +78,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/admin.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/admin-BVq-Y7tC.js",
-			"/assets/useQuery-B_hjDu2j.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/admin-B4tXS5K9.js",
+			"/assets/useQuery-CgsEIqQD.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/supabase-ClxXyGWb.js",
 			"/assets/createLucideIcon-C-so-e7F.js",
 			"/assets/loader-circle-B2lAyaPL.js",
@@ -91,7 +91,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/auth.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/auth-CGP2DOcG.js",
+			"/assets/auth-BAGjASlM.js",
 			"/assets/supabase-ClxXyGWb.js",
 			"/assets/compass-BgPFnzN0.js",
 			"/assets/loader-circle-B2lAyaPL.js",
@@ -102,7 +102,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/onboarding.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/onboarding-B6gbv94O.js",
+			"/assets/onboarding-62Bc3cKh.js",
 			"/assets/supabase-ClxXyGWb.js",
 			"/assets/arrow-right-BeRVpgVc.js",
 			"/assets/loader-circle-B2lAyaPL.js"
@@ -117,7 +117,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/pricing.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/pricing-DIAWzSq8.js",
+			"/assets/pricing-BbcNjwAE.js",
 			"/assets/supabase-ClxXyGWb.js",
 			"/assets/monetization-DabKtcvu.js",
 			"/assets/createLucideIcon-C-so-e7F.js",
@@ -142,8 +142,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.contacted.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.contacted-uWc9d504.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.contacted-C6GeDmul.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/phone-DEmgT3P7.js",
 			"/assets/arrow-right-BeRVpgVc.js",
 			"/assets/calendar-CZclbofY.js",
@@ -156,18 +156,18 @@ var tsrStartManifest = () => ({ routes: {
 	"/_dashboard/dashboard": {
 		filePath: "/app/applet/src/routes/_dashboard.dashboard.tsx",
 		children: void 0,
-		preloads: ["/assets/_dashboard.dashboard-BDt4zY83.js", "/assets/trending-up-OGSctlhb.js"]
+		preloads: ["/assets/_dashboard.dashboard-Di8NeaNz.js", "/assets/trending-up-OGSctlhb.js"]
 	},
 	"/_dashboard/discover": {
 		filePath: "/app/applet/src/routes/_dashboard.discover.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.discover-ks3wjsLw.js",
-			"/assets/sliders-horizontal-BaNzdubS.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.discover-DRw7i4yA.js",
+			"/assets/sliders-horizontal-DeibLmXA.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/phone-DEmgT3P7.js",
 			"/assets/check-CJ6mA__T.js",
-			"/assets/BrandProfileModal-CjpUDHm4.js",
+			"/assets/BrandProfileModal-DGcsiZLR.js",
 			"/assets/loader-circle-B2lAyaPL.js",
 			"/assets/search-Cyq1P6QR.js",
 			"/assets/trending-up-OGSctlhb.js"
@@ -177,10 +177,10 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.for-you.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.for-you-jClIE_u6.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.for-you-B-anx_Mj.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/phone-DEmgT3P7.js",
-			"/assets/BrandProfileModal-CjpUDHm4.js",
+			"/assets/BrandProfileModal-DGcsiZLR.js",
 			"/assets/trending-up-OGSctlhb.js"
 		]
 	},
@@ -188,8 +188,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.profile.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.profile-Dbey4CcM.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.profile-77-U1qo5.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/loader-circle-B2lAyaPL.js",
 			"/assets/save-iNOlvxt3.js"
 		]
@@ -198,13 +198,13 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.saved.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.saved-BVp5Df4m.js",
-			"/assets/sliders-horizontal-BaNzdubS.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.saved-BIEhbjDN.js",
+			"/assets/sliders-horizontal-DeibLmXA.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/phone-DEmgT3P7.js",
 			"/assets/calendar-CZclbofY.js",
 			"/assets/check-CJ6mA__T.js",
-			"/assets/BrandProfileModal-CjpUDHm4.js",
+			"/assets/BrandProfileModal-DGcsiZLR.js",
 			"/assets/loader-circle-B2lAyaPL.js",
 			"/assets/search-Cyq1P6QR.js"
 		]
@@ -213,8 +213,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.settings.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.settings-CaBWoTbU.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.settings-XXFTyStp.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/building-2-DtlKDAcU.js",
 			"/assets/credit-card-BrbVIf0e.js",
 			"/assets/info-Bs78oyN2.js",
@@ -227,8 +227,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_dashboard.team.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_dashboard.team-D8qvRTS6.js",
-			"/assets/useMutation-B1SrLkkc.js",
+			"/assets/_dashboard.team-DIvYzjde.js",
+			"/assets/useMutation-xv1hEOHq.js",
 			"/assets/loader-circle-B2lAyaPL.js",
 			"/assets/shield-CQjJCYRB.js"
 		]

@@ -132,7 +132,6 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        <script src="https://quge5.com/88/tag.min.js" data-zone="278844" async data-cfasync="false"></script>
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
