@@ -1,5 +1,5 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/components/SettingsView.tsx', 'utf-8');
+const fs = require("fs");
+let code = fs.readFileSync("src/components/SettingsView.tsx", "utf-8");
 
 // I need to replace from line 748 to the end of the file.
 // Let's just create SubscriptionSettings again completely and inject it.
@@ -80,4 +80,4 @@ const subSettings = `function SubscriptionSettings({
 
 // Replace everything from `function SubscriptionSettings` to the end of file
 code = code.replace(/function SubscriptionSettings\([\s\S]*$/, subSettings);
-fs.writeFileSync('src/components/SettingsView.tsx', code);
+fs.writeFileSync("src/components/SettingsView.tsx", code);

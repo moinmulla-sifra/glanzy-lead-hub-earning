@@ -1,5 +1,5 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/components/DiscoverView.tsx', 'utf-8');
+const fs = require("fs");
+let code = fs.readFileSync("src/components/DiscoverView.tsx", "utf-8");
 
 const replacement = `const fetchBrands = async ({ pageParam = 0 }) => {
     const pageSize = 12;
@@ -36,5 +36,8 @@ const replacement = `const fetchBrands = async ({ pageParam = 0 }) => {
     return data;
   };`;
 
-code = code.replace(/const fetchBrands = async \(\{ pageParam = 0 \}\) => \{[\s\S]*?return \{[\s\S]*?\};[\s\S]*?\};/, replacement);
-fs.writeFileSync('src/components/DiscoverView.tsx', code);
+code = code.replace(
+  /const fetchBrands = async \(\{ pageParam = 0 \}\) => \{[\s\S]*?return \{[\s\S]*?\};[\s\S]*?\};/,
+  replacement,
+);
+fs.writeFileSync("src/components/DiscoverView.tsx", code);

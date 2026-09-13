@@ -164,7 +164,11 @@ function AuthPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-brand/10 via-background to-background pointer-events-none" />
 
         <div className="relative z-10 flex items-center gap-3 mb-16">
-          <img src="/favicon.png" alt="Branzly Logo" className="w-10 h-10 object-contain drop-shadow-sm" />
+          <img
+            src="/favicon.png"
+            alt="Branzly Logo"
+            className="w-10 h-10 object-contain drop-shadow-sm"
+          />
           <span className="font-bold text-2xl tracking-tight text-foreground">
             Branzly
           </span>
@@ -214,7 +218,11 @@ function AuthPage() {
         <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">
           {/* Mobile Header */}
           <div className="md:hidden flex items-center gap-3 mb-10 justify-center">
-            <img src="/favicon.png" alt="Branzly Logo" className="w-10 h-10 object-contain drop-shadow-sm" />
+            <img
+              src="/favicon.png"
+              alt="Branzly Logo"
+              className="w-10 h-10 object-contain drop-shadow-sm"
+            />
             <span className="font-bold text-2xl tracking-tight text-foreground">
               Branzly
             </span>

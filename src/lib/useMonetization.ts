@@ -21,7 +21,8 @@ export function useMonetization(userId: string | null) {
   });
 
   const workspaceId = memberData?.workspace_id;
-  const workspaceType = (memberData?.workspaces as any)?.type || "creator"; // Default to creator if unknown
+  const workspaceType =
+    (memberData?.workspaces as Record<string, unknown>)?.type || "creator"; // Default to creator if unknown
 
   const { data: subData, isLoading: isLoadingSub } = useQuery({
     queryKey: ["subscription_data", workspaceId],
@@ -35,11 +36,11 @@ export function useMonetization(userId: string | null) {
         .maybeSingle();
 
       let plan = (sub?.plan as string) || "free";
-      
+
       // Fallback for pre-migration state
       if (plan === "pro") plan = "creator_pro";
       if (plan === "agency") plan = "agency_pro";
-      
+
       if (!PLANS[plan as PlanType]) {
         plan = "free";
       }

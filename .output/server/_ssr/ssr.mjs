@@ -331,7 +331,7 @@ var PLANS = {
 		}
 	}
 };
-var supabase$1 = createClient(processModule.env.VITE_SUPABASE_URL || "", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "");
+var supabase$1 = createClient(processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
 var handleDiscover = async (request) => {
 	try {
 		const body = await request.json();
@@ -356,7 +356,7 @@ var handleDiscover = async (request) => {
 		const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
 		const { data: usage } = await supabase$1.from("usage").select("*").eq("workspace_id", workspaceId).gte("period_start", startOfDay).limit(1).maybeSingle();
 		let searches = usage?.searches || 0;
-		let leads = usage?.brand_views || 0;
+		const leads = usage?.brand_views || 0;
 		if (pageParam === 0 && search) {
 			if (planConfig.limits.daily_brand_searches !== "unlimited" && searches >= planConfig.limits.daily_brand_searches) return new Response(JSON.stringify({ error: "Daily search limit reached" }), {
 				status: 403,
@@ -423,7 +423,7 @@ new DodoPayments({
 	bearerToken: processModule.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
 	environment: "test_mode"
 });
-var supabase = createClient(processModule.env.VITE_SUPABASE_URL || "https://placeholder", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
+var supabase = createClient(processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
 var handleDodoWebhook = async (request) => {
 	const payload = await request.text();
 	const signature = request.headers.get("webhook-signature");
@@ -483,7 +483,7 @@ var handleDodoWebhook = async (request) => {
 };
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-Dkq1rz4m.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-DJOIbdbM.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -500,7 +500,7 @@ async function normalizeCatastrophicSsrResponse(response) {
 function isH3SwallowedErrorBody(body) {
 	try {
 		const payload = JSON.parse(body);
-		return payload.unhandled === true && payload.message === "HTTPError";
+		return payload.unhandled === true && (payload.message === "HTTPError" || payload.error === true);
 	} catch {
 		return false;
 	}

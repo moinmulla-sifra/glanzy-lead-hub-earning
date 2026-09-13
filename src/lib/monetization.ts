@@ -1,6 +1,7 @@
 import { supabase } from "./supabase";
 
-export type PlanType = "free" | "creator_plus" | "creator_pro" | "agency_plus" | "agency_pro";
+export type PlanType =
+  "free" | "creator_plus" | "creator_pro" | "agency_plus" | "agency_pro";
 
 export interface PlanConfig {
   name: string;
@@ -222,7 +223,9 @@ export const PLANS: Record<PlanType, PlanConfig> = {
   },
 };
 
-export async function getEffectiveSubscription(workspaceId: string): Promise<PlanType> {
+export async function getEffectiveSubscription(
+  workspaceId: string,
+): Promise<PlanType> {
   const { data: sub } = await supabase
     .from("subscriptions")
     .select("plan, status")
@@ -234,7 +237,7 @@ export async function getEffectiveSubscription(workspaceId: string): Promise<Pla
   let plan = (sub?.plan as string) || "free";
   if (plan === "pro") plan = "creator_pro";
   if (plan === "agency") plan = "agency_pro";
-  
+
   // Verify it is a valid PlanType
   if (!PLANS[plan as PlanType]) {
     plan = "free";
@@ -258,7 +261,7 @@ export async function checkUsageLimit(
 ) {
   const currentPlan = await getEffectiveSubscription(workspaceId);
   const limit = PLANS[currentPlan].limits[limitKey];
-  
+
   if (limit === "unlimited") {
     return { allowed: true, current: 0, limit };
   }
@@ -272,19 +275,27 @@ export async function checkUsageLimit(
     if (limitKey === "team_seats") table = "workspace_members";
     if (limitKey === "saved_brand_limit") table = "saved_brands";
     if (limitKey === "outreach_record_limit") table = "outreach";
-    
+
     const { count } = await supabase
       .from(table)
       .select("*", { count: "exact", head: true })
       .eq("workspace_id", workspaceId);
-      
+
     return { allowed: (count || 0) < limit, current: count || 0, limit };
   }
 
   // Periodic limits (daily/monthly)
   const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const startOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  ).toISOString();
+  const startOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1,
+  ).toISOString();
 
   // For brand_leads and searches, we need a daily usage table or query
   // Let's create or update usage logic
@@ -295,11 +306,14 @@ export async function checkUsageLimit(
       .eq("workspace_id", workspaceId)
       .gte("period_start", startOfDay)
       .maybeSingle();
-      
-    const currentVal = limitKey === "daily_brand_leads" ? (usage?.brand_views || 0) : (usage?.searches || 0);
+
+    const currentVal =
+      limitKey === "daily_brand_leads"
+        ? usage?.brand_views || 0
+        : usage?.searches || 0;
     return { allowed: currentVal < limit, current: currentVal, limit };
   }
-  
+
   if (limitKey === "monthly_contact_reveals") {
     const { data: usage } = await supabase
       .from("usage")
@@ -307,7 +321,7 @@ export async function checkUsageLimit(
       .eq("workspace_id", workspaceId)
       .gte("period_start", startOfMonth)
       .maybeSingle();
-      
+
     const currentVal = usage?.contact_reveals || 0;
     return { allowed: currentVal < limit, current: currentVal, limit };
   }
@@ -318,16 +332,18 @@ export async function checkUsageLimit(
 export async function incrementUsage(
   workspaceId: string,
   metric: "searches" | "brand_views" | "contact_reveals",
-  period: "daily" | "monthly" = "daily"
+  period: "daily" | "monthly" = "daily",
 ) {
   const now = new Date();
-  const startOfPeriod = period === "daily" 
-    ? new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    : new Date(now.getFullYear(), now.getMonth(), 1);
-    
-  const endOfPeriod = period === "daily"
-    ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
-    : new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const startOfPeriod =
+    period === "daily"
+      ? new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      : new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const endOfPeriod =
+    period === "daily"
+      ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+      : new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
   // Attempt to find existing usage record for the period
   const { data: currentUsage } = await supabase

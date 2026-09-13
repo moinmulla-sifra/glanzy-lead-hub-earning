@@ -87,15 +87,15 @@ export function DiscoverView({
     const pageSize = 12;
     const { data: session } = await supabase.auth.getSession();
     const token = session?.session?.access_token;
-    
+
     if (!token) throw new Error("Unauthorized");
-    
+
     // We pass our state to the backend
-    const response = await fetch('/api/brands/discover', {
-      method: 'POST',
+    const response = await fetch("/api/brands/discover", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         workspaceId,
@@ -103,18 +103,18 @@ export function DiscoverView({
         pageSize,
         search: debouncedSearch,
         filters: activeFilters,
-        sortOption
-      })
+        sortOption,
+      }),
     });
-    
+
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
       throw new Error(errData.error || "Failed to fetch brands");
     }
-    
+
     const data = await response.json();
     if (data.error) throw new Error(data.error);
-    
+
     return data;
   };
 

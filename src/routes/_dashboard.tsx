@@ -35,7 +35,7 @@ function DashboardLayout() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  
+
   const { shouldShowAds } = useMonetization(userId);
 
   useEffect(() => {
@@ -133,7 +133,11 @@ function DashboardLayout() {
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 border-b border-border/50 bg-background/80 backdrop-blur-xl z-50 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <img src="/favicon.png" alt="Branzly Logo" className="w-8 h-8 object-contain drop-shadow-sm" />
+          <img
+            src="/favicon.png"
+            alt="Branzly Logo"
+            className="w-8 h-8 object-contain drop-shadow-sm"
+          />
           <span className="font-bold text-lg tracking-tight">Branzly</span>
         </div>
         <button
@@ -155,7 +159,11 @@ function DashboardLayout() {
       >
         <div className="p-6 hidden lg:flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <img src="/favicon.png" alt="Branzly Logo" className="w-8 h-8 object-contain drop-shadow-sm" />
+            <img
+              src="/favicon.png"
+              alt="Branzly Logo"
+              className="w-8 h-8 object-contain drop-shadow-sm"
+            />
             <span className="font-bold text-xl tracking-tight">Branzly</span>
           </div>
           <button
@@ -297,7 +305,7 @@ function DashboardLayout() {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
-      
+
       {shouldShowAds && <MonetagScripts />}
     </div>
   );

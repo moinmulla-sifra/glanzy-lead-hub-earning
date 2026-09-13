@@ -11,12 +11,15 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function PricingPage() {
-  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("yearly");
+  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">(
+    "yearly",
+  );
   const [viewMode, setViewMode] = useState<"account" | "all">("account");
   const [userId, setUserId] = useState<string | null>(null);
-  
+
   // Use centralized monetization state
-  const { currentPlan, workspaceId, workspaceType, isLoading, planConfig } = useMonetization(userId);
+  const { currentPlan, workspaceId, workspaceType, isLoading, planConfig } =
+    useMonetization(userId);
   const [upgrading, setUpgrading] = useState<PlanType | null>(null);
   const navigate = useNavigate();
 
@@ -36,15 +39,21 @@ function PricingPage() {
       navigate({ to: "/auth" });
       return;
     }
-    
+
     if (currentPlan === plan) {
       toast.info("You are already on this plan");
       return;
     }
 
     const selectedPlanConfig = PLANS[plan];
-    if (selectedPlanConfig.accountType !== 'all' && workspaceType && selectedPlanConfig.accountType !== workspaceType) {
-      toast.error(`Account mismatch: You are trying to purchase a ${selectedPlanConfig.accountType} plan on a ${workspaceType} workspace. Please create a new workspace or contact support to change your account type.`);
+    if (
+      selectedPlanConfig.accountType !== "all" &&
+      workspaceType &&
+      selectedPlanConfig.accountType !== workspaceType
+    ) {
+      toast.error(
+        `Account mismatch: You are trying to purchase a ${selectedPlanConfig.accountType} plan on a ${workspaceType} workspace. Please create a new workspace or contact support to change your account type.`,
+      );
       return;
     }
 
@@ -53,22 +62,24 @@ function PricingPage() {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          planId: plan, 
-          workspaceId, 
-          interval: billingInterval 
+        body: JSON.stringify({
+          planId: plan,
+          workspaceId,
+          interval: billingInterval,
         }),
       });
-      
+
       const data = await response.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
         throw new Error(data.error || "Failed to start checkout");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upgrade checkout error:", err);
-      toast.error(err.message || "Failed to initiate checkout. Please try again.");
+      toast.error(
+        err.message || "Failed to initiate checkout. Please try again.",
+      );
       setUpgrading(null);
     }
   };
@@ -77,9 +88,13 @@ function PricingPage() {
   let displayedPlans = Object.values(PLANS);
   if (viewMode === "account" && workspaceType) {
     if (workspaceType === "creator") {
-      displayedPlans = displayedPlans.filter(p => p.accountType === "creator" || p.type === "free");
+      displayedPlans = displayedPlans.filter(
+        (p) => p.accountType === "creator" || p.type === "free",
+      );
     } else if (workspaceType === "agency") {
-      displayedPlans = displayedPlans.filter(p => p.accountType === "agency" || p.type === "free");
+      displayedPlans = displayedPlans.filter(
+        (p) => p.accountType === "agency" || p.type === "free",
+      );
     }
   }
 
@@ -87,16 +102,24 @@ function PricingPage() {
     <div className="min-h-screen bg-background pt-8 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
-          <button 
-            onClick={() => { if (window.history.length > 2) { window.history.back() } else { navigate({ to: '/settings' }) } }}
+          <button
+            onClick={() => {
+              if (window.history.length > 2) {
+                window.history.back();
+              } else {
+                navigate({ to: "/settings" });
+              }
+            }}
             className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </button>
-          
-          <button 
-            onClick={() => setViewMode(prev => prev === "all" ? "account" : "all")}
+
+          <button
+            onClick={() =>
+              setViewMode((prev) => (prev === "all" ? "account" : "all"))
+            }
             className="text-sm font-medium text-brand hover:underline"
           >
             {viewMode === "all" ? "View My Plans" : "View All Plans"}
@@ -110,13 +133,15 @@ function PricingPage() {
           <p className="text-xl text-muted-foreground">
             Find the perfect plan for your business.
           </p>
-          
+
           <div className="mt-8 flex justify-center">
             <div className="bg-muted p-1 rounded-xl inline-flex relative">
               <button
                 onClick={() => setBillingInterval("monthly")}
                 className={`relative z-10 px-6 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                  billingInterval === "monthly" ? "text-foreground shadow-sm bg-background" : "text-muted-foreground hover:text-foreground"
+                  billingInterval === "monthly"
+                    ? "text-foreground shadow-sm bg-background"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Monthly
@@ -124,7 +149,9 @@ function PricingPage() {
               <button
                 onClick={() => setBillingInterval("yearly")}
                 className={`relative z-10 px-6 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center gap-2 ${
-                  billingInterval === "yearly" ? "text-foreground shadow-sm bg-background" : "text-muted-foreground hover:text-foreground"
+                  billingInterval === "yearly"
+                    ? "text-foreground shadow-sm bg-background"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Yearly
@@ -141,14 +168,23 @@ function PricingPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand"></div>
           </div>
         ) : (
-          <div className={`grid grid-cols-1 md:grid-cols-${Math.min(displayedPlans.length, 3)} lg:grid-cols-${displayedPlans.length} gap-6 items-stretch justify-center`}>
+          <div
+            className={`grid grid-cols-1 md:grid-cols-${Math.min(displayedPlans.length, 3)} lg:grid-cols-${displayedPlans.length} gap-6 items-stretch justify-center`}
+          >
             {displayedPlans.map((plan) => {
               const isCurrentPlan = currentPlan === plan.type;
               const isPro = plan.type.includes("pro");
               const isAgency = plan.accountType === "agency";
-              
-              const price = billingInterval === "yearly" ? plan.priceYearly : plan.priceMonthly;
-              const formattedPrice = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price);
+
+              const price =
+                billingInterval === "yearly"
+                  ? plan.priceYearly
+                  : plan.priceMonthly;
+              const formattedPrice = new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "INR",
+                maximumFractionDigits: 0,
+              }).format(price);
 
               return (
                 <div
@@ -168,8 +204,14 @@ function PricingPage() {
                   )}
 
                   <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-2 rounded-xl ${isCurrentPlan ? "bg-brand/10 text-brand" : "bg-muted text-muted-foreground"}`}>
-                      {isAgency ? <Building2 className="w-5 h-5" /> : <User className="w-5 h-5" />}
+                    <div
+                      className={`p-2 rounded-xl ${isCurrentPlan ? "bg-brand/10 text-brand" : "bg-muted text-muted-foreground"}`}
+                    >
+                      {isAgency ? (
+                        <Building2 className="w-5 h-5" />
+                      ) : (
+                        <User className="w-5 h-5" />
+                      )}
                     </div>
                     <h3 className="text-xl font-bold text-foreground">
                       {plan.name}
@@ -188,47 +230,100 @@ function PricingPage() {
                       )}
                     </div>
                     {billingInterval === "yearly" && price > 0 && (
-                      <p className="text-sm text-green-600 font-medium mt-1">2 months free messaging</p>
+                      <p className="text-sm text-green-600 font-medium mt-1">
+                        2 months free messaging
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-4 mb-8 flex-1">
                     <Feature included={true}>
-                      <span className="font-semibold">{plan.limits.daily_brand_leads === "unlimited" ? "Unlimited" : plan.limits.daily_brand_leads}</span> brand leads/day
+                      <span className="font-semibold">
+                        {plan.limits.daily_brand_leads === "unlimited"
+                          ? "Unlimited"
+                          : plan.limits.daily_brand_leads}
+                      </span>{" "}
+                      brand leads/day
                     </Feature>
                     <Feature included={true}>
-                      <span className="font-semibold">{plan.limits.daily_brand_searches === "unlimited" ? "Unlimited" : plan.limits.daily_brand_searches}</span> searches/day
+                      <span className="font-semibold">
+                        {plan.limits.daily_brand_searches === "unlimited"
+                          ? "Unlimited"
+                          : plan.limits.daily_brand_searches}
+                      </span>{" "}
+                      searches/day
                     </Feature>
                     <Feature included={true}>
-                      <span className="font-semibold">{plan.limits.saved_brand_limit === "unlimited" ? "Unlimited" : plan.limits.saved_brand_limit}</span> saved brands
+                      <span className="font-semibold">
+                        {plan.limits.saved_brand_limit === "unlimited"
+                          ? "Unlimited"
+                          : plan.limits.saved_brand_limit}
+                      </span>{" "}
+                      saved brands
                     </Feature>
                     <Feature included={true}>
-                      <span className="font-semibold">{plan.limits.monthly_contact_reveals}</span> contact reveals/mo
+                      <span className="font-semibold">
+                        {plan.limits.monthly_contact_reveals}
+                      </span>{" "}
+                      contact reveals/mo
                     </Feature>
                     <Feature included={true}>
-                      <span className="font-semibold">{plan.limits.team_seats}</span> team seat{plan.limits.team_seats > 1 ? 's' : ''}
+                      <span className="font-semibold">
+                        {plan.limits.team_seats}
+                      </span>{" "}
+                      team seat{plan.limits.team_seats > 1 ? "s" : ""}
                     </Feature>
-                    
+
                     <div className="h-px bg-border/50 my-4" />
-                    
-                    <Feature included={plan.features.advanced_filters}>Advanced filters</Feature>
-                    <Feature included={plan.features.full_brand_intelligence}>Full Brand Intelligence</Feature>
-                    <Feature included={plan.features.product_intelligence}>Product, Funding, & Marketing Intelligence</Feature>
-                    <Feature included={plan.features.outreach_tracker === "full"}>Full Outreach Tracker</Feature>
-                    <Feature included={plan.features.csv_export !== "none"}>
-                      {plan.features.csv_export === "custom" ? "Custom CSV exports" : "CSV exports"}
+
+                    <Feature included={plan.features.advanced_filters}>
+                      Advanced filters
                     </Feature>
-                    <Feature included={plan.features.new_brand_alerts}>In-app brand alerts</Feature>
-                    <Feature included={plan.features.shared_workspace_crm}>Shared Workspace CRM</Feature>
-                    <Feature included={plan.features.whitelabel_reporting}>Whitelabel reporting</Feature>
-                    <Feature included={plan.features.dedicated_account_manager}>Dedicated Account Manager</Feature>
-                    <Feature included={plan.features.support_level === "priority"}>Priority support</Feature>
-                    <Feature included={!plan.features.ads_enabled}>Ad-free experience</Feature>
+                    <Feature included={plan.features.full_brand_intelligence}>
+                      Full Brand Intelligence
+                    </Feature>
+                    <Feature included={plan.features.product_intelligence}>
+                      Product, Funding, & Marketing Intelligence
+                    </Feature>
+                    <Feature
+                      included={plan.features.outreach_tracker === "full"}
+                    >
+                      Full Outreach Tracker
+                    </Feature>
+                    <Feature included={plan.features.csv_export !== "none"}>
+                      {plan.features.csv_export === "custom"
+                        ? "Custom CSV exports"
+                        : "CSV exports"}
+                    </Feature>
+                    <Feature included={plan.features.new_brand_alerts}>
+                      In-app brand alerts
+                    </Feature>
+                    <Feature included={plan.features.shared_workspace_crm}>
+                      Shared Workspace CRM
+                    </Feature>
+                    <Feature included={plan.features.whitelabel_reporting}>
+                      Whitelabel reporting
+                    </Feature>
+                    <Feature included={plan.features.dedicated_account_manager}>
+                      Dedicated Account Manager
+                    </Feature>
+                    <Feature
+                      included={plan.features.support_level === "priority"}
+                    >
+                      Priority support
+                    </Feature>
+                    <Feature included={!plan.features.ads_enabled}>
+                      Ad-free experience
+                    </Feature>
                   </div>
 
                   <button
                     onClick={() => handleUpgrade(plan.type)}
-                    disabled={isCurrentPlan || upgrading === plan.type || (plan.type === "free")}
+                    disabled={
+                      isCurrentPlan ||
+                      upgrading === plan.type ||
+                      plan.type === "free"
+                    }
                     className={`w-full py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2
                       ${
                         isCurrentPlan

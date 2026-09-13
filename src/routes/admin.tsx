@@ -112,7 +112,11 @@ function AdminPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/50 bg-card p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="/favicon.png" alt="Branzly Admin" className="w-8 h-8 object-contain drop-shadow-sm" />
+          <img
+            src="/favicon.png"
+            alt="Branzly Admin"
+            className="w-8 h-8 object-contain drop-shadow-sm"
+          />
           <span className="font-bold text-lg">Branzly Admin</span>
         </div>
         <Link

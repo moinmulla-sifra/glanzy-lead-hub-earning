@@ -765,19 +765,25 @@ function SubscriptionSettings({
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Searches / Day</span>
             <span className="font-semibold text-foreground">
-              {limits?.daily_brand_searches === "unlimited" ? "Unlimited" : limits?.daily_brand_searches}
+              {limits?.daily_brand_searches === "unlimited"
+                ? "Unlimited"
+                : limits?.daily_brand_searches}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Brand Leads / Day</span>
             <span className="font-semibold text-foreground">
-              {limits?.daily_brand_leads === "unlimited" ? "Unlimited" : limits?.daily_brand_leads}
+              {limits?.daily_brand_leads === "unlimited"
+                ? "Unlimited"
+                : limits?.daily_brand_leads}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Saved Brands</span>
             <span className="font-semibold text-foreground">
-              {limits?.saved_brand_limit === "unlimited" ? "Unlimited" : limits?.saved_brand_limit}
+              {limits?.saved_brand_limit === "unlimited"
+                ? "Unlimited"
+                : limits?.saved_brand_limit}
             </span>
           </div>
           <div className="flex justify-between text-sm">
