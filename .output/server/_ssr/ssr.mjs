@@ -117,7 +117,7 @@ var getProductId = (planId, interval) => {
 };
 var handleCheckout = async (request) => {
 	try {
-		const { planId, workspaceId, interval } = await request.json();
+		const { planId, workspaceId, interval, returnUrl } = await request.json();
 		const productId = getProductId(planId, interval);
 		if (!productId) return new Response(JSON.stringify({ error: `Missing Dodo Product ID configuration for plan: ${planId} (${interval}). Please configure DODO_${planId.toUpperCase()}_${interval.toUpperCase()}_PRODUCT_ID in test environment variables.` }), {
 			status: 400,
@@ -134,7 +134,7 @@ var handleCheckout = async (request) => {
 				product_id: productId,
 				quantity: 1
 			}],
-			return_url: `${processModule.env.VITE_APP_URL || "http://localhost:3000"}/settings`,
+			return_url: returnUrl || `${request.headers.get("origin") || new URL(request.url).origin || "http://localhost:3000"}/settings`,
 			metadata: {
 				workspace_id: workspaceId,
 				plan_type: planId
@@ -483,7 +483,7 @@ var handleDodoWebhook = async (request) => {
 };
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-DJOIbdbM.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-CGEn3et5.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {

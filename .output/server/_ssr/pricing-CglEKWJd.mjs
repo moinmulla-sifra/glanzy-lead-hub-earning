@@ -7,7 +7,7 @@ import { b as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { Z as Check, at as ArrowLeft, et as Building2, i as User, n as X } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pricing-BkP5BsfH.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pricing-CglEKWJd.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName = "/app/applet/src/routes/pricing.tsx?tsr-split=component";
@@ -48,7 +48,8 @@ function PricingPage() {
 				body: JSON.stringify({
 					planId: plan,
 					workspaceId,
-					interval: billingInterval
+					interval: billingInterval,
+					returnUrl: window.location.origin + "/settings"
 				})
 			})).json();
 			if (data.url) window.location.href = data.url;
@@ -79,12 +80,12 @@ function PricingPage() {
 						className: "flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
 						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeft, { className: "w-4 h-4 mr-2" }, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 98,
+							lineNumber: 99,
 							columnNumber: 13
 						}, this), "Back"]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 89,
+						lineNumber: 90,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 						onClick: () => setViewMode((prev) => prev === "all" ? "account" : "all"),
@@ -92,12 +93,12 @@ function PricingPage() {
 						children: viewMode === "all" ? "View My Plans" : "View All Plans"
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 102,
+						lineNumber: 103,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName,
-					lineNumber: 88,
+					lineNumber: 89,
 					columnNumber: 9
 				}, this),
 				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -108,7 +109,7 @@ function PricingPage() {
 							children: "Simple, transparent pricing"
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 108,
+							lineNumber: 109,
 							columnNumber: 11
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
@@ -116,7 +117,7 @@ function PricingPage() {
 							children: "Find the perfect plan for your business."
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 111,
+							lineNumber: 112,
 							columnNumber: 11
 						}, this),
 						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -129,7 +130,7 @@ function PricingPage() {
 									children: "Monthly"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 117,
+									lineNumber: 118,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 									onClick: () => setBillingInterval("yearly"),
@@ -139,40 +140,40 @@ function PricingPage() {
 										children: "Save 16%"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 122,
+										lineNumber: 123,
 										columnNumber: 17
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 120,
+									lineNumber: 121,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 116,
+								lineNumber: 117,
 								columnNumber: 13
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 115,
+							lineNumber: 116,
 							columnNumber: 11
 						}, this)
 					]
 				}, void 0, true, {
 					fileName: _jsxFileName,
-					lineNumber: 107,
+					lineNumber: 108,
 					columnNumber: 9
 				}, this),
 				isLoading ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 					className: "flex justify-center items-center py-20",
 					children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 131,
+						lineNumber: 132,
 						columnNumber: 13
 					}, this)
 				}, void 0, false, {
 					fileName: _jsxFileName,
-					lineNumber: 130,
+					lineNumber: 131,
 					columnNumber: 22
 				}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 					className: `grid grid-cols-1 md:grid-cols-${Math.min(displayedPlans.length, 3)} lg:grid-cols-${displayedPlans.length} gap-6 items-stretch justify-center`,
@@ -196,7 +197,7 @@ function PricingPage() {
 									children: "Current Plan"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 146,
+									lineNumber: 147,
 									columnNumber: 37
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -205,28 +206,28 @@ function PricingPage() {
 										className: `p-2 rounded-xl ${isCurrentPlan ? "bg-brand/10 text-brand" : "bg-muted text-muted-foreground"}`,
 										children: isAgency ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Building2, { className: "w-5 h-5" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 152,
+											lineNumber: 153,
 											columnNumber: 35
 										}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(User, { className: "w-5 h-5" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 152,
+											lineNumber: 153,
 											columnNumber: 71
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 151,
+										lineNumber: 152,
 										columnNumber: 21
 									}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", {
 										className: "text-xl font-bold text-foreground",
 										children: plan.name
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 154,
+										lineNumber: 155,
 										columnNumber: 21
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 150,
+									lineNumber: 151,
 									columnNumber: 19
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -238,31 +239,31 @@ function PricingPage() {
 											children: price === 0 ? "Free" : formattedPrice
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 161,
+											lineNumber: 162,
 											columnNumber: 23
 										}, this), price > 0 && /* @__PURE__ */ (void 0)("span", {
 											className: "text-muted-foreground font-medium",
 											children: ["/", billingInterval === "yearly" ? "yr" : "mo"]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 164,
+											lineNumber: 165,
 											columnNumber: 37
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 160,
+										lineNumber: 161,
 										columnNumber: 21
 									}, this), billingInterval === "yearly" && price > 0 && /* @__PURE__ */ (void 0)("p", {
 										className: "text-sm text-green-600 font-medium mt-1",
 										children: "2 months free messaging"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 168,
+										lineNumber: 169,
 										columnNumber: 67
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 159,
+									lineNumber: 160,
 									columnNumber: 19
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -276,7 +277,7 @@ function PricingPage() {
 													children: plan.limits.daily_brand_leads === "unlimited" ? "Unlimited" : plan.limits.daily_brand_leads
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 175,
+													lineNumber: 176,
 													columnNumber: 23
 												}, this),
 												" ",
@@ -284,7 +285,7 @@ function PricingPage() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 174,
+											lineNumber: 175,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -295,7 +296,7 @@ function PricingPage() {
 													children: plan.limits.daily_brand_searches === "unlimited" ? "Unlimited" : plan.limits.daily_brand_searches
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 181,
+													lineNumber: 182,
 													columnNumber: 23
 												}, this),
 												" ",
@@ -303,7 +304,7 @@ function PricingPage() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 180,
+											lineNumber: 181,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -314,7 +315,7 @@ function PricingPage() {
 													children: plan.limits.saved_brand_limit === "unlimited" ? "Unlimited" : plan.limits.saved_brand_limit
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 187,
+													lineNumber: 188,
 													columnNumber: 23
 												}, this),
 												" ",
@@ -322,7 +323,7 @@ function PricingPage() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 186,
+											lineNumber: 187,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -333,7 +334,7 @@ function PricingPage() {
 													children: plan.limits.monthly_contact_reveals
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 193,
+													lineNumber: 194,
 													columnNumber: 23
 												}, this),
 												" ",
@@ -341,7 +342,7 @@ function PricingPage() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 192,
+											lineNumber: 193,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -352,7 +353,7 @@ function PricingPage() {
 													children: plan.limits.team_seats
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 199,
+													lineNumber: 200,
 													columnNumber: 23
 												}, this),
 												" ",
@@ -361,12 +362,12 @@ function PricingPage() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 198,
+											lineNumber: 199,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-px bg-border/50 my-4" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 205,
+											lineNumber: 206,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -374,7 +375,7 @@ function PricingPage() {
 											children: "Advanced filters"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 207,
+											lineNumber: 208,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -382,7 +383,7 @@ function PricingPage() {
 											children: "Full Brand Intelligence"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 210,
+											lineNumber: 211,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -390,7 +391,7 @@ function PricingPage() {
 											children: "Product, Funding, & Marketing Intelligence"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 213,
+											lineNumber: 214,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -398,7 +399,7 @@ function PricingPage() {
 											children: "Full Outreach Tracker"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 216,
+											lineNumber: 217,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -406,7 +407,7 @@ function PricingPage() {
 											children: plan.features.csv_export === "custom" ? "Custom CSV exports" : "CSV exports"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 219,
+											lineNumber: 220,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -414,7 +415,7 @@ function PricingPage() {
 											children: "In-app brand alerts"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 222,
+											lineNumber: 223,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -422,7 +423,7 @@ function PricingPage() {
 											children: "Shared Workspace CRM"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 225,
+											lineNumber: 226,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -430,7 +431,7 @@ function PricingPage() {
 											children: "Whitelabel reporting"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 228,
+											lineNumber: 229,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -438,7 +439,7 @@ function PricingPage() {
 											children: "Dedicated Account Manager"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 231,
+											lineNumber: 232,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -446,7 +447,7 @@ function PricingPage() {
 											children: "Priority support"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 234,
+											lineNumber: 235,
 											columnNumber: 21
 										}, this),
 										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Feature, {
@@ -454,13 +455,13 @@ function PricingPage() {
 											children: "Ad-free experience"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 237,
+											lineNumber: 238,
 											columnNumber: 21
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 173,
+									lineNumber: 174,
 									columnNumber: 19
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
@@ -473,40 +474,40 @@ function PricingPage() {
 										className: "flex items-center gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 246,
+											lineNumber: 247,
 											columnNumber: 25
 										}, this), "Processing..."]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 245,
+										lineNumber: 246,
 										columnNumber: 48
 									}, this) : isCurrentPlan ? "Current Plan" : plan.type === "free" ? "Free Tier" : "Upgrade to " + plan.name
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 242,
+									lineNumber: 243,
 									columnNumber: 19
 								}, this)
 							]
 						}, plan.type, true, {
 							fileName: _jsxFileName,
-							lineNumber: 143,
+							lineNumber: 144,
 							columnNumber: 18
 						}, this);
 					})
 				}, void 0, false, {
 					fileName: _jsxFileName,
-					lineNumber: 132,
+					lineNumber: 133,
 					columnNumber: 20
 				}, this)
 			]
 		}, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 87,
+			lineNumber: 88,
 			columnNumber: 7
 		}, this)
 	}, void 0, false, {
 		fileName: _jsxFileName,
-		lineNumber: 86,
+		lineNumber: 87,
 		columnNumber: 10
 	}, this);
 }
@@ -515,23 +516,23 @@ function Feature({ children, included }) {
 		className: `flex items-start gap-3 ${included ? "text-foreground" : "text-muted-foreground opacity-60"}`,
 		children: [included ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Check, { className: "w-5 h-5 text-green-500 shrink-0" }, void 0, false, {
 			fileName: _jsxFileName,
-			lineNumber: 264,
+			lineNumber: 265,
 			columnNumber: 19
 		}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(X, { className: "w-5 h-5 shrink-0" }, void 0, false, {
 			fileName: _jsxFileName,
-			lineNumber: 264,
+			lineNumber: 265,
 			columnNumber: 75
 		}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
 			className: "text-sm",
 			children
 		}, void 0, false, {
 			fileName: _jsxFileName,
-			lineNumber: 265,
+			lineNumber: 266,
 			columnNumber: 7
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 263,
+		lineNumber: 264,
 		columnNumber: 10
 	}, this);
 }

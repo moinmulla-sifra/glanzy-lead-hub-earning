@@ -30,7 +30,7 @@ const getProductId = (planId: string, interval: string) => {
 export const handleCheckout = async (request: Request) => {
   try {
     const body = await request.json();
-    const { planId, workspaceId, interval } = body;
+    const { planId, workspaceId, interval, returnUrl } = body;
 
     const productId = getProductId(planId, interval);
     if (!productId) {
@@ -60,7 +60,7 @@ export const handleCheckout = async (request: Request) => {
           quantity: 1,
         },
       ],
-      return_url: `${process.env.VITE_APP_URL || "http://localhost:3000"}/settings`,
+      return_url: returnUrl || `${request.headers.get("origin") || new URL(request.url).origin || "http://localhost:3000"}/settings`,
       metadata: {
         workspace_id: workspaceId,
         plan_type: planId,

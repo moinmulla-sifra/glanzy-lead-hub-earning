@@ -66,6 +66,7 @@ function PricingPage() {
           planId: plan,
           workspaceId,
           interval: billingInterval,
+          returnUrl: window.location.origin + "/settings",
         }),
       });
 

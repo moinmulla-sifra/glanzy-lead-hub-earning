@@ -8,7 +8,7 @@ import { t as Route$17 } from "../_dashboard.contacted-DSaJgV6F.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
 import { t as Route$18 } from "./auth-C3-g7quu.mjs";
 import { t as Analytics } from "../_libs/vercel__analytics.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C6oAdtAL.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BuFFzX7R.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-ChT1mZLL.css";
@@ -328,7 +328,7 @@ var $$splitComponentImporter$11 = () => import("./onboarding-CPECzUnr.mjs");
 var Route$11 = createFileRoute("/onboarding")({ component: lazyRouteComponent($$splitComponentImporter$11, "component") });
 var $$splitComponentImporter$10 = () => import("./policies-COOyoH06.mjs");
 var Route$10 = createFileRoute("/policies")({ component: lazyRouteComponent($$splitComponentImporter$10, "component") });
-var $$splitComponentImporter$9 = () => import("./pricing-BkP5BsfH.mjs");
+var $$splitComponentImporter$9 = () => import("./pricing-CglEKWJd.mjs");
 var Route$9 = createFileRoute("/pricing")({ component: lazyRouteComponent($$splitComponentImporter$9, "component") });
 var $$splitComponentImporter$8 = () => import("./security-D3uWz6tG.mjs");
 var Route$8 = createFileRoute("/security")({ component: lazyRouteComponent($$splitComponentImporter$8, "component") });
