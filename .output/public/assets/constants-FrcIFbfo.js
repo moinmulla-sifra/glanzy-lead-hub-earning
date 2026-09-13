@@ -1,0 +1,1 @@
+var e=`id,company_name,website,industry,country,company_stage,influencer_fit_score,lead_score,why_now,recent_funding,recent_launch,existing_creator_activity,marketing_activity,contact_person,contact_role,email,phone,linkedin,budget_potential`;export{e as t};

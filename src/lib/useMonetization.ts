@@ -10,73 +10,61 @@ export function useMonetization(userId: string | null) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("workspace_members")
-        .select("workspace_id")
+        .select("workspace_id, workspaces(type)")
         .eq("user_id", userId!)
         .limit(1)
         .maybeSingle();
+
       if (error) throw error;
       return data;
     },
   });
 
   const workspaceId = memberData?.workspace_id;
+  const workspaceType = (memberData?.workspaces as any)?.type || "creator"; // Default to creator if unknown
 
   const { data: subData, isLoading: isLoadingSub } = useQuery({
     queryKey: ["subscription_data", workspaceId],
     enabled: !!workspaceId,
     queryFn: async () => {
-      // 1. Get legacy subscription fallback
-      const { data: legacySub } = await supabase
+      const { data: sub } = await supabase
         .from("subscriptions")
-        .select("plan")
+        .select("plan, status")
         .eq("workspace_id", workspaceId!)
+        .eq("status", "active")
         .maybeSingle();
 
-      // 2. Get latest approved manual request
-      const { data: approvedReq } = await supabase
-        .from("subscription_requests")
-        .select("requested_plan")
-        .eq("workspace_id", workspaceId!)
-        .eq("status", "approved")
-        .order("reviewed_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-        
-      // 3. Get latest pending request
-      const { data: pendingReq } = await supabase
-        .from("subscription_requests")
-        .select("requested_plan")
-        .eq("workspace_id", workspaceId!)
-        .eq("status", "pending")
-        .order("requested_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      let plan = (sub?.plan as string) || "free";
+      
+      // Fallback for pre-migration state
+      if (plan === "pro") plan = "creator_pro";
+      if (plan === "agency") plan = "agency_pro";
+      
+      if (!PLANS[plan as PlanType]) {
+        plan = "free";
+      }
 
-      const activePlan = approvedReq?.requested_plan 
-        ? (approvedReq.requested_plan as PlanType) 
-        : (legacySub?.plan as PlanType) || "free";
-
-      return { 
-        plan: activePlan,
-        pendingPlan: pendingReq ? (pendingReq.requested_plan as PlanType) : null
+      return {
+        plan: plan as PlanType,
+        status: sub?.status || "inactive",
       };
     },
   });
 
   const isLoading = isLoadingMember || (!!workspaceId && isLoadingSub);
   const currentPlan = (subData?.plan as PlanType) || "free";
-  const pendingPlan = subData?.pendingPlan || null;
   const planConfig = PLANS[currentPlan];
-  const shouldShowAds = !isLoading && !planConfig.features.removeAds;
+
+  const shouldShowAds = !isLoading && planConfig.features.ads_enabled;
 
   return {
     workspaceId,
+    workspaceType,
     currentPlan,
-    pendingPlan,
     planConfig,
     features: planConfig.features,
     limits: planConfig.limits,
-    isProOrAgency: currentPlan === "pro" || currentPlan === "agency",
+    isPaid: currentPlan !== "free",
     shouldShowAds,
     isLoading,
   };

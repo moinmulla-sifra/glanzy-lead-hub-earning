@@ -1,4 +1,4 @@
-import { n as __toESM } from "../_runtime.mjs";
+import { r as __toESM } from "../_runtime.mjs";
 import { s as require_react } from "./react+tanstack__react-query.mjs";
 import processModule from "node:process";
 //#region node_modules/@vercel/analytics/dist/react/index.mjs

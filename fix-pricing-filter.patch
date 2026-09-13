@@ -1,0 +1,25 @@
+--- src/routes/pricing.tsx
++++ src/routes/pricing.tsx
+@@ -21,7 +21,7 @@
+   const [userId, setUserId] = useState<string | null>(null);
+   
+   // Use centralized monetization state
+-  const { currentPlan, workspaceId, isLoading, planConfig } = useMonetization(userId);
++  const { currentPlan, workspaceId, workspaceType, isLoading, planConfig } = useMonetization(userId);
+   const [upgrading, setUpgrading] = useState<PlanType | null>(null);
+   const navigate = useNavigate();
+ 
+@@ -58,11 +58,11 @@
+ 
+   // Filter plans based on viewMode and user's account type
+   let displayedPlans = Object.values(PLANS);
+-  if (viewMode === "account" && planConfig?.accountType) {
+-    if (planConfig.accountType === "creator") {
++  if (viewMode === "account" && workspaceType) {
++    if (workspaceType === "creator") {
+       displayedPlans = displayedPlans.filter(p => p.accountType === "creator" || p.type === "free");
+-    } else if (planConfig.accountType === "agency") {
++    } else if (workspaceType === "agency") {
+       displayedPlans = displayedPlans.filter(p => p.accountType === "agency" || p.type === "free");
+     }
+   }

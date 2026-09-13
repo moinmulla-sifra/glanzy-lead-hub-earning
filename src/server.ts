@@ -1,7 +1,10 @@
 import "./lib/error-capture";
-
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+
+import { handleCheckout } from "../server/api/checkout";
+import { handleDiscover } from "../server/api/brands/discover";
+import { handleDodoWebhook } from "../server/api/webhook/dodo";
 
 type ServerEntry = {
   fetch: (
@@ -58,6 +61,24 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      
+      // API Routes Intercept
+      if (url.pathname === "/api/checkout" && request.method === "POST") {
+        return await handleCheckout(request);
+      }
+      if (url.pathname === "/api/brands/discover" && request.method === "POST") {
+        return await handleDiscover(request);
+      }
+      if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
+        return await handleDodoWebhook(request);
+      }
+      if (url.pathname === "/api/cron") {
+        return new Response(JSON.stringify({ status: "Cron not fully connected to backend yet" }), {
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

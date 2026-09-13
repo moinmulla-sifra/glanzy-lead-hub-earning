@@ -732,7 +732,7 @@ function SubscriptionSettings({
   userId: string | null;
   workspaceId?: string;
 }) {
-  const { currentPlan, pendingPlan, planConfig, limits } = useMonetization(userId);
+  const { currentPlan, planConfig, limits } = useMonetization(userId);
   const navigate = useNavigate();
 
   return (
@@ -747,18 +747,13 @@ function SubscriptionSettings({
       </div>
 
       <div className="max-w-md bg-gradient-to-br from-brand/5 to-muted/20 border border-brand/20 rounded-2xl p-6 shadow-sm relative overflow-hidden">
-        {pendingPlan && (
-          <div className="absolute top-0 left-0 w-full bg-amber-500/10 text-amber-600 px-4 py-2 text-xs font-bold text-center border-b border-amber-500/20">
-            Upgrade Request Pending: {pendingPlan.toUpperCase()}
-          </div>
-        )}
-        <div className={`flex items-center justify-between mb-6 ${pendingPlan ? 'mt-6' : ''}`}>
+        <div className="flex items-center justify-between mb-6">
           <div>
             <p className="text-xs font-bold text-brand uppercase tracking-wider mb-1">
               Current Plan
             </p>
             <h3 className="text-2xl font-bold text-foreground">
-              {planConfig.name}
+              {planConfig?.name || "Free"}
             </h3>
           </div>
           <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
@@ -766,30 +761,29 @@ function SubscriptionSettings({
           </div>
         </div>
 
-        <div className="space-y-4 mb-8">
-          <div className="text-sm font-semibold mb-2">Usage Limits</div>
+        <div className="space-y-3 mb-6">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Searches / mo</span>
-            <span className="font-medium text-foreground">
-              {limits.searchesPerMonth} limit
+            <span className="text-muted-foreground">Searches / Day</span>
+            <span className="font-semibold text-foreground">
+              {limits?.daily_brand_searches === "unlimited" ? "Unlimited" : limits?.daily_brand_searches}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Brand Views / mo</span>
-            <span className="font-medium text-foreground">
-              {limits.brandViewsPerMonth} limit
+            <span className="text-muted-foreground">Brand Leads / Day</span>
+            <span className="font-semibold text-foreground">
+              {limits?.daily_brand_leads === "unlimited" ? "Unlimited" : limits?.daily_brand_leads}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Saved Brands</span>
-            <span className="font-medium text-foreground">
-              {limits.savedBrandsTotal} limit
+            <span className="font-semibold text-foreground">
+              {limits?.saved_brand_limit === "unlimited" ? "Unlimited" : limits?.saved_brand_limit}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Team Members</span>
-            <span className="font-medium text-foreground">
-              {limits.teamMembers} limit
+            <span className="text-muted-foreground">Team Seats</span>
+            <span className="font-semibold text-foreground">
+              {limits?.team_seats || 1}
             </span>
           </div>
         </div>

@@ -85,70 +85,37 @@ export function DiscoverView({
 
   const fetchBrands = async ({ pageParam = 0 }) => {
     const pageSize = 12;
-    let q = supabase
-      .from("brands")
-      .select(BRAND_SELECT_FIELDS, { count: "exact" });
-
-    if (debouncedSearch) {
-      q = q.or(
-        `company_name.ilike.%${debouncedSearch}%,industry.ilike.%${debouncedSearch}%,country.ilike.%${debouncedSearch}%`,
-      );
+    const { data: session } = await supabase.auth.getSession();
+    const token = session?.session?.access_token;
+    
+    if (!token) throw new Error("Unauthorized");
+    
+    // We pass our state to the backend
+    const response = await fetch('/api/brands/discover', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        workspaceId,
+        pageParam,
+        pageSize,
+        search: debouncedSearch,
+        filters: activeFilters,
+        sortOption
+      })
+    });
+    
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error || "Failed to fetch brands");
     }
-
-    // Filters
-    if (activeFilters.industry.length > 0) {
-      q = q.in("industry", activeFilters.industry);
-    }
-    if (activeFilters.country.length > 0) {
-      q = q.in("country", activeFilters.country);
-    }
-    if (activeFilters.company_stage.length > 0) {
-      q = q.in("company_stage", activeFilters.company_stage);
-    }
-    if (activeFilters.budget_potential.length > 0) {
-      q = q.in("budget_potential", activeFilters.budget_potential);
-    }
-
-    // Sorting
-    switch (sortOption) {
-      case "lead_score":
-        q = q.order("lead_score", { ascending: false, nullsFirst: false });
-        break;
-      case "creator_fit":
-        q = q.order("influencer_fit_score", {
-          ascending: false,
-          nullsFirst: false,
-        });
-        break;
-      case "recent":
-        q = q.order("updated_at", { ascending: false });
-        break;
-      case "az":
-        q = q.order("company_name", { ascending: true });
-        break;
-      case "best_match":
-      default:
-        // Default combo sort
-        q = q
-          .order("lead_score", { ascending: false, nullsFirst: false })
-          .order("influencer_fit_score", {
-            ascending: false,
-            nullsFirst: false,
-          });
-        break;
-    }
-
-    // Pagination
-    q = q.range(pageParam * pageSize, (pageParam + 1) * pageSize - 1);
-
-    const { data, error, count } = await q;
-    if (error) throw error;
-
-    return {
-      brands: data as Brand[],
-      totalCount: count || 0,
-      nextPage: data.length === pageSize ? pageParam + 1 : undefined,
-    };
+    
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+    
+    return data;
   };
 
   const {
