@@ -68,16 +68,16 @@ export default {
 
       // API Routes Intercept
       if (url.pathname === "/api/checkout" && request.method === "POST") {
-        return await handleCheckout(request);
+        return await handleCheckout(request, env);
       }
       if (
         url.pathname === "/api/brands/discover" &&
         request.method === "POST"
       ) {
-        return await handleDiscover(request);
+        return await handleDiscover(request, env);
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
-        return await handleDodoWebhook(request);
+        return await handleDodoWebhook(request, env);
       }
       if (url.pathname === "/api/cron") {
         return new Response(

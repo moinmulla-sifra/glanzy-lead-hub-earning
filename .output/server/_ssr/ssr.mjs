@@ -100,25 +100,26 @@ function renderErrorPage() {
   </body>
 </html>`;
 }
-var dodo = new DodoPayments({
-	bearerToken: processModule.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
+var getDodo$1 = (env) => new DodoPayments({
+	bearerToken: env?.DODO_PAYMENTS_API_KEY || processModule.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
 	environment: "test_mode"
 });
-var getProductId = (planId, interval) => {
-	if (planId === "creator_plus" && interval === "monthly") return processModule.env.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID;
-	if (planId === "creator_plus" && interval === "yearly") return processModule.env.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID;
-	if (planId === "creator_pro" && interval === "monthly") return processModule.env.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID;
-	if (planId === "creator_pro" && interval === "yearly") return processModule.env.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID;
-	if (planId === "agency_plus" && interval === "monthly") return processModule.env.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID;
-	if (planId === "agency_plus" && interval === "yearly") return processModule.env.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID;
-	if (planId === "agency_pro" && interval === "monthly") return processModule.env.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID;
-	if (planId === "agency_pro" && interval === "yearly") return processModule.env.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID;
-	return processModule.env.DODO_TEST_PRODUCT_ID;
+var getProductId = (planId, interval, env) => {
+	if (planId === "creator_plus" && interval === "monthly") return env?.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID || processModule.env.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID;
+	if (planId === "creator_plus" && interval === "yearly") return env?.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID || processModule.env.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID;
+	if (planId === "creator_pro" && interval === "monthly") return env?.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID || processModule.env.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID;
+	if (planId === "creator_pro" && interval === "yearly") return env?.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID || processModule.env.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID;
+	if (planId === "agency_plus" && interval === "monthly") return env?.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID || processModule.env.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID;
+	if (planId === "agency_plus" && interval === "yearly") return env?.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID || processModule.env.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID;
+	if (planId === "agency_pro" && interval === "monthly") return env?.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID || processModule.env.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID;
+	if (planId === "agency_pro" && interval === "yearly") return env?.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID || processModule.env.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID;
+	return env?.DODO_TEST_PRODUCT_ID || processModule.env.DODO_TEST_PRODUCT_ID;
 };
-var handleCheckout = async (request) => {
+var handleCheckout = async (request, env) => {
 	try {
+		const dodo = getDodo$1(env);
 		const { planId, workspaceId, interval, returnUrl } = await request.json();
-		const productId = getProductId(planId, interval);
+		const productId = getProductId(planId, interval, env);
 		if (!productId) return new Response(JSON.stringify({ error: `Missing Dodo Product ID configuration for plan: ${planId} (${interval}). Please configure DODO_${planId.toUpperCase()}_${interval.toUpperCase()}_PRODUCT_ID in test environment variables.` }), {
 			status: 400,
 			headers: { "Content-Type": "application/json" }
@@ -331,22 +332,23 @@ var PLANS = {
 		}
 	}
 };
-var supabase$1 = createClient(processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
-var handleDiscover = async (request) => {
+var getSupabase$1 = (env) => createClient(env?.VITE_SUPABASE_URL || processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", env?.VITE_SUPABASE_SERVICE_ROLE_KEY || env?.VITE_SUPABASE_ANON_KEY || processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
+var handleDiscover = async (request, env) => {
 	try {
+		const supabase = getSupabase$1(env);
 		const body = await request.json();
 		const token = request.headers.get("Authorization")?.replace("Bearer ", "");
 		if (!token) return new Response(JSON.stringify({ error: "Unauthorized" }), {
 			status: 401,
 			headers: { "Content-Type": "application/json" }
 		});
-		const { data: { user } } = await supabase$1.auth.getUser(token);
+		const { data: { user } } = await supabase.auth.getUser(token);
 		if (!user) return new Response(JSON.stringify({ error: "Unauthorized" }), {
 			status: 401,
 			headers: { "Content-Type": "application/json" }
 		});
 		const { workspaceId, pageParam = 0, pageSize = 12, search, filters, sortOption } = body;
-		const { data: sub } = await supabase$1.from("subscriptions").select("plan").eq("workspace_id", workspaceId).eq("status", "active").maybeSingle();
+		const { data: sub } = await supabase.from("subscriptions").select("plan").eq("workspace_id", workspaceId).eq("status", "active").maybeSingle();
 		let plan = sub?.plan || "free";
 		if (plan === "pro") plan = "creator_pro";
 		if (plan === "agency") plan = "agency_pro";
@@ -354,7 +356,7 @@ var handleDiscover = async (request) => {
 		const planConfig = PLANS[plan];
 		const now = /* @__PURE__ */ new Date();
 		const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-		const { data: usage } = await supabase$1.from("usage").select("*").eq("workspace_id", workspaceId).gte("period_start", startOfDay).limit(1).maybeSingle();
+		const { data: usage } = await supabase.from("usage").select("*").eq("workspace_id", workspaceId).gte("period_start", startOfDay).limit(1).maybeSingle();
 		let searches = usage?.searches || 0;
 		const leads = usage?.brand_views || 0;
 		if (pageParam === 0 && search) {
@@ -370,18 +372,18 @@ var handleDiscover = async (request) => {
 		});
 		if (!usage) {
 			const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString();
-			await supabase$1.from("usage").insert({
+			await supabase.from("usage").insert({
 				workspace_id: workspaceId,
 				period_start: startOfDay,
 				period_end: endOfDay,
 				searches: search && pageParam === 0 ? 1 : 0,
 				brand_views: pageSize
 			});
-		} else await supabase$1.from("usage").update({
+		} else await supabase.from("usage").update({
 			searches,
 			brand_views: leads + pageSize
 		}).eq("id", usage.id);
-		let q = supabase$1.from("brands").select("*", { count: "exact" });
+		let q = supabase.from("brands").select("*", { count: "exact" });
 		if (search) q = q.or(`company_name.ilike.%${search}%,industry.ilike.%${search}%,country.ilike.%${search}%`);
 		if (filters?.industry) q = q.eq("industry", filters.industry);
 		if (filters?.country) q = q.eq("country", filters.country);
@@ -419,12 +421,14 @@ var handleDiscover = async (request) => {
 		});
 	}
 };
-new DodoPayments({
-	bearerToken: processModule.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
+var getDodo = (env) => new DodoPayments({
+	bearerToken: env?.DODO_PAYMENTS_API_KEY || processModule.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
 	environment: "test_mode"
 });
-var supabase = createClient(processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
-var handleDodoWebhook = async (request) => {
+var getSupabase = (env) => createClient(env?.VITE_SUPABASE_URL || processModule.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co", env?.VITE_SUPABASE_SERVICE_ROLE_KEY || env?.VITE_SUPABASE_ANON_KEY || processModule.env.VITE_SUPABASE_SERVICE_ROLE_KEY || processModule.env.VITE_SUPABASE_ANON_KEY || "placeholder");
+var handleDodoWebhook = async (request, env) => {
+	getDodo(env);
+	const supabase = getSupabase(env);
 	const payload = await request.text();
 	const signature = request.headers.get("webhook-signature");
 	if (!payload || !signature) return new Response(JSON.stringify({ message: "Missing payload or signature" }), {
@@ -508,9 +512,9 @@ function isH3SwallowedErrorBody(body) {
 var server_default = { async fetch(request, env, ctx) {
 	try {
 		const url = new URL(request.url);
-		if (url.pathname === "/api/checkout" && request.method === "POST") return await handleCheckout(request);
-		if (url.pathname === "/api/brands/discover" && request.method === "POST") return await handleDiscover(request);
-		if (url.pathname === "/api/webhook/dodo" && request.method === "POST") return await handleDodoWebhook(request);
+		if (url.pathname === "/api/checkout" && request.method === "POST") return await handleCheckout(request, env);
+		if (url.pathname === "/api/brands/discover" && request.method === "POST") return await handleDiscover(request, env);
+		if (url.pathname === "/api/webhook/dodo" && request.method === "POST") return await handleDodoWebhook(request, env);
 		if (url.pathname === "/api/cron") return new Response(JSON.stringify({ status: "Cron not fully connected to backend yet" }), { headers: { "Content-Type": "application/json" } });
 		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
 	} catch (error) {

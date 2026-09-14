@@ -1,19 +1,30 @@
 import DodoPayments from "dodopayments";
 import { createClient } from "@supabase/supabase-js";
 
-const dodo = new DodoPayments({
-  bearerToken: process.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
-  environment: "test_mode",
-});
+const getDodo = (env: any) =>
+  new DodoPayments({
+    bearerToken:
+      (env?.DODO_PAYMENTS_API_KEY as string) ||
+      process.env.DODO_PAYMENTS_API_KEY ||
+      "test_sk_placeholder",
+    environment: "test_mode",
+  });
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    "placeholder",
-);
+const getSupabase = (env: any) =>
+  createClient(
+    (env?.VITE_SUPABASE_URL as string) ||
+      process.env.VITE_SUPABASE_URL ||
+      "https://placeholder.supabase.co",
+    (env?.VITE_SUPABASE_SERVICE_ROLE_KEY as string) ||
+      (env?.VITE_SUPABASE_ANON_KEY as string) ||
+      process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY ||
+      "placeholder",
+  );
 
-export const handleDodoWebhook = async (request: Request) => {
+export const handleDodoWebhook = async (request: Request, env?: any) => {
+  const dodo = getDodo(env);
+  const supabase = getSupabase(env);
   const payload = await request.text();
   const signature = request.headers.get("webhook-signature");
 

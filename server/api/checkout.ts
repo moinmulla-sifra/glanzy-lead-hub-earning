@@ -1,38 +1,67 @@
 import DodoPayments from "dodopayments";
 
-const dodo = new DodoPayments({
-  bearerToken: process.env.DODO_PAYMENTS_API_KEY || "test_sk_placeholder",
-  environment: "test_mode",
-});
+const getDodo = (env: any) =>
+  new DodoPayments({
+    bearerToken:
+      (env?.DODO_PAYMENTS_API_KEY as string) ||
+      process.env.DODO_PAYMENTS_API_KEY ||
+      "test_sk_placeholder",
+    environment: "test_mode",
+  });
 
-const getProductId = (planId: string, interval: string) => {
+const getProductId = (planId: string, interval: string, env: any) => {
   if (planId === "creator_plus" && interval === "monthly")
-    return process.env.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID;
+    return (
+      env?.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID ||
+      process.env.DODO_CREATOR_PLUS_MONTHLY_PRODUCT_ID
+    );
   if (planId === "creator_plus" && interval === "yearly")
-    return process.env.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID;
+    return (
+      env?.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID ||
+      process.env.DODO_CREATOR_PLUS_YEARLY_PRODUCT_ID
+    );
   if (planId === "creator_pro" && interval === "monthly")
-    return process.env.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID;
+    return (
+      env?.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID ||
+      process.env.DODO_CREATOR_PRO_MONTHLY_PRODUCT_ID
+    );
   if (planId === "creator_pro" && interval === "yearly")
-    return process.env.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID;
+    return (
+      env?.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID ||
+      process.env.DODO_CREATOR_PRO_YEARLY_PRODUCT_ID
+    );
   if (planId === "agency_plus" && interval === "monthly")
-    return process.env.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID;
+    return (
+      env?.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID ||
+      process.env.DODO_AGENCY_PLUS_MONTHLY_PRODUCT_ID
+    );
   if (planId === "agency_plus" && interval === "yearly")
-    return process.env.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID;
+    return (
+      env?.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID ||
+      process.env.DODO_AGENCY_PLUS_YEARLY_PRODUCT_ID
+    );
   if (planId === "agency_pro" && interval === "monthly")
-    return process.env.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID;
+    return (
+      env?.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID ||
+      process.env.DODO_AGENCY_PRO_MONTHLY_PRODUCT_ID
+    );
   if (planId === "agency_pro" && interval === "yearly")
-    return process.env.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID;
+    return (
+      env?.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID ||
+      process.env.DODO_AGENCY_PRO_YEARLY_PRODUCT_ID
+    );
 
   // Fallback for simple tests
-  return process.env.DODO_TEST_PRODUCT_ID;
+  return env?.DODO_TEST_PRODUCT_ID || process.env.DODO_TEST_PRODUCT_ID;
 };
 
-export const handleCheckout = async (request: Request) => {
+export const handleCheckout = async (request: Request, env?: any) => {
   try {
+    const dodo = getDodo(env);
     const body = await request.json();
     const { planId, workspaceId, interval, returnUrl } = body;
 
-    const productId = getProductId(planId, interval);
+    const productId = getProductId(planId, interval, env);
     if (!productId) {
       return new Response(
         JSON.stringify({

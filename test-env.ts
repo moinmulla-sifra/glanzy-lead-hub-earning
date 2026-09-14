@@ -1,7 +1,6 @@
-import { createServerFn } from "@tanstack/react-start";
-export const testEnv = createServerFn({ method: "GET" }).handler(() => {
-  return {
-    processEnv: process.env["VITE_SUPABASE_URL"] || null,
-    importMeta: import.meta.env.VITE_SUPABASE_URL || null,
-  };
-});
+import { createClient } from "@supabase/supabase-js";
+console.log("Top level process.env.VITE_SUPABASE_URL:", process.env.VITE_SUPABASE_URL);
+export const handleDiscover = async (request: Request) => {
+  console.log("Inside handle process.env.VITE_SUPABASE_URL:", process.env.VITE_SUPABASE_URL);
+  return new Response("OK");
+}

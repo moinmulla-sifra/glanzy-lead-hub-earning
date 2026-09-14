@@ -1,15 +1,21 @@
 import { createClient } from "@supabase/supabase-js";
 import { PLANS, PlanType } from "../../../src/lib/monetization";
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    "placeholder",
-);
+const getSupabase = (env: any) =>
+  createClient(
+    (env?.VITE_SUPABASE_URL as string) ||
+      process.env.VITE_SUPABASE_URL ||
+      "https://placeholder.supabase.co",
+    (env?.VITE_SUPABASE_SERVICE_ROLE_KEY as string) ||
+      (env?.VITE_SUPABASE_ANON_KEY as string) ||
+      process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY ||
+      "placeholder",
+  );
 
-export const handleDiscover = async (request: Request) => {
+export const handleDiscover = async (request: Request, env?: any) => {
   try {
+    const supabase = getSupabase(env);
     const body = await request.json();
     const token = request.headers.get("Authorization")?.replace("Bearer ", "");
 
