@@ -3,6 +3,7 @@ import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
 import { handleCheckout } from "../server/api/checkout";
+import { handleVerifyCheckout } from "../server/api/checkout/verify";
 import { handleDiscover } from "../server/api/brands/discover";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
 
@@ -69,6 +70,12 @@ export default {
       // API Routes Intercept
       if (url.pathname === "/api/checkout" && request.method === "POST") {
         return await handleCheckout(request, env);
+      }
+      if (
+        url.pathname === "/api/checkout/verify" &&
+        request.method === "POST"
+      ) {
+        return await handleVerifyCheckout(request, env);
       }
       if (
         url.pathname === "/api/brands/discover" &&

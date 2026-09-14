@@ -59,6 +59,9 @@ function PricingPage() {
 
     setUpgrading(plan);
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userEmail = sessionData?.session?.user?.email;
+
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,6 +69,7 @@ function PricingPage() {
           planId: plan,
           workspaceId,
           interval: billingInterval,
+          userEmail,
           returnUrl: window.location.origin + "/settings",
         }),
       });

@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { PLANS, PlanType } from "../../../src/lib/monetization";
 
-const getSupabase = (env: any) =>
+const getSupabase = (env?: Record<string, unknown>) =>
   createClient(
     (env?.VITE_SUPABASE_URL as string) ||
       process.env.VITE_SUPABASE_URL ||
@@ -13,27 +13,19 @@ const getSupabase = (env: any) =>
       "placeholder",
   );
 
-export const handleDiscover = async (request: Request, env?: any) => {
+export const handleDiscover = async (
+  request: Request,
+  env?: Record<string, unknown>,
+) => {
   try {
     const supabase = getSupabase(env);
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const token = request.headers.get("Authorization")?.replace("Bearer ", "");
 
-    if (!token) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser(token);
-    if (!user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+    let user: { id: string } | null = null;
+    if (token) {
+      const { data } = await supabase.auth.getUser(token);
+      user = (data?.user as { id: string } | null) || null;
     }
 
     const {
@@ -45,14 +37,31 @@ export const handleDiscover = async (request: Request, env?: any) => {
       sortOption,
     } = body;
 
-    const { data: sub } = await supabase
-      .from("subscriptions")
-      .select("plan")
-      .eq("workspace_id", workspaceId)
-      .eq("status", "active")
-      .maybeSingle();
+    let activeWorkspaceId = workspaceId;
+    if (!activeWorkspaceId && user?.id) {
+      const { data: member } = await supabase
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+      activeWorkspaceId = member?.workspace_id;
+    }
 
-    let plan = (sub?.plan as string) || "free";
+    let plan = "free";
+    if (activeWorkspaceId) {
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("plan")
+        .eq("workspace_id", activeWorkspaceId)
+        .eq("status", "active")
+        .maybeSingle();
+
+      if (sub?.plan) {
+        plan = sub.plan as string;
+      }
+    }
+
     if (plan === "pro") plan = "creator_pro";
     if (plan === "agency") plan = "agency_pro";
     if (!PLANS[plan as PlanType]) plan = "free";
@@ -66,61 +75,63 @@ export const handleDiscover = async (request: Request, env?: any) => {
       now.getDate(),
     ).toISOString();
 
-    const { data: usage } = await supabase
-      .from("usage")
-      .select("*")
-      .eq("workspace_id", workspaceId)
-      .gte("period_start", startOfDay)
-      .limit(1)
-      .maybeSingle();
+    if (activeWorkspaceId) {
+      const { data: usage } = await supabase
+        .from("usage")
+        .select("*")
+        .eq("workspace_id", activeWorkspaceId)
+        .gte("period_start", startOfDay)
+        .limit(1)
+        .maybeSingle();
 
-    let searches = usage?.searches || 0;
-    const leads = usage?.brand_views || 0;
+      let searches = usage?.searches || 0;
+      const leads = usage?.brand_views || 0;
 
-    if (pageParam === 0 && search) {
+      if (pageParam === 0 && search) {
+        if (
+          planConfig.limits.daily_brand_searches !== "unlimited" &&
+          searches >= planConfig.limits.daily_brand_searches
+        ) {
+          return new Response(
+            JSON.stringify({ error: "Daily search limit reached" }),
+            { status: 403, headers: { "Content-Type": "application/json" } },
+          );
+        }
+        searches++;
+      }
+
       if (
-        planConfig.limits.daily_brand_searches !== "unlimited" &&
-        searches >= planConfig.limits.daily_brand_searches
+        planConfig.limits.daily_brand_leads !== "unlimited" &&
+        leads >= planConfig.limits.daily_brand_leads
       ) {
         return new Response(
-          JSON.stringify({ error: "Daily search limit reached" }),
+          JSON.stringify({ error: "Daily lead limit reached" }),
           { status: 403, headers: { "Content-Type": "application/json" } },
         );
       }
-      searches++;
-    }
 
-    if (
-      planConfig.limits.daily_brand_leads !== "unlimited" &&
-      leads >= planConfig.limits.daily_brand_leads
-    ) {
-      return new Response(
-        JSON.stringify({ error: "Daily lead limit reached" }),
-        { status: 403, headers: { "Content-Type": "application/json" } },
-      );
-    }
-
-    if (!usage) {
-      const endOfDay = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1,
-      ).toISOString();
-      await supabase.from("usage").insert({
-        workspace_id: workspaceId,
-        period_start: startOfDay,
-        period_end: endOfDay,
-        searches: search && pageParam === 0 ? 1 : 0,
-        brand_views: pageSize,
-      });
-    } else {
-      await supabase
-        .from("usage")
-        .update({
-          searches: searches,
-          brand_views: leads + pageSize,
-        })
-        .eq("id", usage.id);
+      if (!usage) {
+        const endOfDay = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() + 1,
+        ).toISOString();
+        await supabase.from("usage").insert({
+          workspace_id: activeWorkspaceId,
+          period_start: startOfDay,
+          period_end: endOfDay,
+          searches: search && pageParam === 0 ? 1 : 0,
+          brand_views: pageSize,
+        });
+      } else {
+        await supabase
+          .from("usage")
+          .update({
+            searches: searches,
+            brand_views: leads + pageSize,
+          })
+          .eq("id", usage.id);
+      }
     }
 
     let q = supabase.from("brands").select("*", { count: "exact" });

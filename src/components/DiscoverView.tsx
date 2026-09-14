@@ -88,15 +88,17 @@ export function DiscoverView({
     const { data: session } = await supabase.auth.getSession();
     const token = session?.session?.access_token;
 
-    if (!token) throw new Error("Unauthorized");
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
 
     // We pass our state to the backend
     const response = await fetch("/api/brands/discover", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
       body: JSON.stringify({
         workspaceId,
         pageParam,
@@ -126,7 +128,13 @@ export function DiscoverView({
     isLoading: isBrandsLoading,
     isError: isBrandsError,
   } = useInfiniteQuery({
-    queryKey: ["brands", debouncedSearch, activeFilters, sortOption],
+    queryKey: [
+      "brands",
+      workspaceId || "anon",
+      debouncedSearch,
+      activeFilters,
+      sortOption,
+    ],
     queryFn: fetchBrands,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,

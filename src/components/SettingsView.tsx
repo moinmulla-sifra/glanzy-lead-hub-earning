@@ -74,6 +74,48 @@ export function SettingsView({ userId }: { userId: string | null }) {
     }
   }, [workspaceInfo?.name]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const checkoutSuccess = params.get("checkout_success");
+    const targetWorkspace = params.get("workspace_id") || workspaceInfo?.id;
+    const targetPlan = params.get("plan");
+
+    if (checkoutSuccess === "true") {
+      setActiveTab("subscription");
+
+      if (targetWorkspace && targetPlan) {
+        fetch("/api/checkout/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            workspaceId: targetWorkspace,
+            planId: targetPlan,
+          }),
+        })
+          .then((res) => res.json())
+          .then(() => {
+            queryClient.invalidateQueries({ queryKey: ["subscription_data"] });
+            queryClient.invalidateQueries({
+              queryKey: ["workspace_member_settings"],
+            });
+            toast.success(
+              "Payment verified! Your subscription has been updated successfully.",
+            );
+          })
+          .catch((err) => {
+            console.error("Verification error:", err);
+          });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["subscription_data"] });
+        toast.success("Welcome back! Your subscription is active.");
+      }
+
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }, [workspaceInfo?.id, queryClient]);
+
   const updateWorkspaceMutation = useMutation({
     mutationFn: async (newName: string) => {
       if (!workspaceInfo?.id) throw new Error("Workspace not found");
@@ -429,7 +471,10 @@ export function SettingsView({ userId }: { userId: string | null }) {
 
         {/* SUBSCRIPTION TAB */}
         {activeTab === "subscription" && (
-          <SubscriptionSettings userId={userId} />
+          <SubscriptionSettings
+            userId={userId}
+            workspaceId={workspaceInfo?.id}
+          />
         )}
 
         {/* ABOUT TAB */}
