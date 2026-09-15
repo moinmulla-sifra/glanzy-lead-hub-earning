@@ -1,23 +1,37 @@
 import { createClient } from "@supabase/supabase-js";
 
-const getSupabase = (env?: Record<string, unknown>) =>
-  createClient(
+const getSupabase = (
+  env?: Record<string, unknown>,
+  authHeader?: string | null,
+) => {
+  const url =
     (env?.VITE_SUPABASE_URL as string) ||
-      process.env.VITE_SUPABASE_URL ||
-      "https://placeholder.supabase.co",
+    process.env.VITE_SUPABASE_URL ||
+    "https://placeholder.supabase.co";
+  const key =
     (env?.VITE_SUPABASE_SERVICE_ROLE_KEY as string) ||
-      (env?.VITE_SUPABASE_ANON_KEY as string) ||
-      process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.VITE_SUPABASE_ANON_KEY ||
-      "placeholder",
-  );
+    (env?.VITE_SUPABASE_ANON_KEY as string) ||
+    process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    "placeholder";
+
+  return createClient(url, key, {
+    auth: { persistSession: false },
+    global: {
+      headers: authHeader ? { Authorization: authHeader } : {},
+    },
+  });
+};
 
 export const handleVerifyCheckout = async (
   request: Request,
   env?: Record<string, unknown>,
 ) => {
   try {
-    const supabase = getSupabase(env);
+    const authHeader =
+      request.headers.get("authorization") ||
+      request.headers.get("Authorization");
+    const supabase = getSupabase(env, authHeader);
     const body = await request.json().catch(() => ({}));
     const { workspaceId, planId, sessionId } = body;
 

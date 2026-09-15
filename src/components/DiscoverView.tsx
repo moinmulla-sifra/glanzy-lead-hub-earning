@@ -127,6 +127,7 @@ export function DiscoverView({
     isFetchingNextPage,
     isLoading: isBrandsLoading,
     isError: isBrandsError,
+    error: brandsError,
   } = useInfiniteQuery({
     queryKey: [
       "brands",
@@ -423,10 +424,17 @@ export function DiscoverView({
       {isBrandsError ? (
         <div className="flex flex-col items-center justify-center text-center p-12 bg-destructive/5 border border-destructive/20 rounded-3xl">
           <AlertCircle className="w-12 h-12 text-destructive mb-4" />
-          <h2 className="text-xl font-bold mb-2">We couldn't load brands</h2>
+          <h2 className="text-xl font-bold mb-2">
+            {brandsData?.pages?.[0]?.error ||
+            brandsError?.message?.includes("limit reached")
+              ? "Daily Limit Reached"
+              : "We couldn't load brands"}
+          </h2>
           <p className="text-muted-foreground max-w-sm mb-6">
-            Something went wrong while loading opportunities. Please check your
-            connection and try again.
+            {brandsData?.pages?.[0]?.error ||
+            brandsError?.message?.includes("limit reached")
+              ? "You have reached your daily limit on the Free plan. Upgrade your subscription to unlock more searches and leads."
+              : "Something went wrong while loading opportunities. Please check your connection and try again."}
           </p>
           <button
             onClick={() =>

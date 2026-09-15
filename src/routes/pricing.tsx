@@ -76,14 +76,18 @@ function PricingPage() {
 
       const data = await response.json();
       if (data.url) {
+        if (data.sandbox) {
+          toast.info("Redirecting to complete checkout in sandbox mode...");
+        }
         window.location.href = data.url;
       } else {
         throw new Error(data.error || "Failed to start checkout");
       }
     } catch (err: unknown) {
-      console.error("Upgrade checkout error:", err);
+      console.warn("Upgrade checkout notice:", err);
+      const errorObj = err as { message?: string } | undefined;
       toast.error(
-        err.message || "Failed to initiate checkout. Please try again.",
+        errorObj?.message || "Failed to initiate checkout. Please try again.",
       );
       setUpgrading(null);
     }

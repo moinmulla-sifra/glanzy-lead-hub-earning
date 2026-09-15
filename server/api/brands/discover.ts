@@ -142,12 +142,16 @@ export const handleDiscover = async (
       );
     }
 
-    if (filters?.industry) q = q.eq("industry", filters.industry);
-    if (filters?.country) q = q.eq("country", filters.country);
+    if (filters?.industry && filters.industry.length > 0)
+      q = q.in("industry", filters.industry);
+    if (filters?.country && filters.country.length > 0)
+      q = q.in("country", filters.country);
 
     if (planConfig.features.advanced_filters) {
-      if (filters?.company_stage)
-        q = q.eq("company_stage", filters.company_stage);
+      if (filters?.company_stage && filters.company_stage.length > 0)
+        q = q.in("company_stage", filters.company_stage);
+      if (filters?.budget_potential && filters.budget_potential.length > 0)
+        q = q.in("budget_potential", filters.budget_potential);
     }
 
     if (sortOption === "score") {
