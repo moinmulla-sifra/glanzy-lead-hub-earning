@@ -251,17 +251,17 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-6 md:p-8 animate-in fade-in duration-200">
       <div
         className="absolute inset-0 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-5xl h-[95vh] md:h-[90vh] bg-card border border-border/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col slide-in-from-bottom-8 animate-in duration-300">
+      <div className="relative w-full max-w-5xl h-[100dvh] sm:h-[90vh] bg-card border-0 sm:border border-border/50 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col slide-in-from-bottom-8 animate-in duration-300">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-border/50 p-6 sm:px-8 bg-muted/10 flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0 flex gap-6">
-            <div className="w-20 h-20 bg-muted rounded-2xl flex items-center justify-center border border-border/50 shadow-sm shrink-0 overflow-hidden">
+        <div className="flex-shrink-0 border-b border-border/50 p-4 sm:p-6 sm:px-8 bg-muted/10 flex flex-col sm:flex-row items-stretch sm:items-start justify-between gap-4">
+          <div className="flex-1 min-w-0 flex items-start gap-3 sm:gap-6">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-muted rounded-xl sm:rounded-2xl flex items-center justify-center border border-border/50 shadow-sm shrink-0 overflow-hidden">
               {brand.logo_url ? (
                 <img
                   src={brand.logo_url}
@@ -269,23 +269,26 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Building2 size={32} className="text-muted-foreground/50" />
+                <Building2
+                  size={24}
+                  className="text-muted-foreground/50 sm:size-8"
+                />
               )}
             </div>
 
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-1">
-                <h2 className="text-2xl font-bold truncate">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <h2 className="text-lg sm:text-2xl font-bold truncate">
                   {brand.company_name}
                 </h2>
                 {brand.research_status === "verified" && (
-                  <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-xs font-medium border border-blue-500/20 flex items-center gap-1">
-                    <Check size={12} /> Verified
+                  <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[11px] sm:text-xs font-medium border border-blue-500/20 flex items-center gap-1">
+                    <Check size={11} /> Verified
                   </span>
                 )}
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground flex-wrap">
                 {brand.website && (
                   <a
                     href={
@@ -295,35 +298,44 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-foreground transition-colors text-brand"
+                    className="flex items-center gap-1 hover:text-foreground transition-colors text-brand"
                   >
-                    <Globe size={14} />
+                    <Globe size={13} />
                     {brand.domain || brand.website}
-                    <ExternalLink size={12} />
+                    <ExternalLink size={11} />
                   </a>
                 )}
                 {brand.category && (
-                  <span className="flex items-center gap-1.5">
-                    <Tag size={14} /> {brand.category}{" "}
+                  <span className="flex items-center gap-1">
+                    <Tag size={13} /> {brand.category}{" "}
                     {brand.subcategory ? ` / ${brand.subcategory}` : ""}
                   </span>
                 )}
                 {brand.country && (
-                  <span className="flex items-center gap-1.5">
-                    <MapPin size={14} /> {brand.city ? `${brand.city}, ` : ""}
+                  <span className="flex items-center gap-1">
+                    <MapPin size={13} /> {brand.city ? `${brand.city}, ` : ""}
                     {brand.country}
                   </span>
                 )}
               </div>
             </div>
+
+            {/* Mobile close button */}
+            <button
+              onClick={onClose}
+              className="sm:hidden p-2 -mr-1 text-muted-foreground hover:bg-muted rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Close modal"
+            >
+              <X size={20} />
+            </button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={onSave}
               disabled={isSaving}
               className={`
-                px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2
+                flex-1 sm:flex-none px-4 py-2.5 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2
                 ${
                   isSaved
                     ? "bg-brand/10 text-brand border border-brand/20"
@@ -331,20 +343,21 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                 }
               `}
             >
-              {isSaved ? <Check size={16} /> : <Save size={16} />}
+              {isSaved ? <Check size={15} /> : <Save size={15} />}
               {isSaved ? "Saved" : "Save"}
             </button>
 
             <button
               onClick={() => setShowContact(true)}
-              className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 bg-brand text-white hover:bg-brand/90 shadow-md shadow-brand/20"
+              className="flex-1 sm:flex-none px-4 py-2.5 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 bg-brand text-white hover:bg-brand/90 shadow-md shadow-brand/20"
             >
-              <Send size={16} />
-              contact details
+              <Send size={15} />
+              Contact Details
             </button>
             <button
               onClick={onClose}
-              className="p-2 -mr-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors"
+              className="hidden sm:flex p-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors min-h-[44px] min-w-[44px] items-center justify-center"
+              aria-label="Close modal"
             >
               <X size={20} />
             </button>
