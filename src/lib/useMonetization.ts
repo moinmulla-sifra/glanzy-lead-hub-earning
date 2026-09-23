@@ -56,7 +56,7 @@ export function useMonetization(userId: string | null) {
   const currentPlan = (subData?.plan as PlanType) || "free";
   const planConfig = PLANS[currentPlan];
 
-  const shouldShowAds = !isLoading && planConfig.features.ads_enabled;
+  const shouldShowAds = false;
 
   return {
     workspaceId,

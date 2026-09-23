@@ -73,7 +73,7 @@ export const PLANS: Record<PlanType, PlanConfig> = {
       whitelabel_reporting: false,
       dedicated_account_manager: false,
       priority_data_access: false,
-      ads_enabled: true,
+      ads_enabled: false,
       support_level: "standard",
     },
   },

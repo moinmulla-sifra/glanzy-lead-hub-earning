@@ -19,8 +19,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
-import { useMonetization } from "@/lib/useMonetization";
-import { MonetagScripts } from "@/components/MonetagScripts";
 import { useDevice } from "@/lib/useDevice";
 
 export const Route = createFileRoute("/_dashboard")({
@@ -38,7 +36,6 @@ function DashboardLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const { isMobile, deviceType } = useDevice();
-  const { shouldShowAds } = useMonetization(userId);
 
   useEffect(() => {
     let active = true;
@@ -378,8 +375,6 @@ function DashboardLayout() {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
-
-      {shouldShowAds && <MonetagScripts />}
     </div>
   );
 }

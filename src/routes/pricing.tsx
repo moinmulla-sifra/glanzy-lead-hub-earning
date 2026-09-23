@@ -321,9 +321,6 @@ function PricingPage() {
                     >
                       Priority support
                     </Feature>
-                    <Feature included={!plan.features.ads_enabled}>
-                      Ad-free experience
-                    </Feature>
                   </div>
 
                   <button
