@@ -105,6 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "google-adsense-account", content: "ca-pub-4966868337893543" },
       ],
       links: [
         { rel: "stylesheet", href: appCss },
@@ -120,7 +121,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       ],
-      scripts: [{ children: THEME_INIT_SCRIPT }],
+      scripts: [
+        {
+          src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543",
+          async: true,
+          crossOrigin: "anonymous",
+        },
+        { children: THEME_INIT_SCRIPT },
+      ],
     }),
     shellComponent: RootShell,
     component: RootComponent,
@@ -133,6 +141,12 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543"
+          crossOrigin="anonymous"
+        ></script>
+        <meta name="google-adsense-account" content="ca-pub-4966868337893543" />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
