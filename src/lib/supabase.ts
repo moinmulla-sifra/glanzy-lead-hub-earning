@@ -1,32 +1,63 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Browser-safe configuration for the user's own external Supabase project.
+// Browser-safe configuration for the user's external Supabase project.
 // Publishable (anon) key only — never a service-role/secret key.
-export const SUPABASE_URL = import.meta.env["VITE_SUPABASE_URL"] || "";
-export const SUPABASE_PUBLISHABLE_KEY =
-  import.meta.env["VITE_SUPABASE_ANON_KEY"] ||
-  import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
-  "";
+const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkeGp4cnRkeWxudWh2bW1jdmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTgxMjUsImV4cCI6MjEwNDI3NDEyNX0.C7mUyroSPQ7Vcpepiqv-jzSd-zhTB4fHuFrMX23l3HY";
 
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  console.warn(
-    "Missing Supabase configuration. Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment variables.",
-  );
+export function sanitizeSupabaseKey(rawKey: string | undefined | null): string {
+  if (!rawKey) return "";
+  const key = rawKey.trim().replace(/^["']|["']$/g, "");
+  // If an environment variable was accidentally concatenated (e.g. key + DODO_PAYMENTS_API_KEY=...)
+  // A Supabase JWT consists of 3 dot-separated base64url strings: header.payload.signature
+  const parts = key.split(".");
+  if (parts.length >= 3) {
+    const sigMatch = parts[2].match(/^[A-Za-z0-9_-]+/);
+    if (sigMatch) {
+      return `${parts[0]}.${parts[1]}.${sigMatch[0]}`;
+    }
+  }
+  return key;
 }
 
-export const supabase = createClient(
-  SUPABASE_URL || "https://placeholder.supabase.co",
-  SUPABASE_PUBLISHABLE_KEY ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder",
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      storageKey: "branzly-auth",
-    },
+const getEnv = (key: string): string => {
+  if (
+    typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env[key]
+  ) {
+    return String(import.meta.env[key]);
+  }
+  if (typeof process !== "undefined" && process.env && process.env[key]) {
+    return String(process.env[key]);
+  }
+  return "";
+};
+
+const rawUrl = getEnv("VITE_SUPABASE_URL");
+const rawKey =
+  getEnv("VITE_SUPABASE_ANON_KEY") || getEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
+
+const cleanedUrl = rawUrl.trim().replace(/^["']|["']$/g, "");
+const cleanedKey = sanitizeSupabaseKey(rawKey);
+
+export const SUPABASE_URL =
+  (cleanedUrl && !cleanedUrl.includes("placeholder") ? cleanedUrl : "") ||
+  DEFAULT_SUPABASE_URL;
+
+export const SUPABASE_PUBLISHABLE_KEY =
+  (cleanedKey && !cleanedKey.includes("placeholder") ? cleanedKey : "") ||
+  DEFAULT_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: "branzly-auth",
   },
-);
+});
 
 export type OutreachStatus =
   "Saved" | "Contacted" | "Replied" | "Interested" | "Meeting" | "Won" | "Lost";

@@ -18,17 +18,43 @@ const getDodo = (env?: Record<string, unknown>) => {
   });
 };
 
-const getSupabase = (env?: Record<string, unknown>) =>
-  createClient(
+const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
+const DEFAULT_SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkeGp4cnRkeWxudWh2bW1jdmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTgxMjUsImV4cCI6MjEwNDI3NDEyNX0.C7mUyroSPQ7Vcpepiqv-jzSd-zhTB4fHuFrMX23l3HY";
+
+function sanitizeSupabaseKey(rawKey: string | undefined | null): string {
+  if (!rawKey) return "";
+  const key = rawKey.trim().replace(/^["']|["']$/g, "");
+  const parts = key.split(".");
+  if (parts.length >= 3) {
+    const sigMatch = parts[2].match(/^[A-Za-z0-9_-]+/);
+    if (sigMatch) {
+      return `${parts[0]}.${parts[1]}.${sigMatch[0]}`;
+    }
+  }
+  return key;
+}
+
+const getSupabase = (env?: Record<string, unknown>) => {
+  const rawUrl =
     (env?.VITE_SUPABASE_URL as string) ||
-      process.env.VITE_SUPABASE_URL ||
-      "https://placeholder.supabase.co",
+    process.env.VITE_SUPABASE_URL ||
+    DEFAULT_SUPABASE_URL;
+  const rawKey =
     (env?.VITE_SUPABASE_SERVICE_ROLE_KEY as string) ||
-      (env?.VITE_SUPABASE_ANON_KEY as string) ||
-      process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.VITE_SUPABASE_ANON_KEY ||
-      "placeholder",
-  );
+    (env?.VITE_SUPABASE_ANON_KEY as string) ||
+    process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    DEFAULT_SUPABASE_KEY;
+
+  const url =
+    rawUrl && !rawUrl.includes("placeholder")
+      ? rawUrl.trim()
+      : DEFAULT_SUPABASE_URL;
+  const key = sanitizeSupabaseKey(rawKey) || DEFAULT_SUPABASE_KEY;
+
+  return createClient(url, key);
+};
 
 const PRODUCT_TO_PLAN: Record<string, string> = {
   pdt_0NnVj2WDdu538UYT0YJyn: "creator_plus",

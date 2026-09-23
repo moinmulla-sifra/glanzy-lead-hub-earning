@@ -143,7 +143,13 @@ function AuthPage() {
         setMode("signin");
       }
     } catch (err: unknown) {
-      toast.error(err.message || "Authentication failed");
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === "object" && err && "message" in err
+            ? String((err as { message: unknown }).message)
+            : "Authentication failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
