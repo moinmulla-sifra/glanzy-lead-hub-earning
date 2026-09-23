@@ -123,9 +123,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       scripts: [
         {
-          src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543",
+          src: "https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD",
           async: true,
-          crossOrigin: "anonymous",
+        },
+        {
+          children: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1C4EYN1KVD');
+`,
         },
         { children: THEME_INIT_SCRIPT },
       ],
@@ -141,27 +148,6 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543"
-          crossOrigin="anonymous"
-        ></script>
-        <meta name="google-adsense-account" content="ca-pub-4966868337893543" />
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-1C4EYN1KVD"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-1C4EYN1KVD');
-`,
-          }}
-        />
         <HeadContent />
       </head>
       <body suppressHydrationWarning>
@@ -170,6 +156,22 @@ function RootShell({ children }: { children: ReactNode }) {
       </body>
     </html>
   );
+}
+
+function GoogleAdSense() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
+
+    const script = document.createElement("script");
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    document.head.appendChild(script);
+  }, []);
+
+  return null;
 }
 
 function RootComponent() {
@@ -182,6 +184,7 @@ function RootComponent() {
         <Outlet />
         <Toaster position="bottom-right" richColors />
         <Analytics />
+        <GoogleAdSense />
       </DeviceProvider>
     </QueryClientProvider>
   );
