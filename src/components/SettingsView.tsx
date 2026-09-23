@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMonetization } from "@/lib/useMonetization";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,6 +23,8 @@ import {
   Loader2,
   Key,
   Sparkles,
+  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
 
 export function SettingsView({ userId }: { userId: string | null }) {
@@ -74,6 +76,47 @@ export function SettingsView({ userId }: { userId: string | null }) {
     }
   }, [workspaceInfo?.name]);
 
+  const [isSyncingSub, setIsSyncingSub] = useState(false);
+  const hasVerifiedRef = useRef(false);
+
+  const handleSyncSubscription = async (force = true) => {
+    const wsId = workspaceInfo?.id;
+    if (!wsId) return;
+    setIsSyncingSub(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const email = sessionData?.session?.user?.email;
+
+      const res = await fetch(
+        `/api/subscription/current?workspaceId=${encodeURIComponent(wsId)}${email ? `&userEmail=${encodeURIComponent(email)}` : ""}${force ? "&force=true" : ""}`,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        await queryClient.invalidateQueries({
+          queryKey: ["subscription_data"],
+        });
+        await queryClient.refetchQueries({ queryKey: ["subscription_data"] });
+        await queryClient.invalidateQueries({
+          queryKey: ["workspace_member_settings"],
+        });
+        const planName =
+          data?.plan?.replace("_", " ").toUpperCase() || "ACTIVE";
+        toast.success(`Subscription synced! Plan: ${planName}`);
+      } else {
+        toast.error("Failed to sync subscription details");
+      }
+    } catch (e) {
+      console.warn("Sync error:", e);
+      toast.error("Error refreshing subscription from payment gateway");
+    } finally {
+      setIsSyncingSub(false);
+    }
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -81,85 +124,61 @@ export function SettingsView({ userId }: { userId: string | null }) {
     const targetWorkspace = params.get("workspace_id") || workspaceInfo?.id;
     const targetPlan = params.get("plan");
 
-    if (checkoutSuccess === "true") {
+    if (checkoutSuccess === "true" && !hasVerifiedRef.current) {
+      hasVerifiedRef.current = true;
       setActiveTab("subscription");
       const isSandbox = params.get("sandbox") === "true";
 
-      if (targetWorkspace && targetPlan) {
-        (async () => {
-          try {
-            const { data: sessionData } = await supabase.auth.getSession();
-            const token = sessionData?.session?.access_token;
+      (async () => {
+        try {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const token = sessionData?.session?.access_token;
+          const userEmail = sessionData?.session?.user?.email;
 
-            const res = await fetch("/api/checkout/verify", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
-              },
-              body: JSON.stringify({
-                workspaceId: targetWorkspace,
-                planId: targetPlan,
-              }),
-            });
-            const resData = await res.json().catch(() => ({}));
-            if (!res.ok) {
-              console.warn("Backend verify notice:", resData?.error);
-              // Fallback direct update via client session if server encountered an RLS policy issue
-              const { data: existingSub } = await supabase
-                .from("subscriptions")
-                .select("id")
-                .eq("workspace_id", targetWorkspace)
-                .maybeSingle();
-
-              if (existingSub?.id) {
-                await supabase
-                  .from("subscriptions")
-                  .update({
-                    plan: targetPlan,
-                    status: "active",
-                    provider: "dodo",
-                    updated_at: new Date().toISOString(),
-                  })
-                  .eq("id", existingSub.id);
-              } else {
-                await supabase.from("subscriptions").insert({
-                  workspace_id: targetWorkspace,
-                  plan: targetPlan,
-                  status: "active",
-                  provider: "dodo",
-                  updated_at: new Date().toISOString(),
-                });
-              }
-            }
-          } catch (err) {
-            console.warn("Verification notice:", err);
-          } finally {
-            queryClient.invalidateQueries({ queryKey: ["subscription_data"] });
-            queryClient.invalidateQueries({
-              queryKey: ["workspace_member_settings"],
-            });
-            queryClient.invalidateQueries({
-              queryKey: ["workspace_member"],
-            });
-            if (isSandbox) {
-              toast.success(
-                "Subscription upgraded successfully in sandbox mode!",
-              );
-            } else {
-              toast.success(
-                "Payment verified! Your subscription has been updated successfully.",
-              );
-            }
+          const res = await fetch("/api/checkout/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({
+              workspaceId: targetWorkspace,
+              planId: targetPlan,
+              userEmail,
+            }),
+          });
+          const resData = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            console.warn("Backend verify notice:", resData?.error);
           }
-        })();
-      } else {
-        queryClient.invalidateQueries({ queryKey: ["subscription_data"] });
-        toast.success("Welcome back! Your subscription is active.");
-      }
+        } catch (err) {
+          console.warn("Verification notice:", err);
+        } finally {
+          await queryClient.invalidateQueries({
+            queryKey: ["subscription_data"],
+          });
+          await queryClient.refetchQueries({ queryKey: ["subscription_data"] });
+          await queryClient.invalidateQueries({
+            queryKey: ["workspace_member_settings"],
+          });
+          await queryClient.invalidateQueries({
+            queryKey: ["workspace_member"],
+          });
 
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, document.title, newUrl);
+          if (isSandbox) {
+            toast.success(
+              "Subscription upgraded successfully in sandbox mode!",
+            );
+          } else {
+            toast.success(
+              "Payment verified! Your subscription plan has been activated.",
+            );
+          }
+
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, document.title, newUrl);
+        }
+      })();
     }
   }, [workspaceInfo?.id, queryClient]);
 

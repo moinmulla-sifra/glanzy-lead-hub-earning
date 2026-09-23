@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { PLANS, PlanType } from "../../../src/lib/monetization";
+import { getEffectiveSubscription } from "../../lib/subscriptionStore";
 
 const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
 const DEFAULT_SUPABASE_KEY =
@@ -77,15 +78,14 @@ export const handleDiscover = async (
 
     let plan = "free";
     if (activeWorkspaceId) {
-      const { data: sub } = await supabase
-        .from("subscriptions")
-        .select("plan")
-        .eq("workspace_id", activeWorkspaceId)
-        .eq("status", "active")
-        .maybeSingle();
-
+      const sub = await getEffectiveSubscription(
+        activeWorkspaceId,
+        userEmail,
+        env,
+        authHeader,
+      );
       if (sub?.plan) {
-        plan = sub.plan as string;
+        plan = sub.plan;
       }
     }
 

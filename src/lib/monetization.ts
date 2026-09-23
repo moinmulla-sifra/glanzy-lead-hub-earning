@@ -226,6 +226,27 @@ export const PLANS: Record<PlanType, PlanConfig> = {
 export async function getEffectiveSubscription(
   workspaceId: string,
 ): Promise<PlanType> {
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch(
+        `/api/subscription/current?workspaceId=${encodeURIComponent(workspaceId)}`,
+      );
+      if (res.ok) {
+        const apiSub = await res.json();
+        if (apiSub && apiSub.plan && apiSub.status === "active") {
+          let plan = apiSub.plan;
+          if (plan === "pro") plan = "creator_pro";
+          if (plan === "agency") plan = "agency_pro";
+          if (PLANS[plan as PlanType]) {
+            return plan as PlanType;
+          }
+        }
+      }
+    } catch {
+      // Fall through to direct Supabase query
+    }
+  }
+
   const { data: sub } = await supabase
     .from("subscriptions")
     .select("plan, status")

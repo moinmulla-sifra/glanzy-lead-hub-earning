@@ -1,21 +1,4 @@
-import DodoPayments from "dodopayments";
-
-const getDodo = (env?: Record<string, unknown>) => {
-  const rawEnv =
-    (env?.DODO_PAYMENTS_ENVIRONMENT as string) ||
-    process.env.DODO_PAYMENTS_ENVIRONMENT;
-  const environment = rawEnv === "live_mode" ? "live_mode" : "test_mode";
-
-  const apiKey =
-    (env?.DODO_PAYMENTS_API_KEY as string) ||
-    process.env.DODO_PAYMENTS_API_KEY ||
-    "";
-
-  return new DodoPayments({
-    bearerToken: apiKey,
-    environment,
-  });
-};
+import { getDodo, getDodoApiKey } from "../lib/subscriptionStore";
 
 const getProductId = (
   planId: string,
@@ -106,16 +89,15 @@ export const handleCheckout = async (
       parsedUrl.searchParams.set("checkout_success", "true");
       if (workspaceId) parsedUrl.searchParams.set("workspace_id", workspaceId);
       if (planId) parsedUrl.searchParams.set("plan", planId);
+      if (userEmail) parsedUrl.searchParams.set("email", userEmail);
       finalReturnUrl = parsedUrl.toString();
     } catch {
-      finalReturnUrl = `${baseReturnUrl}?checkout_success=true&workspace_id=${workspaceId || ""}&plan=${planId || ""}`;
+      finalReturnUrl = `${baseReturnUrl}?checkout_success=true&workspace_id=${workspaceId || ""}&plan=${planId || ""}&email=${encodeURIComponent(userEmail || "")}`;
     }
 
     const cancelUrl = `${origin}/pricing`;
 
-    const apiKey =
-      (env?.DODO_PAYMENTS_API_KEY as string) ||
-      process.env.DODO_PAYMENTS_API_KEY;
+    const apiKey = getDodoApiKey(env);
 
     let checkoutUrl: string | null = null;
     let isSandboxFallback = false;
@@ -123,6 +105,9 @@ export const handleCheckout = async (
     if (apiKey && !apiKey.startsWith("test_sk_placeholder")) {
       try {
         const dodo = getDodo(env);
+        if (!dodo) {
+          throw new Error("Dodo Payments client not initialized");
+        }
         const session = await dodo.checkoutSessions.create({
           billing_address: {
             country: "IN",

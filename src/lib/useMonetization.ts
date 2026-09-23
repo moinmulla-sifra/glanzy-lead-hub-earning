@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "./supabase";
 import { PLANS, type PlanType } from "./monetization";
-import { useEffect, useState } from "react";
 
 export function useMonetization(userId: string | null) {
   const { data: memberData, isLoading: isLoadingMember } = useQuery({
@@ -28,27 +27,68 @@ export function useMonetization(userId: string | null) {
     queryKey: ["subscription_data", workspaceId],
     enabled: !!workspaceId,
     queryFn: async () => {
-      const { data: sub } = await supabase
-        .from("subscriptions")
-        .select("plan, status")
-        .eq("workspace_id", workspaceId!)
-        .eq("status", "active")
-        .maybeSingle();
+      // 1. Primary check: Query our backend subscription endpoint (checks live Dodo Payments API + persistent server store)
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        const email = sessionData?.session?.user?.email;
 
-      let plan = (sub?.plan as string) || "free";
+        const url = `/api/subscription/current?workspaceId=${encodeURIComponent(
+          workspaceId!,
+        )}${email ? `&userEmail=${encodeURIComponent(email)}` : ""}`;
 
-      // Fallback for pre-migration state
-      if (plan === "pro") plan = "creator_pro";
-      if (plan === "agency") plan = "agency_pro";
+        const res = await fetch(url, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
 
-      if (!PLANS[plan as PlanType]) {
-        plan = "free";
+        if (res.ok) {
+          const apiSub = await res.json();
+          if (apiSub && apiSub.plan) {
+            let plan = apiSub.plan;
+            if (plan === "pro") plan = "creator_pro";
+            if (plan === "agency") plan = "agency_pro";
+            if (PLANS[plan as PlanType]) {
+              return {
+                plan: plan as PlanType,
+                status: apiSub.status || "active",
+                subscriptionId: apiSub.provider_subscription_id,
+                nextBillingDate: apiSub.next_billing_date,
+              };
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Backend subscription check notice:", err);
       }
 
-      return {
-        plan: plan as PlanType,
-        status: sub?.status || "inactive",
-      };
+      // 2. Secondary fallback: Query Supabase subscriptions table directly
+      try {
+        const { data: sub } = await supabase
+          .from("subscriptions")
+          .select("plan, status")
+          .eq("workspace_id", workspaceId!)
+          .eq("status", "active")
+          .maybeSingle();
+
+        let plan = (sub?.plan as string) || "free";
+
+        if (plan === "pro") plan = "creator_pro";
+        if (plan === "agency") plan = "agency_pro";
+
+        if (!PLANS[plan as PlanType]) {
+          plan = "free";
+        }
+
+        return {
+          plan: plan as PlanType,
+          status: sub?.status || "inactive",
+        };
+      } catch {
+        return {
+          plan: "free" as PlanType,
+          status: "inactive",
+        };
+      }
     },
   });
 

@@ -6,6 +6,7 @@ import { handleCheckout } from "../server/api/checkout";
 import { handleVerifyCheckout } from "../server/api/checkout/verify";
 import { handleDiscover } from "../server/api/brands/discover";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
+import { handleSubscriptionCurrent } from "../server/api/subscription/current";
 
 type ServerEntry = {
   fetch: (
@@ -68,6 +69,12 @@ export default {
       const url = new URL(request.url);
 
       // API Routes Intercept
+      if (
+        url.pathname === "/api/subscription/current" &&
+        (request.method === "GET" || request.method === "POST")
+      ) {
+        return await handleSubscriptionCurrent(request, env);
+      }
       if (url.pathname === "/api/checkout" && request.method === "POST") {
         return await handleCheckout(request, env);
       }

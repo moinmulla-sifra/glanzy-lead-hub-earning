@@ -1,22 +1,8 @@
-import DodoPayments from "dodopayments";
+import {
+  saveSubscription,
+  normalizePlanName,
+} from "../../lib/subscriptionStore";
 import { createClient } from "@supabase/supabase-js";
-
-const getDodo = (env?: Record<string, unknown>) => {
-  const apiKey =
-    (env?.DODO_PAYMENTS_API_KEY as string) ||
-    process.env.DODO_PAYMENTS_API_KEY ||
-    "test_sk_placeholder";
-  const rawEnv =
-    (env?.DODO_PAYMENTS_ENVIRONMENT as string) ||
-    process.env.DODO_PAYMENTS_ENVIRONMENT ||
-    "test_mode";
-  const environment = rawEnv === "live_mode" ? "live_mode" : "test_mode";
-
-  return new DodoPayments({
-    bearerToken: apiKey,
-    environment,
-  });
-};
 
 const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
 const DEFAULT_SUPABASE_KEY =
@@ -67,15 +53,15 @@ const PRODUCT_TO_PLAN: Record<string, string> = {
   pdt_0NnVnRNOMYq9ZlHoTEsua: "agency_pro",
 };
 
+// In-memory set for event deduplication
+const seenEvents = new Set<string>();
+
 export const handleDodoWebhook = async (
   request: Request,
   env?: Record<string, unknown>,
 ) => {
   const supabase = getSupabase(env);
   const payload = await request.text();
-  const signature =
-    request.headers.get("webhook-signature") ||
-    request.headers.get("svix-signature");
 
   if (!payload) {
     return new Response(JSON.stringify({ message: "Missing payload" }), {
@@ -93,30 +79,40 @@ export const handleDodoWebhook = async (
       parsed.id ||
       `${parsed.business_id || "dodo"}_${parsed.timestamp || Date.now()}_${eventType}`;
 
-    // Process idempotency
-    const { data: existingEvent } = await supabase
-      .from("webhook_events")
-      .select("id")
-      .eq("event_id", eventId)
-      .maybeSingle();
-
-    if (existingEvent) {
+    if (seenEvents.has(eventId)) {
       return new Response(
         JSON.stringify({ received: true, message: "Duplicate event ignored" }),
         { headers: { "Content-Type": "application/json" } },
       );
     }
+    seenEvents.add(eventId);
 
-    // Store event for idempotency
-    await supabase
-      .from("webhook_events")
-      .insert({
+    // Attempt Supabase webhook_events idempotency if table exists (ignore if missing)
+    try {
+      const { data: existingEvent } = await supabase
+        .from("webhook_events")
+        .select("id")
+        .eq("event_id", eventId)
+        .maybeSingle();
+
+      if (existingEvent) {
+        return new Response(
+          JSON.stringify({
+            received: true,
+            message: "Duplicate event ignored",
+          }),
+          { headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      await supabase.from("webhook_events").insert({
         event_id: eventId,
         event_type: eventType,
         payload: parsed,
-      })
-      .select("id")
-      .maybeSingle();
+      });
+    } catch {
+      // Table doesn't exist or RLS blocked, memory deduplication handles it
+    }
 
     const data = parsed.data || {};
     const metadata =
@@ -127,6 +123,7 @@ export const handleDodoWebhook = async (
 
     let workspaceId = metadata.workspace_id;
     let planType = metadata.plan_type;
+    const customerEmail = data.customer?.email;
 
     // Fallback: Infer plan from product ID if not in metadata
     if (!planType) {
@@ -140,92 +137,82 @@ export const handleDodoWebhook = async (
     }
 
     // Fallback: Resolve workspace from customer email if missing in metadata
-    if (!workspaceId && data.customer?.email) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("email", data.customer.email)
-        .maybeSingle();
-
-      if (profile?.id) {
-        const { data: member } = await supabase
-          .from("workspace_members")
-          .select("workspace_id")
-          .eq("user_id", profile.id)
-          .limit(1)
+    if (!workspaceId && customerEmail) {
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("email", customerEmail)
           .maybeSingle();
-        workspaceId = member?.workspace_id;
+
+        if (profile?.id) {
+          const { data: member } = await supabase
+            .from("workspace_members")
+            .select("workspace_id")
+            .eq("user_id", profile.id)
+            .limit(1)
+            .maybeSingle();
+          workspaceId = member?.workspace_id;
+        }
+      } catch (profErr) {
+        console.warn("Profile resolution notice:", profErr);
       }
     }
 
     if (workspaceId) {
-      const activePlan = planType || "creator_pro";
-
-      const { data: existingSub } = await supabase
-        .from("subscriptions")
-        .select("id")
-        .eq("workspace_id", workspaceId)
-        .maybeSingle();
+      const activePlan = normalizePlanName(planType || "creator_pro");
+      const providerSubId =
+        data.subscription_id ||
+        data.payment_id ||
+        data.id ||
+        `dodo_${Date.now()}`;
 
       if (
         eventType === "payment.succeeded" ||
         eventType === "subscription.active" ||
         eventType === "subscription.renewed"
       ) {
-        if (existingSub?.id) {
-          await supabase
-            .from("subscriptions")
-            .update({
-              plan: activePlan,
-              status: "active",
-              provider: "dodo",
-              provider_subscription_id:
-                data.subscription_id || data.payment_id || data.id,
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", existingSub.id);
-        } else {
-          await supabase.from("subscriptions").insert({
+        await saveSubscription(
+          {
             workspace_id: workspaceId,
             plan: activePlan,
             status: "active",
             provider: "dodo",
-            provider_subscription_id:
-              data.subscription_id || data.payment_id || data.id,
+            provider_subscription_id: providerSubId,
+            customer_email: customerEmail,
+            next_billing_date: data.next_billing_date,
             updated_at: new Date().toISOString(),
-          });
-        }
+          },
+          env,
+        );
       } else if (eventType === "subscription.updated") {
         const nextStatus = data.status === "active" ? "active" : "on_hold";
-        if (existingSub?.id) {
-          await supabase
-            .from("subscriptions")
-            .update({
-              plan: activePlan,
-              status: nextStatus,
-              provider: "dodo",
-              provider_subscription_id: data.subscription_id || data.id,
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", existingSub.id);
-        } else {
-          await supabase.from("subscriptions").insert({
+        await saveSubscription(
+          {
             workspace_id: workspaceId,
             plan: activePlan,
             status: nextStatus,
             provider: "dodo",
-            provider_subscription_id: data.subscription_id || data.id,
+            provider_subscription_id: providerSubId,
+            customer_email: customerEmail,
+            next_billing_date: data.next_billing_date,
             updated_at: new Date().toISOString(),
-          });
-        }
+          },
+          env,
+        );
       } else if (eventType === "subscription.on_hold") {
-        await supabase
-          .from("subscriptions")
-          .update({
+        await saveSubscription(
+          {
+            workspace_id: workspaceId,
+            plan: activePlan,
             status: "on_hold",
+            provider: "dodo",
+            provider_subscription_id: providerSubId,
+            customer_email: customerEmail,
             updated_at: new Date().toISOString(),
-          })
-          .eq("workspace_id", workspaceId);
+          },
+          env,
+        );
       } else if (
         eventType === "subscription.cancelled" ||
         eventType === "subscription.canceled" ||
@@ -233,26 +220,33 @@ export const handleDodoWebhook = async (
         eventType === "subscription.failed" ||
         eventType === "payment.failed"
       ) {
-        await supabase
-          .from("subscriptions")
-          .update({
-            status: eventType.includes("failed") ? "failed" : "canceled",
+        await saveSubscription(
+          {
+            workspace_id: workspaceId,
+            plan: "free",
+            status: "inactive",
+            provider: "dodo",
+            provider_subscription_id: providerSubId,
+            customer_email: customerEmail,
             updated_at: new Date().toISOString(),
-          })
-          .eq("workspace_id", workspaceId);
+          },
+          env,
+        );
       }
     }
 
     return new Response(JSON.stringify({ received: true }), {
+      status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err: unknown) {
-    const errorMsg =
-      err instanceof Error ? err.message : "Unknown webhook error";
-    console.error("Webhook Error:", err);
-    return new Response(JSON.stringify({ message: errorMsg }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("Webhook processing error:", err);
+    return new Response(
+      JSON.stringify({ error: "Failed to process webhook" }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 };
