@@ -71,7 +71,57 @@ const getSupabase = (
   });
 };
 
+function parseEnvFile(): Record<string, string> {
+  try {
+    const envPath = path.join(process.cwd(), ".env");
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, "utf-8");
+      const vars: Record<string, string> = {};
+      for (const line of content.split("\n")) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith("#")) continue;
+        const eqIdx = trimmed.indexOf("=");
+        if (eqIdx > 0) {
+          const key = trimmed.slice(0, eqIdx).trim();
+          const val = trimmed
+            .slice(eqIdx + 1)
+            .trim()
+            .replace(/^["']|["']$/g, "");
+          vars[key] = val;
+        }
+      }
+      return vars;
+    }
+  } catch {
+    // Non-fatal if fs is restricted
+  }
+  return {};
+}
+
+// Auto-sync valid credentials from .env to process.env
+const localEnv = parseEnvFile();
+if (
+  localEnv.DODO_PAYMENTS_API_KEY &&
+  !localEnv.DODO_PAYMENTS_API_KEY.startsWith("test_sk_placeholder")
+) {
+  process.env.DODO_PAYMENTS_API_KEY = localEnv.DODO_PAYMENTS_API_KEY;
+}
+if (
+  localEnv.DODO_PAYMENTS_ENVIRONMENT === "test_mode" ||
+  localEnv.DODO_PAYMENTS_ENVIRONMENT === "live_mode"
+) {
+  process.env.DODO_PAYMENTS_ENVIRONMENT = localEnv.DODO_PAYMENTS_ENVIRONMENT;
+}
+
 export const getDodoApiKey = (env?: Record<string, unknown>): string => {
+  const envFile = parseEnvFile();
+  const fileKey = envFile.DODO_PAYMENTS_API_KEY?.trim().replace(
+    /^["']|["']$/g,
+    "",
+  );
+  if (fileKey && !fileKey.startsWith("test_sk_placeholder")) {
+    return fileKey;
+  }
   const rawKey =
     (env?.DODO_PAYMENTS_API_KEY as string) ||
     process.env.DODO_PAYMENTS_API_KEY ||
@@ -79,12 +129,25 @@ export const getDodoApiKey = (env?: Record<string, unknown>): string => {
   return rawKey.trim().replace(/^["']|["']$/g, "");
 };
 
-export const getDodo = (env?: Record<string, unknown>): DodoPayments | null => {
+export const getDodoEnvironment = (
+  env?: Record<string, unknown>,
+): "live_mode" | "test_mode" => {
+  const envFile = parseEnvFile();
+  const fileEnv = envFile.DODO_PAYMENTS_ENVIRONMENT?.trim().replace(
+    /^["']|["']$/g,
+    "",
+  );
+  if (fileEnv === "live_mode" || fileEnv === "test_mode") {
+    return fileEnv;
+  }
   const rawEnv =
     (env?.DODO_PAYMENTS_ENVIRONMENT as string) ||
     process.env.DODO_PAYMENTS_ENVIRONMENT;
-  const environment = rawEnv === "live_mode" ? "live_mode" : "test_mode";
+  return rawEnv === "live_mode" ? "live_mode" : "test_mode";
+};
 
+export const getDodo = (env?: Record<string, unknown>): DodoPayments | null => {
+  const environment = getDodoEnvironment(env);
   const apiKey = getDodoApiKey(env);
 
   if (!apiKey || apiKey.startsWith("test_sk_placeholder")) {
@@ -311,8 +374,23 @@ export async function syncFromDodoPayments(
         }
       }
     }
-  } catch (err) {
-    console.warn("Dodo direct query notice:", err);
+  } catch (err: unknown) {
+    const errorObj = err as { status?: number; message?: string } | undefined;
+    const isAuthError =
+      errorObj?.status === 401 ||
+      String(errorObj?.message || "").includes("401") ||
+      String(errorObj?.message || "").includes("Unauthorized");
+
+    if (isAuthError) {
+      console.warn(
+        "[Dodo Payments] Upstream authentication notice: Credentials unauthorized (401). Continuing with cached/database subscription record.",
+      );
+    } else {
+      console.warn(
+        "Dodo direct query notice:",
+        err instanceof Error ? err.message : String(err),
+      );
+    }
   }
 
   return null;
