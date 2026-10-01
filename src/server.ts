@@ -5,6 +5,7 @@ import { renderErrorPage } from "./lib/error-page";
 import { handleCheckout } from "../server/api/checkout";
 import { handleVerifyCheckout } from "../server/api/checkout/verify";
 import { handleDiscover } from "../server/api/brands/discover";
+import { handleReveal } from "../server/api/brands/reveal";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
 import { handleSubscriptionCurrent } from "../server/api/subscription/current";
 
@@ -89,6 +90,9 @@ export default {
         request.method === "POST"
       ) {
         return await handleDiscover(request, env);
+      }
+      if (url.pathname === "/api/brands/reveal" && request.method === "POST") {
+        return await handleReveal(request, env);
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
         return await handleDodoWebhook(request, env);

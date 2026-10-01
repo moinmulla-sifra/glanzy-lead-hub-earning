@@ -1,0 +1,7 @@
+{
+  "name": "Branzly - Brand Discovery & Creator Outreach Intelligence Platform",
+  "description": "Discover brand opportunities, verified contacts, and manage outreach workflows for creators and agencies.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

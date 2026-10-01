@@ -48,12 +48,19 @@ export const handleDiscover = async (
   try {
     const supabase = getSupabase(env);
     const body = await request.json().catch(() => ({}));
-    const token = request.headers.get("Authorization")?.replace("Bearer ", "");
+    const authHeader =
+      request.headers.get("Authorization") ||
+      request.headers.get("authorization");
+    const token = authHeader?.replace("Bearer ", "").trim();
 
-    let user: { id: string } | null = null;
+    let user: { id: string; email?: string } | null = null;
+    let userEmail: string | null = null;
     if (token) {
       const { data } = await supabase.auth.getUser(token);
-      user = (data?.user as { id: string } | null) || null;
+      user = (data?.user as { id: string; email?: string } | null) || null;
+      if (user?.email) {
+        userEmail = user.email;
+      }
     }
 
     const {
@@ -230,9 +237,15 @@ export const handleDiscover = async (
       { headers: { "Content-Type": "application/json" } },
     );
   } catch (err: unknown) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    const errorObj = err as { message?: string } | undefined;
+    return new Response(
+      JSON.stringify({
+        error: errorObj?.message || "Error processing discover request",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 };

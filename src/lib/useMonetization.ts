@@ -96,7 +96,8 @@ export function useMonetization(userId: string | null) {
   const currentPlan = (subData?.plan as PlanType) || "free";
   const planConfig = PLANS[currentPlan];
 
-  const shouldShowAds = false;
+  const isPaid = currentPlan !== "free" && subData?.status === "active";
+  const shouldShowAds = !isPaid && (planConfig?.features?.ads_enabled ?? true);
 
   return {
     workspaceId,
@@ -105,8 +106,9 @@ export function useMonetization(userId: string | null) {
     planConfig,
     features: planConfig.features,
     limits: planConfig.limits,
-    isPaid: currentPlan !== "free",
+    isPaid,
     shouldShowAds,
+    subscriptionDetails: subData,
     isLoading,
   };
 }

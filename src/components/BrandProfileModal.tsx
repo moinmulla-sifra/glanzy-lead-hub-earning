@@ -43,6 +43,29 @@ interface BrandProfileModalProps {
   onStartOutreach?: () => void; // Keeping for compatibility, but we might handle it internally
 }
 
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return "••••••••@••••••.com";
+  const parts = email.split("@");
+  if (parts.length < 2) return "••••••••@••••••.com";
+  const [local, domain] = parts;
+  const maskedLocal =
+    local.length > 2
+      ? `${local[0]}${"•".repeat(Math.min(local.length - 2, 5))}${local[local.length - 1]}`
+      : `${local[0]}••`;
+  const domParts = domain.split(".");
+  const maskedDomain = domParts[0]
+    ? `${domParts[0][0]}${"•".repeat(Math.min(domParts[0].length - 1, 5))}`
+    : "••••";
+  return `${maskedLocal}@${maskedDomain}.${domParts[1] || "com"}`;
+}
+
+function maskPhone(phone: string | null | undefined): string {
+  if (!phone) return "+•• ••••• ••••";
+  return phone.length > 6
+    ? `${phone.slice(0, 3)} ••••• ••${phone.slice(-2)}`
+    : "+•• ••••• ••••";
+}
+
 export const BrandProfileModal = React.memo(function BrandProfileModal({
   brand,
   isOpen,
@@ -52,6 +75,7 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
   isSaving,
 }: BrandProfileModalProps) {
   const [showContact, setShowContact] = useState(false);
+  const [isRevealing, setIsRevealing] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -65,6 +89,90 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  const { data: revealStatus, refetch: refetchReveal } = useQuery({
+    queryKey: ["brand-reveal-status", brand?.id],
+    enabled: !!brand?.id && isOpen,
+    queryFn: async () => {
+      const { data: session } = await supabase.auth.getSession();
+      const token = session?.session?.access_token;
+      if (!token) return null;
+      const res = await fetch("/api/brands/reveal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ brandId: brand!.id, checkOnly: true }),
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+      return null;
+    },
+  });
+
+  const handleRevealContact = async () => {
+    if (!brand) return;
+    setIsRevealing(true);
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      const token = session?.session?.access_token;
+      if (!token) {
+        toast.error("Please sign in to reveal contacts");
+        return;
+      }
+      const res = await fetch("/api/brands/reveal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ brandId: brand.id, checkOnly: false }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (data.limitReached) {
+          toast.error(
+            data.error ||
+              "Monthly contact reveal limit reached. Please upgrade your plan.",
+          );
+        } else {
+          toast.error(data.error || "Failed to reveal contact");
+        }
+        return;
+      }
+      if (data.revealed) {
+        toast.success(
+          data.alreadyRevealed
+            ? "Contact details loaded (previously revealed)"
+            : `Contact revealed! (${data.revealsRemaining} remaining this month)`,
+        );
+        await refetchReveal();
+        queryClient.invalidateQueries({
+          queryKey: ["brand-reveal-status", brand.id],
+        });
+      } else if (data.noContactAvailable) {
+        toast.info(
+          data.message ||
+            "No direct contact details currently available for this brand.",
+        );
+      }
+    } catch (e) {
+      console.warn("Reveal error:", e);
+      toast.error("Error connecting to reveal service");
+    } finally {
+      setIsRevealing(false);
+    }
+  };
+
+  const isRevealed = Boolean(revealStatus?.revealed);
+  const effectiveEmail = isRevealed
+    ? revealStatus?.contact?.email || brand?.email
+    : brand?.email;
+  const effectivePhone = isRevealed
+    ? revealStatus?.contact?.phone || brand?.phone
+    : brand?.phone;
 
   const { data: contactsData } = useQuery({
     queryKey: ["brand-contacts", brand?.id],
@@ -403,56 +511,136 @@ export const BrandProfileModal = React.memo(function BrandProfileModal({
                         Primary Contact
                       </div>
                       <div className="space-y-4">
-                        {brand.contact_person && (
-                          <div>
-                            <div className="text-sm font-medium">
-                              {brand.contact_person}
+                        {!isRevealed ? (
+                          <div className="p-5 rounded-2xl bg-muted/30 border border-border/60 space-y-4">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="space-y-1">
+                                <div className="text-sm font-semibold flex items-center gap-2">
+                                  <Mail size={16} className="text-brand" />
+                                  <span>Direct Contact Available</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                  Contact information is protected to ensure
+                                  verified outreach.
+                                </p>
+                              </div>
+                              <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand/10 text-brand whitespace-nowrap">
+                                {revealStatus?.revealsRemaining !== undefined
+                                  ? `${revealStatus.revealsRemaining} reveals left`
+                                  : "Plan limits apply"}
+                              </span>
                             </div>
-                            {brand.contact_role && (
-                              <div className="text-sm text-muted-foreground">
-                                {brand.contact_role}
+
+                            <div className="space-y-2 py-2 border-y border-border/40 font-mono text-xs text-muted-foreground select-none">
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground/70">
+                                  Email:
+                                </span>
+                                <span className="font-semibold">
+                                  {maskEmail(brand.email)}
+                                </span>
+                              </div>
+                              {brand.phone && (
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground/70">
+                                    Phone:
+                                  </span>
+                                  <span className="font-semibold">
+                                    {maskPhone(brand.phone)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={handleRevealContact}
+                              disabled={isRevealing}
+                              className="w-full py-2.5 px-4 rounded-xl bg-brand text-white font-semibold text-xs sm:text-sm hover:bg-brand/90 transition-all shadow-md shadow-brand/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                              {isRevealing ? (
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Sparkles size={16} />
+                              )}
+                              Reveal Verified Contact
+                            </button>
+
+                            <p className="text-[11px] text-muted-foreground text-center">
+                              No duplicate deductions. Once revealed, this
+                              contact remains permanently unlocked for your
+                              workspace.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between pb-2 border-b border-border/40">
+                              <span className="text-xs font-semibold text-green-600 dark:text-green-400 flex items-center gap-1.5">
+                                <Check size={14} /> Unlocked for Workspace
+                              </span>
+                              <span className="text-[11px] text-muted-foreground">
+                                Permanent access
+                              </span>
+                            </div>
+
+                            {brand.contact_person && (
+                              <div>
+                                <div className="text-sm font-medium">
+                                  {brand.contact_person}
+                                </div>
+                                {brand.contact_role && (
+                                  <div className="text-sm text-muted-foreground">
+                                    {brand.contact_role}
+                                  </div>
+                                )}
                               </div>
                             )}
-                          </div>
-                        )}
 
-                        {brand.email && (
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
-                              <Mail size={14} className="text-brand" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-medium truncate">
-                                {brand.email}
+                            {effectiveEmail && (
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
+                                  <Mail size={14} className="text-brand" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <a
+                                    href={`mailto:${effectiveEmail}`}
+                                    className="text-sm font-medium hover:underline text-foreground truncate block"
+                                  >
+                                    {effectiveEmail}
+                                  </a>
+                                  <div className="text-xs text-muted-foreground">
+                                    Business Email
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => copyEmail(effectiveEmail)}
+                                  className="p-1.5 text-muted-foreground hover:bg-muted rounded-md transition-colors"
+                                  title="Copy Email"
+                                >
+                                  <span className="text-xs font-medium px-2">
+                                    Copy
+                                  </span>
+                                </button>
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                Business Email
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => copyEmail(brand.email!)}
-                              className="p-1.5 text-muted-foreground hover:bg-muted rounded-md transition-colors"
-                            >
-                              <span className="text-xs font-medium px-2">
-                                Copy
-                              </span>
-                            </button>
-                          </div>
-                        )}
+                            )}
 
-                        {brand.phone && (
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
-                              <Phone size={14} className="text-brand" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-medium">
-                                {brand.phone}
+                            {effectivePhone && (
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
+                                  <Phone size={14} className="text-brand" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <a
+                                    href={`tel:${effectivePhone}`}
+                                    className="text-sm font-medium hover:underline text-foreground"
+                                  >
+                                    {effectivePhone}
+                                  </a>
+                                  <div className="text-xs text-muted-foreground">
+                                    Business Phone
+                                  </div>
+                                </div>
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                Business Phone
-                              </div>
-                            </div>
+                            )}
                           </div>
                         )}
                       </div>

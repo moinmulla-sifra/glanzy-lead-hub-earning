@@ -20,6 +20,7 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { useDevice } from "@/lib/useDevice";
+import { useMonetization } from "@/lib/useMonetization";
 
 export const Route = createFileRoute("/_dashboard")({
   component: DashboardLayout,
@@ -36,6 +37,7 @@ function DashboardLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const { isMobile, deviceType } = useDevice();
+  const monetization = useMonetization(userId);
 
   useEffect(() => {
     let active = true;
@@ -302,8 +304,29 @@ function DashboardLayout() {
         )}
 
         <div className="flex-1 overflow-y-auto p-4 lg:p-8 pb-24 lg:pb-8 relative z-10 safe-area-bottom">
-          <div className="max-w-6xl mx-auto h-full">
-            <Outlet />
+          <div className="max-w-6xl mx-auto h-full flex flex-col">
+            {monetization.shouldShowAds && (
+              <div className="mb-4 shrink-0 px-4 py-3 rounded-xl border border-border/70 bg-card/60 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-sm">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand/10 text-brand shrink-0">
+                    Free Tier
+                  </span>
+                  <span className="text-muted-foreground font-medium">
+                    You are on the ad-supported Free plan. Upgrade to remove all
+                    ads, get higher search limits, and reveal verified contacts.
+                  </span>
+                </div>
+                <Link
+                  to="/settings"
+                  className="font-semibold text-brand hover:underline shrink-0 flex items-center gap-1 transition-colors"
+                >
+                  Upgrade to remove ads →
+                </Link>
+              </div>
+            )}
+            <div className="flex-1">
+              <Outlet />
+            </div>
           </div>
         </div>
       </main>

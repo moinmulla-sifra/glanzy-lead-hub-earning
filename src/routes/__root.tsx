@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import { DeviceProvider } from "@/lib/useDevice";
+import { supabase } from "@/lib/supabase";
 
 function NotFoundComponent() {
   return (
@@ -91,17 +92,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "Branzly" },
+        {
+          title:
+            "Branzly - Brand Discovery & Creator Outreach Intelligence Platform",
+        },
         {
           name: "description",
           content:
-            "Discover brand opportunities and manage your outreach with Branzly.",
+            "Discover brand opportunities, verified contacts, and manage outreach workflows for creators and agencies.",
         },
-        { property: "og:title", content: "Branzly" },
+        {
+          property: "og:title",
+          content:
+            "Branzly - Brand Discovery & Creator Outreach Intelligence Platform",
+        },
         {
           property: "og:description",
           content:
-            "Discover brand opportunities and manage your outreach with Branzly.",
+            "Discover brand opportunities, verified contacts, and manage outreach workflows for creators and agencies.",
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -161,14 +169,61 @@ function RootShell({ children }: { children: ReactNode }) {
 function GoogleAdSense() {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
 
-    const script = document.createElement("script");
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543";
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    document.head.appendChild(script);
+    let isCancelled = false;
+
+    async function evaluateAdsPolicy() {
+      try {
+        const { data } = await supabase.auth.getSession();
+        const user = data?.session?.user;
+        if (user) {
+          const res = await fetch(
+            `/api/subscription/current?userEmail=${encodeURIComponent(user.email || "")}`,
+            {
+              headers: data.session?.access_token
+                ? { Authorization: `Bearer ${data.session.access_token}` }
+                : {},
+            },
+          );
+          if (res.ok) {
+            const sub = await res.json();
+            if (
+              sub &&
+              sub.status === "active" &&
+              sub.plan &&
+              sub.plan !== "free"
+            ) {
+              // Paid subscriber: remove ads script and prevent injection
+              const existingScript = document.querySelector(
+                'script[src*="adsbygoogle.js"]',
+              );
+              if (existingScript?.parentNode) {
+                existingScript.parentNode.removeChild(existingScript);
+              }
+              return;
+            }
+          }
+        }
+      } catch {
+        // Fall back to showing ads for free tier / unauthenticated
+      }
+
+      if (isCancelled) return;
+      if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
+
+      const script = document.createElement("script");
+      script.src =
+        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4966868337893543";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      document.head.appendChild(script);
+    }
+
+    evaluateAdsPolicy();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   return null;
