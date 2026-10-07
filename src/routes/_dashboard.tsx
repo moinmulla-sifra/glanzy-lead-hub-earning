@@ -115,9 +115,10 @@ function DashboardLayout() {
     { id: "contacted", label: "Contacted", icon: Send, to: "/contacted" },
     {
       id: "for-you",
-      label: "For You",
+      label: "Bran AI",
       icon: Sparkles,
       to: "/for-you",
+      badge: "Agent",
     },
   ];
 
@@ -213,7 +214,12 @@ function DashboardLayout() {
                     size={18}
                     className={isActive ? "text-brand" : "opacity-70"}
                   />
-                  {item.label}
+                  <span>{item.label}</span>
+                  {"badge" in item && item.badge && (
+                    <span className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand/15 text-brand tracking-wider">
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}

@@ -1,1 +1,0 @@
-ALTER TABLE public.research_queue DISABLE ROW LEVEL SECURITY;

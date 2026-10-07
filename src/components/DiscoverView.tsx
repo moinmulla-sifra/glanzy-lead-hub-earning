@@ -2,6 +2,7 @@ import { BRAND_SELECT_FIELDS } from "@/lib/constants";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useMonetization } from "@/lib/useMonetization";
 import { useDevice } from "@/lib/useDevice";
+import { Link } from "@tanstack/react-router";
 
 import {
   useInfiniteQuery,
@@ -325,13 +326,26 @@ export function DiscoverView({
   return (
     <div className="flex flex-col gap-5 lg:gap-8 pb-12 animate-in fade-in duration-500 h-full">
       {/* Header Section */}
-      <div className="flex flex-col gap-1.5 sm:gap-2">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-          Discover Brands
-        </h1>
-        <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-          Find vetted brand sponsorship opportunities tailored to your audience.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-1.5 sm:gap-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            Discover Brands
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
+            Find vetted brand sponsorship opportunities tailored to your
+            audience.
+          </p>
+        </div>
+        <Link
+          to="/for-you"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-brand/10 hover:bg-brand/15 text-brand border border-brand/25 text-sm font-semibold transition-all hover:scale-102 active:scale-98 shrink-0 shadow-xs"
+        >
+          <Sparkles size={16} className="text-brand animate-pulse" />
+          <span>Ask Bran AI</span>
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand/20 text-brand uppercase">
+            Agent
+          </span>
+        </Link>
       </div>
 
       {/* Search and Filter Toolbar */}

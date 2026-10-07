@@ -6,6 +6,7 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
+import { BrandIntelligenceNetwork } from "@/components/BrandIntelligenceNetwork";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -13,7 +14,10 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background selection:bg-brand/20">
+    <div className="relative min-h-screen bg-background selection:bg-brand/20 overflow-x-hidden">
+      {/* Brand Intelligence Network Background Layer */}
+      <BrandIntelligenceNetwork />
+
       <header className="fixed top-0 left-0 right-0 h-16 border-b border-border/50 bg-background/80 backdrop-blur-xl z-50 flex items-center justify-between px-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <img
@@ -41,7 +45,7 @@ function LandingPage() {
         </nav>
       </header>
 
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+      <main className="relative z-10 pt-32 pb-24 px-6 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 text-brand text-sm font-semibold mb-6 border border-brand/20">
             <SparklesIcon className="w-4 h-4" /> Now in Public Beta
@@ -99,7 +103,7 @@ function LandingPage() {
         </div>
       </main>
 
-      <footer className="border-t border-border/50 py-12 px-6">
+      <footer className="relative z-10 border-t border-border/50 py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 opacity-75">
             <img

@@ -8,6 +8,7 @@ import { handleDiscover } from "../server/api/brands/discover";
 import { handleReveal } from "../server/api/brands/reveal";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
 import { handleSubscriptionCurrent } from "../server/api/subscription/current";
+import { handlePerfectFitAgent } from "../server/api/ai/perfect-fit";
 
 type ServerEntry = {
   fetch: (
@@ -96,6 +97,9 @@ export default {
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
         return await handleDodoWebhook(request, env);
+      }
+      if (url.pathname === "/api/ai/perfect-fit" && (request.method === "POST" || request.method === "GET")) {
+        return await handlePerfectFitAgent(request, env);
       }
       if (url.pathname === "/api/cron") {
         return new Response(

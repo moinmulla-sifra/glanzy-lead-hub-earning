@@ -10,4 +10,9 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  nitro: process.env.VERCEL
+    ? {
+        preset: "vercel",
+      }
+    : undefined,
 });
