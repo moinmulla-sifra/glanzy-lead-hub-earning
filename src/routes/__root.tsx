@@ -142,6 +142,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   gtag('config', 'G-1C4EYN1KVD');
 `,
         },
+        {
+          type: "text/javascript",
+          children: `(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A7946827-08c9-435a-8985-492d36b7d6f51.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');`,
+        },
         { children: THEME_INIT_SCRIPT },
       ],
     }),

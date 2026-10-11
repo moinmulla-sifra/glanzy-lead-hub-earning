@@ -98,7 +98,10 @@ export default {
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
         return await handleDodoWebhook(request, env);
       }
-      if (url.pathname === "/api/ai/perfect-fit" && (request.method === "POST" || request.method === "GET")) {
+      if (
+        url.pathname === "/api/ai/perfect-fit" &&
+        (request.method === "POST" || request.method === "GET")
+      ) {
         return await handlePerfectFitAgent(request, env);
       }
       if (url.pathname === "/api/cron") {
