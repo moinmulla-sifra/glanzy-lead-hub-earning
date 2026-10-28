@@ -13,9 +13,7 @@ function sanitizeSupabaseKey(rawKey: string | undefined | null): string {
   const parts = key.split(".");
   if (parts.length >= 3) {
     const sigMatch = parts[2].match(/^[A-Za-z0-9_-]+/);
-    if (sigMatch) {
-      return `${parts[0]}.${parts[1]}.${sigMatch[0]}`;
-    }
+    if (sigMatch) return `${parts[0]}.${parts[1]}.${sigMatch[0]}`;
   }
   return key;
 }
@@ -25,22 +23,115 @@ const getSupabase = (env?: Record<string, unknown>) => {
     (env?.VITE_SUPABASE_URL as string) ||
     process.env.VITE_SUPABASE_URL ||
     DEFAULT_SUPABASE_URL;
-
   const rawKey =
     (env?.VITE_SUPABASE_SERVICE_ROLE_KEY as string) ||
     (env?.VITE_SUPABASE_ANON_KEY as string) ||
     process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
     process.env.VITE_SUPABASE_ANON_KEY ||
     DEFAULT_SUPABASE_KEY;
-
   const url =
     rawUrl && !rawUrl.includes("placeholder")
       ? rawUrl.trim()
       : DEFAULT_SUPABASE_URL;
   const key = sanitizeSupabaseKey(rawKey) || DEFAULT_SUPABASE_KEY;
-
   return createClient(url, key);
 };
+
+function normalizePlan(plan: string): PlanType {
+  if (plan === "pro") plan = "creator_pro";
+  if (plan === "agency") plan = "agency_pro";
+  return PLANS[plan as PlanType] ? (plan as PlanType) : "free";
+}
+
+function getSortColumn(sortOption?: string): { column: string; ascending: boolean } {
+  switch ((sortOption || "").toLowerCase()) {
+    case "newest":
+    case "recent":
+      return { column: "created_at", ascending: false };
+    case "highest score":
+    case "top score":
+    case "best match":
+    default:
+      return { column: "lead_score", ascending: false };
+  }
+}
+
+/**
+ * Temporary resilient data strategy:
+ * Google Sheets remains the preferred brand-intelligence source.
+ * If Sheets is unavailable or returns no rows, use the existing Supabase
+ * brand catalogue rather than showing a misleading empty Discover page.
+ */
+async function getSupabaseBrandFallback(
+  supabase: ReturnType<typeof createClient>,
+  options: {
+    search?: string;
+    filters?: Record<string, unknown>;
+    sortOption?: string;
+    pageParam: number;
+    pageSize: number;
+  },
+) {
+  const { search, filters, sortOption, pageParam, pageSize } = options;
+  let query = supabase
+    .from("brands")
+    .select("*", { count: "exact" })
+    .eq("status", "published");
+
+  if (search?.trim()) {
+    const term = search.trim().replace(/[,%()]/g, " ");
+    query = query.or(
+      `company_name.ilike.%${term}%,industry.ilike.%${term}%,product.ilike.%${term}%,category.ilike.%${term}%,subcategory.ilike.%${term}%,country.ilike.%${term}%,company_description.ilike.%${term}%`,
+    );
+  }
+
+  if (filters && typeof filters === "object") {
+    const country = filters.country;
+    const industry = filters.industry;
+    const category = filters.category;
+    const stage = filters.companyStage ?? filters.company_stage;
+    if (typeof country === "string" && country && country.toLowerCase() !== "all") {
+      query = query.ilike("country", country);
+    }
+    if (typeof industry === "string" && industry && industry.toLowerCase() !== "all") {
+      query = query.ilike("industry", industry);
+    }
+    if (typeof category === "string" && category && category.toLowerCase() !== "all") {
+      query = query.ilike("category", category);
+    }
+    if (typeof stage === "string" && stage && stage.toLowerCase() !== "all") {
+      query = query.ilike("company_stage", stage);
+    }
+  }
+
+  const sort = getSortColumn(sortOption);
+  query = query.order(sort.column, { ascending: sort.ascending, nullsFirst: false });
+  const from = Math.max(0, pageParam) * Math.max(1, pageSize);
+  query = query.range(from, from + Math.max(1, pageSize) - 1);
+
+  const { data, error, count } = await query;
+  if (error) throw error;
+  const brands = (data || []).map((brand: Record<string, unknown>) => ({
+    ...brand,
+    id: brand.id,
+    brand_id: brand.id,
+    name: brand.company_name,
+    primary_product_summary:
+      brand.product_description || brand.product || null,
+    opportunity_signals: brand.opportunity_signals || brand.opportunity_signals,
+    source: "supabase_fallback",
+  }));
+  const totalCount = count || 0;
+  return {
+    brands,
+    count: brands.length,
+    totalCount,
+    nextPage: from + brands.length < totalCount ? pageParam + 1 : null,
+    page: pageParam,
+    pageSize,
+    source: "supabase_fallback",
+  };
+}
 
 export const handleDiscover = async (
   request: Request,
@@ -60,11 +151,9 @@ export const handleDiscover = async (
       try {
         const { data } = await supabase.auth.getUser(token);
         user = (data?.user as { id: string; email?: string } | null) || null;
-        if (user?.email) {
-          userEmail = user.email;
-        }
+        if (user?.email) userEmail = user.email;
       } catch {
-        // Non-fatal if Supabase auth endpoint unavailable
+        // Continue with the public catalogue; auth failures must not break discovery.
       }
     }
 
@@ -88,11 +177,11 @@ export const handleDiscover = async (
           .maybeSingle();
         activeWorkspaceId = member?.workspace_id;
       } catch {
-        // Continue
+        // Discovery can continue without workspace-specific quota tracking.
       }
     }
 
-    let plan = "free";
+    let plan: string = "free";
     if (activeWorkspaceId) {
       const sub = await getEffectiveSubscription(
         activeWorkspaceId,
@@ -100,16 +189,10 @@ export const handleDiscover = async (
         env,
         authHeader,
       );
-      if (sub?.plan) {
-        plan = sub.plan;
-      }
+      if (sub?.plan) plan = sub.plan;
     }
-
-    if (plan === "pro") plan = "creator_pro";
-    if (plan === "agency") plan = "agency_pro";
-    if (!PLANS[plan as PlanType]) plan = "free";
-
-    const planConfig = PLANS[plan as PlanType];
+    const planType = normalizePlan(plan);
+    const planConfig = PLANS[planType];
 
     const now = new Date();
     const startOfDay = new Date(
@@ -130,16 +213,15 @@ export const handleDiscover = async (
 
         let searches = usage?.searches || 0;
         const leads = usage?.brand_views || 0;
-
         if (pageParam === 0 && search) {
           if (
             planConfig.limits.daily_brand_searches !== "unlimited" &&
             searches >= planConfig.limits.daily_brand_searches
           ) {
-            return new Response(
-              JSON.stringify({ error: "Daily search limit reached" }),
-              { status: 403, headers: { "Content-Type": "application/json" } },
-            );
+            return new Response(JSON.stringify({ error: "Daily search limit reached" }), {
+              status: 403,
+              headers: { "Content-Type": "application/json" },
+            });
           }
           searches++;
         }
@@ -148,10 +230,10 @@ export const handleDiscover = async (
           planConfig.limits.daily_brand_leads !== "unlimited" &&
           leads >= planConfig.limits.daily_brand_leads
         ) {
-          return new Response(
-            JSON.stringify({ error: "Daily lead limit reached" }),
-            { status: 403, headers: { "Content-Type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: "Daily lead limit reached" }), {
+            status: 403,
+            headers: { "Content-Type": "application/json" },
+          });
         }
 
         if (!usage) {
@@ -170,27 +252,40 @@ export const handleDiscover = async (
         } else {
           await supabase
             .from("usage")
-            .update({
-              searches: searches,
-              brand_views: leads + pageSize,
-            })
+            .update({ searches, brand_views: leads + pageSize })
             .eq("id", usage.id);
         }
       } catch {
-        // Usage tracking graceful error handling
+        // Quota telemetry should not make discovery unavailable.
       }
     }
 
-    // Google Sheet as single source of truth for brand discovery
-    const result = googleSheetsService.getBrands({
-      search,
-      filters,
-      sortOption,
-      pageParam,
-      pageSize,
-    });
+    let result: any = null;
+    let source = "google_sheets";
+    try {
+      result = googleSheetsService.getBrands({
+        search,
+        filters,
+        sortOption,
+        pageParam,
+        pageSize,
+      });
+    } catch (sheetError) {
+      console.error("Google Sheets brand lookup failed; using Supabase fallback.", sheetError);
+    }
 
-    const maskedBrands = result.brands.map((brand) => {
+    if (!result || !Array.isArray(result.brands) || result.brands.length === 0) {
+      result = await getSupabaseBrandFallback(supabase, {
+        search,
+        filters,
+        sortOption,
+        pageParam,
+        pageSize,
+      });
+      source = "supabase_fallback";
+    }
+
+    const maskedBrands = result.brands.map((brand: Record<string, any>) => {
       if (!planConfig.features.full_brand_intelligence) {
         return {
           ...brand,
@@ -219,20 +314,18 @@ export const handleDiscover = async (
         nextPage: result.nextPage,
         page: result.page,
         pageSize: result.pageSize,
-        source: "google_sheets",
+        source: result.source || source,
       }),
       { headers: { "Content-Type": "application/json" } },
     );
   } catch (err: unknown) {
     const errorObj = err as { message?: string } | undefined;
+    console.error("Discover request failed:", errorObj?.message || err);
     return new Response(
       JSON.stringify({
         error: errorObj?.message || "Error processing discover request",
       }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+      { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }
 };
