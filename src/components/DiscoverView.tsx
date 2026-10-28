@@ -92,121 +92,62 @@ export function DiscoverView({
   // Saved brands query
   const savedQuery = useQuery({
     queryKey: ["saved-brand-ids", workspaceId],
-    enabled: !!workspaceId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("saved_brands")
-        .select("brand_id")
-        .eq("workspace_id", workspaceId!);
-      if (error) return new Set<string>();
-      return new Set(data.map((d) => d.brand_id));
+      const res = await fetch("/api/brands/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspaceId }),
+      });
+      if (!res.ok) return new Set<string>();
+      const data = await res.json();
+      return new Set<string>(data.savedBrandIds || []);
     },
   });
 
   const savedIds = savedQuery.data || new Set();
 
-  // Dual-mode fetcher: tries API route, falls back to direct Supabase query
+  // Fetch brand leads strictly from server Google Sheets endpoint
   const fetchBrands = async ({ pageParam = 0 }) => {
     const pageSize = 12;
 
-    // 1. Try server-side API endpoint first
-    try {
-      const { data: session } = await supabase.auth.getSession();
-      const token = session?.session?.access_token;
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-
-      const response = await fetch("/api/brands/discover", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          workspaceId,
-          pageParam,
-          pageSize,
-          search: debouncedSearch,
-          filters: activeFilters,
-          sortOption,
-        }),
-      });
-
-      const contentType = response.headers.get("content-type") || "";
-      if (response.ok && contentType.includes("application/json")) {
-        const data = await response.json();
-        if (data && Array.isArray(data.brands)) {
-          const totalCount =
-            data.totalCount ?? data.count ?? data.brands.length;
-          return {
-            ...data,
-            totalCount,
-            count: totalCount,
-          };
-        }
-      }
-    } catch {
-      // API unavailable, fall back to direct Supabase client query
+    const { data: session } = await supabase.auth
+      .getSession()
+      .catch(() => ({ data: null }));
+    const token = session?.session?.access_token;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // 2. Direct Supabase Query Fallback (works seamlessly on Vercel, static preview, anywhere)
-    const from = pageParam * pageSize;
-    const to = from + pageSize - 1;
+    const response = await fetch("/api/brands/discover", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        workspaceId,
+        pageParam,
+        pageSize,
+        search: debouncedSearch,
+        filters: activeFilters,
+        sortOption,
+      }),
+    });
 
-    let q = supabase.from("brands").select("*", { count: "exact" });
-
-    if (debouncedSearch && debouncedSearch.trim()) {
-      const s = debouncedSearch.trim();
-      q = q.or(
-        `company_name.ilike.%${s}%,industry.ilike.%${s}%,country.ilike.%${s}%`,
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(
+        errData.error || `Failed to fetch brand leads: ${response.status}`,
       );
     }
 
-    if (activeFilters.industry && activeFilters.industry.length > 0) {
-      q = q.in("industry", activeFilters.industry);
-    }
-    if (activeFilters.country && activeFilters.country.length > 0) {
-      q = q.in("country", activeFilters.country);
-    }
-    if (activeFilters.company_stage && activeFilters.company_stage.length > 0) {
-      q = q.in("company_stage", activeFilters.company_stage);
-    }
-    if (
-      activeFilters.budget_potential &&
-      activeFilters.budget_potential.length > 0
-    ) {
-      q = q.in("budget_potential", activeFilters.budget_potential);
-    }
-
-    if (sortOption === "lead_score") {
-      q = q.order("lead_score", { ascending: false, nullsFirst: false });
-    } else if (sortOption === "creator_fit") {
-      q = q.order("influencer_fit_score", {
-        ascending: false,
-        nullsFirst: false,
-      });
-    } else if (sortOption === "recent") {
-      q = q.order("created_at", { ascending: false });
-    } else if (sortOption === "az") {
-      q = q.order("company_name", { ascending: true });
-    } else {
-      // best_match default
-      q = q.order("lead_score", { ascending: false, nullsFirst: false });
-    }
-
-    const { data: brands, count, error } = await q.range(from, to);
-
-    if (error) {
-      console.error("Supabase direct query error:", error);
-      throw new Error(error.message || "Failed to load brands");
-    }
-
-    const totalCount = count ?? (brands ? brands.length : 0);
-    const hasMore = from + pageSize < totalCount;
+    const data = await response.json();
+    const totalCount =
+      data.totalCount ?? data.count ?? (data.brands ? data.brands.length : 0);
+    const hasMore = (pageParam + 1) * pageSize < totalCount;
 
     return {
-      brands: brands || [],
+      brands: data.brands || [],
       count: totalCount,
       totalCount,
       nextPage: hasMore ? pageParam + 1 : undefined,
@@ -243,28 +184,25 @@ export function DiscoverView({
 
   const saveMutation = useMutation({
     mutationFn: async (brandId: string) => {
-      if (!workspaceId) throw new Error("No workspace found");
-
       const isCurrentlySaved = savedIds.has(brandId);
-
-      if (isCurrentlySaved) {
-        const { error } = await supabase
-          .from("saved_brands")
-          .delete()
-          .match({ workspace_id: workspaceId, brand_id: brandId });
-        if (error) throw error;
-        return { action: "unsaved", brandId };
-      } else {
-        const { error } = await supabase
-          .from("saved_brands")
-          .insert({ workspace_id: workspaceId, brand_id: brandId });
-        if (error) throw error;
-        return { action: "saved", brandId };
-      }
+      const res = await fetch("/api/brands/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId,
+          action: isCurrentlySaved ? "unsave" : "save",
+          brandId,
+        }),
+      });
+      if (!res.ok) throw new Error("Could not update saved brands");
+      return { action: isCurrentlySaved ? "unsaved" : "saved", brandId };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["saved-brand-ids", workspaceId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["saved_brands_query"],
       });
       toast.success(
         data.action === "saved" ? "Brand saved to list" : "Brand removed",

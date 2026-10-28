@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { PLANS, PlanType } from "../../../src/lib/monetization";
 import { getEffectiveSubscription } from "../../lib/subscriptionStore";
+import { googleSheetsService } from "../../lib/googleSheetsService";
 
 const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
 const DEFAULT_SUPABASE_KEY =
@@ -56,10 +57,14 @@ export const handleDiscover = async (
     let user: { id: string; email?: string } | null = null;
     let userEmail: string | null = null;
     if (token) {
-      const { data } = await supabase.auth.getUser(token);
-      user = (data?.user as { id: string; email?: string } | null) || null;
-      if (user?.email) {
-        userEmail = user.email;
+      try {
+        const { data } = await supabase.auth.getUser(token);
+        user = (data?.user as { id: string; email?: string } | null) || null;
+        if (user?.email) {
+          userEmail = user.email;
+        }
+      } catch {
+        // Non-fatal if Supabase auth endpoint unavailable
       }
     }
 
@@ -74,13 +79,17 @@ export const handleDiscover = async (
 
     let activeWorkspaceId = workspaceId;
     if (!activeWorkspaceId && user?.id) {
-      const { data: member } = await supabase
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("user_id", user.id)
-        .limit(1)
-        .maybeSingle();
-      activeWorkspaceId = member?.workspace_id;
+      try {
+        const { data: member } = await supabase
+          .from("workspace_members")
+          .select("workspace_id")
+          .eq("user_id", user.id)
+          .limit(1)
+          .maybeSingle();
+        activeWorkspaceId = member?.workspace_id;
+      } catch {
+        // Continue
+      }
     }
 
     let plan = "free";
@@ -110,108 +119,83 @@ export const handleDiscover = async (
     ).toISOString();
 
     if (activeWorkspaceId) {
-      const { data: usage } = await supabase
-        .from("usage")
-        .select("*")
-        .eq("workspace_id", activeWorkspaceId)
-        .gte("period_start", startOfDay)
-        .limit(1)
-        .maybeSingle();
+      try {
+        const { data: usage } = await supabase
+          .from("usage")
+          .select("*")
+          .eq("workspace_id", activeWorkspaceId)
+          .gte("period_start", startOfDay)
+          .limit(1)
+          .maybeSingle();
 
-      let searches = usage?.searches || 0;
-      const leads = usage?.brand_views || 0;
+        let searches = usage?.searches || 0;
+        const leads = usage?.brand_views || 0;
 
-      if (pageParam === 0 && search) {
+        if (pageParam === 0 && search) {
+          if (
+            planConfig.limits.daily_brand_searches !== "unlimited" &&
+            searches >= planConfig.limits.daily_brand_searches
+          ) {
+            return new Response(
+              JSON.stringify({ error: "Daily search limit reached" }),
+              { status: 403, headers: { "Content-Type": "application/json" } },
+            );
+          }
+          searches++;
+        }
+
         if (
-          planConfig.limits.daily_brand_searches !== "unlimited" &&
-          searches >= planConfig.limits.daily_brand_searches
+          planConfig.limits.daily_brand_leads !== "unlimited" &&
+          leads >= planConfig.limits.daily_brand_leads
         ) {
           return new Response(
-            JSON.stringify({ error: "Daily search limit reached" }),
+            JSON.stringify({ error: "Daily lead limit reached" }),
             { status: 403, headers: { "Content-Type": "application/json" } },
           );
         }
-        searches++;
-      }
 
-      if (
-        planConfig.limits.daily_brand_leads !== "unlimited" &&
-        leads >= planConfig.limits.daily_brand_leads
-      ) {
-        return new Response(
-          JSON.stringify({ error: "Daily lead limit reached" }),
-          { status: 403, headers: { "Content-Type": "application/json" } },
-        );
-      }
-
-      if (!usage) {
-        const endOfDay = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() + 1,
-        ).toISOString();
-        await supabase.from("usage").insert({
-          workspace_id: activeWorkspaceId,
-          period_start: startOfDay,
-          period_end: endOfDay,
-          searches: search && pageParam === 0 ? 1 : 0,
-          brand_views: pageSize,
-        });
-      } else {
-        await supabase
-          .from("usage")
-          .update({
-            searches: searches,
-            brand_views: leads + pageSize,
-          })
-          .eq("id", usage.id);
+        if (!usage) {
+          const endOfDay = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + 1,
+          ).toISOString();
+          await supabase.from("usage").insert({
+            workspace_id: activeWorkspaceId,
+            period_start: startOfDay,
+            period_end: endOfDay,
+            searches: search && pageParam === 0 ? 1 : 0,
+            brand_views: pageSize,
+          });
+        } else {
+          await supabase
+            .from("usage")
+            .update({
+              searches: searches,
+              brand_views: leads + pageSize,
+            })
+            .eq("id", usage.id);
+        }
+      } catch {
+        // Usage tracking graceful error handling
       }
     }
 
-    let q = supabase.from("brands").select("*", { count: "exact" });
+    // Google Sheet as single source of truth for brand discovery
+    const result = googleSheetsService.getBrands({
+      search,
+      filters,
+      sortOption,
+      pageParam,
+      pageSize,
+    });
 
-    if (search) {
-      q = q.or(
-        `company_name.ilike.%${search}%,industry.ilike.%${search}%,country.ilike.%${search}%`,
-      );
-    }
-
-    if (filters?.industry && filters.industry.length > 0)
-      q = q.in("industry", filters.industry);
-    if (filters?.country && filters.country.length > 0)
-      q = q.in("country", filters.country);
-
-    if (planConfig.features.advanced_filters) {
-      if (filters?.company_stage && filters.company_stage.length > 0)
-        q = q.in("company_stage", filters.company_stage);
-      if (filters?.budget_potential && filters.budget_potential.length > 0)
-        q = q.in("budget_potential", filters.budget_potential);
-    }
-
-    if (sortOption === "score") {
-      q = q.order("lead_score", { ascending: false });
-    } else if (sortOption === "recent") {
-      q = q.order("created_at", { ascending: false });
-    } else {
-      q = q.order("company_name", { ascending: true });
-    }
-
-    q = q.range(pageParam * pageSize, (pageParam + 1) * pageSize - 1);
-
-    const { data: brands, count, error } = await q;
-    if (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const maskedBrands = brands?.map((brand) => {
+    const maskedBrands = result.brands.map((brand) => {
       if (!planConfig.features.full_brand_intelligence) {
         return {
           ...brand,
-          product_description: planConfig.features.product_intelligence
-            ? brand.product_description
+          primary_product_summary: planConfig.features.product_intelligence
+            ? brand.primary_product_summary
             : "Upgrade to unlock product intelligence",
           recent_funding: planConfig.features.funding_intelligence
             ? brand.recent_funding
@@ -219,8 +203,8 @@ export const handleDiscover = async (
           marketing_activity: planConfig.features.marketing_intelligence
             ? brand.marketing_activity
             : "Upgrade to unlock marketing intelligence",
-          creator_signals: planConfig.features.creator_intelligence
-            ? brand.creator_signals
+          opportunity_signals: planConfig.features.creator_intelligence
+            ? brand.opportunity_signals
             : null,
         };
       }
@@ -230,9 +214,12 @@ export const handleDiscover = async (
     return new Response(
       JSON.stringify({
         brands: maskedBrands,
-        count,
-        nextPage:
-          (pageParam + 1) * pageSize < (count || 0) ? pageParam + 1 : undefined,
+        count: result.count,
+        totalCount: result.totalCount,
+        nextPage: result.nextPage,
+        page: result.page,
+        pageSize: result.pageSize,
+        source: "google_sheets",
       }),
       { headers: { "Content-Type": "application/json" } },
     );

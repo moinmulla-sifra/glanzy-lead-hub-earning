@@ -75,91 +75,30 @@ export function SavedView({
   const { workspaceId } = useMonetization(userId);
 
   const fetchSavedBrands = async ({ pageParam = 0 }) => {
-    if (!workspaceId) throw new Error("No workspace found");
     const pageSize = 12;
 
-    let q = supabase
-      .from("saved_brands")
-      .select(
-        `
-        *,
-        brand:brand_id!inner (${BRAND_SELECT_FIELDS})
-      `,
-        { count: "exact" },
-      )
-      .eq("workspace_id", workspaceId);
+    const res = await fetch("/api/brands/saved", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        workspaceId,
+        pageParam,
+        pageSize,
+        search: debouncedSearch,
+        filters: activeFilters,
+        sortOption,
+      }),
+    });
 
-    // Filters on saved_brands
-    if (activeFilters.status.length > 0) {
-      q = q.in("status", activeFilters.status);
+    if (!res.ok) {
+      throw new Error(`Failed to load saved brands: ${res.status}`);
     }
 
-    // Filters on brands
-    if (activeFilters.industry.length > 0) {
-      q = q.in("brand.industry", activeFilters.industry);
-    }
-    if (activeFilters.country.length > 0) {
-      q = q.in("brand.country", activeFilters.country);
-    }
-    if (activeFilters.company_stage.length > 0) {
-      q = q.in("brand.company_stage", activeFilters.company_stage);
-    }
-    if (activeFilters.budget_potential.length > 0) {
-      q = q.in("brand.budget_potential", activeFilters.budget_potential);
-    }
-
-    // Search
-    if (debouncedSearch) {
-      q = q.or(
-        `company_name.ilike.%${debouncedSearch}%,industry.ilike.%${debouncedSearch}%,country.ilike.%${debouncedSearch}%`,
-        { foreignTable: "brand" },
-      );
-    }
-
-    // Sorting
-    switch (sortOption) {
-      case "recently_saved":
-        q = q.order("created_at", { ascending: false });
-        break;
-      case "recently_updated":
-        q = q.order("updated_at", { ascending: false });
-        break;
-      case "creator_fit":
-        q = q.order("influencer_fit_score", {
-          foreignTable: "brand",
-          ascending: false,
-          nullsFirst: false,
-        });
-        break;
-      case "lead_score":
-        q = q.order("lead_score", {
-          foreignTable: "brand",
-          ascending: false,
-          nullsFirst: false,
-        });
-        break;
-      case "az":
-        q = q.order("company_name", { foreignTable: "brand", ascending: true });
-        break;
-      default:
-        q = q.order("created_at", { ascending: false });
-        break;
-    }
-
-    // Pagination
-    q = q.range(pageParam * pageSize, (pageParam + 1) * pageSize - 1);
-
-    const { data, error, count } = await q;
-
-    if (error) {
-      console.error(error);
-      throw error;
-    }
-
+    const data = await res.json();
     return {
-      savedBrands: data as SavedBrand[],
-      totalCount: count || 0,
-      nextPage: data.length === pageSize ? pageParam + 1 : undefined,
+      savedBrands: (data.savedBrands || []) as SavedBrand[],
+      totalCount: data.totalCount || 0,
+      nextPage: data.nextPage,
     };
   };
 
@@ -179,7 +118,6 @@ export function SavedView({
       sortOption,
     ],
     queryFn: fetchSavedBrands,
-    enabled: !!workspaceId,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
@@ -189,17 +127,25 @@ export function SavedView({
   const totalCount = savedBrandsData?.pages[0]?.totalCount || 0;
 
   const removeMutation = useMutation({
-    mutationFn: async (savedId: string) => {
-      const { error } = await supabase
-        .from("saved_brands")
-        .delete()
-        .eq("id", savedId);
-      if (error) throw error;
-      return savedId;
+    mutationFn: async (savedItem: SavedBrand | string) => {
+      const brandId =
+        typeof savedItem === "string" ? savedItem : savedItem.brand_id;
+      const res = await fetch("/api/brands/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId,
+          action: "unsave",
+          brandId,
+        }),
+      });
+      if (!res.ok) throw new Error("Could not remove brand");
+      return brandId;
     },
     onSuccess: () => {
       toast.success("Brand removed from Saved");
       queryClient.invalidateQueries({ queryKey: ["saved_brands_ids"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-brand-ids"] });
       queryClient.invalidateQueries({ queryKey: ["saved_brands_query"] });
       queryClient.invalidateQueries({ queryKey: ["outreach"] });
     },

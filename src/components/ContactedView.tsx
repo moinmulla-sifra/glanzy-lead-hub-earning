@@ -90,15 +90,20 @@ export function ContactedView({
 
   const contactedQuery = useQuery({
     queryKey: ["contacted", workspaceId],
-    enabled: !!workspaceId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("outreach")
-        .select(`*, brand:brand_id (${BRAND_SELECT_FIELDS})`)
-        .eq("workspace_id", workspaceId!)
-        .order("updated_at", { ascending: false });
-      if (error) throw error;
-      return data as unknown as Outreach[];
+      const res = await fetch("/api/brands/contacted", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId,
+          action: "list",
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to load contacted pipeline: ${res.status}`);
+      }
+      const data = await res.json();
+      return (data.outreach || []) as unknown as Outreach[];
     },
   });
 

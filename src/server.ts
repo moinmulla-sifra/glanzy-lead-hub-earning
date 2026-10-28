@@ -6,6 +6,9 @@ import { handleCheckout } from "../server/api/checkout";
 import { handleVerifyCheckout } from "../server/api/checkout/verify";
 import { handleDiscover } from "../server/api/brands/discover";
 import { handleReveal } from "../server/api/brands/reveal";
+import { handleBrandDetails } from "../server/api/brands/details";
+import { handleSavedBrands } from "../server/api/brands/saved";
+import { handleContactedBrands } from "../server/api/brands/contacted";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
 import { handleSubscriptionCurrent } from "../server/api/subscription/current";
 import { handlePerfectFitAgent } from "../server/api/ai/perfect-fit";
@@ -94,6 +97,21 @@ export default {
       }
       if (url.pathname === "/api/brands/reveal" && request.method === "POST") {
         return await handleReveal(request, env);
+      }
+      if (
+        url.pathname === "/api/brands/details" &&
+        (request.method === "GET" || request.method === "POST")
+      ) {
+        return await handleBrandDetails(request, env);
+      }
+      if (url.pathname === "/api/brands/saved" && request.method === "POST") {
+        return await handleSavedBrands(request, env);
+      }
+      if (
+        url.pathname === "/api/brands/contacted" &&
+        request.method === "POST"
+      ) {
+        return await handleContactedBrands(request, env);
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
         return await handleDodoWebhook(request, env);

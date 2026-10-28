@@ -90,14 +90,15 @@ export function ForYouView({ userId }: { userId: string | null }) {
   // 3. Fetch Saved Brands mapping
   useQuery({
     queryKey: ["saved_brands_set", workspaceId],
-    enabled: !!workspaceId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("saved_brands")
-        .select("brand_id")
-        .eq("workspace_id", workspaceId!);
-      if (error) throw error;
-      const ids = new Set<string>(data.map((d) => d.brand_id));
+      const res = await fetch("/api/brands/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspaceId }),
+      });
+      if (!res.ok) return new Set<string>();
+      const data = await res.json();
+      const ids = new Set<string>(data.savedBrandIds || []);
       setSavedBrandIds(ids);
       return ids;
     },
@@ -112,22 +113,16 @@ export function ForYouView({ userId }: { userId: string | null }) {
       brandId: string;
       isSaved: boolean;
     }) => {
-      if (!workspaceId) throw new Error("No workspace selected");
-
-      if (isSaved) {
-        const { error } = await supabase
-          .from("saved_brands")
-          .delete()
-          .eq("workspace_id", workspaceId)
-          .eq("brand_id", brandId);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("saved_brands").insert({
-          workspace_id: workspaceId,
-          brand_id: brandId,
-        });
-        if (error) throw error;
-      }
+      const res = await fetch("/api/brands/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId,
+          action: isSaved ? "unsave" : "save",
+          brandId,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to update saved brand");
       return { brandId, isSaved: !isSaved };
     },
     onSuccess: ({ brandId, isSaved }) => {
@@ -140,7 +135,8 @@ export function ForYouView({ userId }: { userId: string | null }) {
       queryClient.invalidateQueries({
         queryKey: ["saved_brands_set", workspaceId],
       });
-      queryClient.invalidateQueries({ queryKey: ["saved_brands"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-brand-ids"] });
+      queryClient.invalidateQueries({ queryKey: ["saved_brands_query"] });
       toast.success(isSaved ? "Saved brand to CRM" : "Removed from CRM");
     },
     onError: () => {

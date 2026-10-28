@@ -89,42 +89,32 @@ export const handlePerfectFitAgent = async (
       limit?: number;
     };
 
-    const supabase = getSupabase(env);
+    // 1. Fetch live brands from Google Sheets service (single source of truth)
+    const { googleSheetsService } =
+      await import("../../lib/googleSheetsService");
 
-    // 1. Fetch live brands from database to feed the agent
-    let query = supabase.from("brands").select(BRAND_SELECT_FIELDS).limit(40);
+    const sheetBrandsResult = googleSheetsService.getBrands({
+      search:
+        creatorProfile.niche &&
+        creatorProfile.niche !== "All" &&
+        creatorProfile.niche !== "General"
+          ? creatorProfile.niche
+          : prompt,
+      pageSize: 50,
+      sortOption: "creator_fit",
+    });
 
-    if (
-      creatorProfile.niche &&
-      creatorProfile.niche !== "All" &&
-      creatorProfile.niche !== "General"
-    ) {
-      query = query.ilike("industry", `%${creatorProfile.niche}%`);
-    } else {
-      query = query.order("influencer_fit_score", {
-        ascending: false,
-        nullsFirst: false,
-      });
-    }
-
-    const { data: rawBrands, error: brandsError } = await query;
-
-    // If niche filter returned few or no rows, fallback to top scored brands
-    const candidateBrands = [...(rawBrands || [])];
+    const candidateBrands = sheetBrandsResult.brands || [];
     if (candidateBrands.length < 10) {
-      const { data: fallbackBrands } = await supabase
-        .from("brands")
-        .select(BRAND_SELECT_FIELDS)
-        .limit(40)
-        .order("influencer_fit_score", { ascending: false, nullsFirst: false });
-      if (fallbackBrands && fallbackBrands.length > 0) {
-        // Merge without duplicates
-        const existingIds = new Set(candidateBrands.map((b) => b.id));
-        for (const fb of fallbackBrands) {
-          if (!existingIds.has(fb.id)) {
-            candidateBrands.push(fb);
-            existingIds.add(fb.id);
-          }
+      const allBrandsResult = googleSheetsService.getBrands({
+        pageSize: 50,
+        sortOption: "creator_fit",
+      });
+      const existingIds = new Set(candidateBrands.map((b) => b.id));
+      for (const fb of allBrandsResult.brands) {
+        if (!existingIds.has(fb.id)) {
+          candidateBrands.push(fb);
+          existingIds.add(fb.id);
         }
       }
     }
