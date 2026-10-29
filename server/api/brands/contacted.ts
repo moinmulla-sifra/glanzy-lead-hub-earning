@@ -60,7 +60,7 @@ interface OutreachRecord {
   updated_at: string;
 }
 
-function loadOutreachRecords(): OutreachRecord[] {
+export function loadOutreachRecords(): OutreachRecord[] {
   try {
     if (fs.existsSync(OUTREACH_FILE)) {
       return JSON.parse(fs.readFileSync(OUTREACH_FILE, "utf-8")) || [];

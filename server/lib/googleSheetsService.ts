@@ -159,11 +159,20 @@ interface SheetsStore {
   };
 }
 
-const STORE_PATH = path.join(
+const PRIMARY_STORE_PATH = path.join(
+  process.cwd(),
+  "server",
+  "data",
+  "google_sheets_store.json",
+);
+
+const FALLBACK_STORE_PATH = path.join(
   process.cwd(),
   ".data",
   "google_sheets_store.json",
 );
+
+const STORE_PATHS = [PRIMARY_STORE_PATH, FALLBACK_STORE_PATH];
 
 class GoogleSheetsService {
   private store: SheetsStore | null = null;
@@ -180,15 +189,24 @@ class GoogleSheetsService {
       return this.store;
     }
 
-    try {
-      if (fs.existsSync(STORE_PATH)) {
-        const raw = fs.readFileSync(STORE_PATH, "utf-8");
-        this.store = JSON.parse(raw);
-        this.lastLoadedAt = now;
-        return this.store!;
+    for (const p of STORE_PATHS) {
+      try {
+        if (fs.existsSync(p)) {
+          const raw = fs.readFileSync(p, "utf-8");
+          const parsed = JSON.parse(raw);
+          if (
+            parsed?.worksheets?.Brands &&
+            Array.isArray(parsed.worksheets.Brands) &&
+            parsed.worksheets.Brands.length > 0
+          ) {
+            this.store = parsed;
+            this.lastLoadedAt = now;
+            return this.store!;
+          }
+        }
+      } catch (err) {
+        console.warn(`Could not read sheets store at ${p}:`, err);
       }
-    } catch (err) {
-      console.warn("Could not read local sheets store:", err);
     }
 
     // Default empty store
@@ -209,15 +227,17 @@ class GoogleSheetsService {
 
   private saveStore() {
     try {
-      const dir = path.dirname(STORE_PATH);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      for (const p of STORE_PATHS) {
+        try {
+          const dir = path.dirname(p);
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+          }
+          fs.writeFileSync(p, JSON.stringify(this.store, null, 2), "utf-8");
+        } catch {
+          // ignore individual path error
+        }
       }
-      fs.writeFileSync(
-        STORE_PATH,
-        JSON.stringify(this.store, null, 2),
-        "utf-8",
-      );
       this.lastLoadedAt = Date.now();
     } catch (err) {
       console.error("Failed to save sheets store:", err);
@@ -520,6 +540,38 @@ class GoogleSheetsService {
         const matches = filters.budget_potential.some((fb) =>
           budget.includes(fb.toLowerCase()),
         );
+        if (!matches) return false;
+      }
+
+      if (filters.category && filters.category.length > 0) {
+        const cat = (b.category || b.subcategory || "").toLowerCase();
+        const matches = filters.category.some((fc) =>
+          cat.includes(fc.toLowerCase()),
+        );
+        if (!matches) return false;
+      }
+
+      if (filters.data_confidence && filters.data_confidence.length > 0) {
+        const conf = (b.data_confidence || "medium").toLowerCase();
+        const matches = filters.data_confidence.some((fc) =>
+          conf.includes(fc.toLowerCase()),
+        );
+        if (!matches) return false;
+      }
+
+      if (filters.creator_activity && filters.creator_activity.length > 0) {
+        const hasWorksWith = Boolean(b.works_with_creators);
+        const hasUgc = Boolean(b.ugc_activity);
+        const hasAmbassador = Boolean(b.ambassador_activity);
+        const hasAffiliate = Boolean(b.affiliate_program);
+
+        const matches = filters.creator_activity.some((fa) => {
+          if (fa === "works_with_creators") return hasWorksWith;
+          if (fa === "ugc") return hasUgc;
+          if (fa === "ambassador") return hasAmbassador;
+          if (fa === "affiliate") return hasAffiliate;
+          return true;
+        });
         if (!matches) return false;
       }
 

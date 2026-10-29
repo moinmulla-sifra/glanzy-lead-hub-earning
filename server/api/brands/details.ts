@@ -7,7 +7,13 @@ export const handleBrandDetails = async (
 ) => {
   try {
     const url = new URL(request.url);
-    const brandId = url.searchParams.get("id") || "";
+    let brandId =
+      url.searchParams.get("id") || url.searchParams.get("brandId") || "";
+
+    if (!brandId && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      brandId = (body.id as string) || (body.brandId as string) || "";
+    }
 
     if (!brandId) {
       return new Response(JSON.stringify({ error: "Missing brand id" }), {

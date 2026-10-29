@@ -1,20 +1,17 @@
-import { BRAND_SELECT_FIELDS } from "@/lib/constants";
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { useMonetization } from "@/lib/useMonetization";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useDevice } from "@/lib/useDevice";
 import { Link } from "@tanstack/react-router";
-
 import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
   useQuery,
 } from "@tanstack/react-query";
-import { supabase, type Brand } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { type Brand } from "@/types/brand";
 import { toast } from "sonner";
 import {
   Search,
-  Filter,
   Plus,
   Check,
   Star,
@@ -28,6 +25,9 @@ import {
   Building2,
   AlertCircle,
   RotateCcw,
+  ExternalLink,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 import { BrandProfileModal } from "./BrandProfileModal";
 
@@ -35,13 +35,13 @@ type SortOption = "best_match" | "lead_score" | "creator_fit" | "recent" | "az";
 
 export function DiscoverView({
   userId,
-  onStartOutreach,
+  onStartOutreach: _onStartOutreach,
 }: {
   userId: string | null;
   onStartOutreach?: (brandId: string) => void;
 }) {
   const queryClient = useQueryClient();
-  const { isMobile, deviceType } = useDevice();
+  const { isMobile } = useDevice();
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -49,26 +49,35 @@ export function DiscoverView({
   // Modal state
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
 
-  // Filters state
+  // Expanded filters state matching Google Sheets contract
   const [activeFilters, setActiveFilters] = useState<{
     industry: string[];
+    category: string[];
     country: string[];
     company_stage: string[];
     budget_potential: string[];
+    creator_activity: string[];
+    data_confidence: string[];
   }>({
     industry: [],
+    category: [],
     country: [],
     company_stage: [],
     budget_potential: [],
+    creator_activity: [],
+    data_confidence: [],
   });
 
   const [sortOption, setSortOption] = useState<SortOption>("best_match");
 
+  // Keep track of latest request to prevent stale requests from overwriting
+  const requestIdRef = useRef(0);
+
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
-    }, 300);
+      setDebouncedSearch(searchTerm.trim());
+    }, 350);
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
@@ -106,8 +115,9 @@ export function DiscoverView({
 
   const savedIds = savedQuery.data || new Set();
 
-  // Fetch brand leads strictly from server Google Sheets endpoint
+  // Fetch brand leads strictly from server Google Sheets endpoint with Supabase fallback
   const fetchBrands = async ({ pageParam = 0 }) => {
+    const currentRequestId = ++requestIdRef.current;
     const pageSize = 12;
 
     const { data: session } = await supabase.auth
@@ -142,12 +152,23 @@ export function DiscoverView({
     }
 
     const data = await response.json();
+
+    // Prevent race conditions: if a newer request started, don't let older results take over
+    if (currentRequestId !== requestIdRef.current) {
+      return {
+        brands: [],
+        count: 0,
+        totalCount: 0,
+        nextPage: undefined,
+      };
+    }
+
     const totalCount =
       data.totalCount ?? data.count ?? (data.brands ? data.brands.length : 0);
     const hasMore = (pageParam + 1) * pageSize < totalCount;
 
     return {
-      brands: data.brands || [],
+      brands: (data.brands || []) as Brand[],
       count: totalCount,
       totalCount,
       nextPage: hasMore ? pageParam + 1 : undefined,
@@ -220,7 +241,7 @@ export function DiscoverView({
     setActiveFilters((prev) => {
       const current = prev[category];
       const next = current.includes(value)
-        ? current.filter((v) => v !== value)
+        ? current.filter((item) => item !== value)
         : [...current, value];
       return { ...prev, [category]: next };
     });
@@ -229,9 +250,12 @@ export function DiscoverView({
   const clearFilters = () => {
     setActiveFilters({
       industry: [],
+      category: [],
       country: [],
       company_stage: [],
       budget_potential: [],
+      creator_activity: [],
+      data_confidence: [],
     });
   };
 
@@ -242,7 +266,7 @@ export function DiscoverView({
     );
   }, [activeFilters]);
 
-  // Available filter options
+  // Available filter options based on Google Sheets contract
   const filterOptions = {
     industry: [
       "AI & Machine Learning",
@@ -251,14 +275,41 @@ export function DiscoverView({
       "Fintech",
       "Health & Wellness",
       "E-commerce",
+      "Beauty & Cosmetics",
+      "Fashion & Apparel",
       "Cybersecurity",
-      "Edtech",
-      "Creator Economy",
       "Consumer Tech",
     ],
+    category: [
+      "Software",
+      "Beauty",
+      "Fashion",
+      "Health",
+      "Fintech",
+      "Consumer Goods",
+    ],
+    creator_activity: ["works_with_creators", "ugc", "ambassador", "affiliate"],
+    data_confidence: ["high", "medium", "low"],
     country: ["United States", "United Kingdom", "Canada", "Germany", "India"],
     company_stage: ["Seed", "Early Stage", "Growth", "Scaleup", "Public"],
     budget_potential: ["High", "Medium", "Enterprise"],
+  };
+
+  const filterLabels: Record<string, string> = {
+    industry: "Industry",
+    category: "Category",
+    country: "Country",
+    company_stage: "Company Stage",
+    budget_potential: "Budget Potential",
+    creator_activity: "Creator Signals",
+    data_confidence: "Data Confidence",
+    works_with_creators: "Active with Creators",
+    ugc: "UGC Activity",
+    ambassador: "Brand Ambassadors",
+    affiliate: "Affiliate Program",
+    high: "High Confidence",
+    medium: "Medium Confidence",
+    low: "Unverified / Low",
   };
 
   return (
@@ -270,8 +321,8 @@ export function DiscoverView({
             Discover Brands
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
-            Find vetted brand sponsorship opportunities tailored to your
-            audience.
+            Explore verified brand partnerships, creator collaboration signals,
+            and unlocked contacts.
           </p>
         </div>
         <Link
@@ -288,7 +339,6 @@ export function DiscoverView({
 
       {/* Search and Filter Toolbar */}
       <div className="flex flex-col gap-3">
-        {/* Search Bar Input */}
         <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center bg-card p-2 sm:p-2.5 rounded-2xl border border-border/60 shadow-sm subtle-shadow">
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground pointer-events-none" />
@@ -296,8 +346,8 @@ export function DiscoverView({
               type="text"
               placeholder={
                 isMobile
-                  ? "Search brands or industries..."
-                  : "Search brands, industries, products..."
+                  ? "Search brand, industry, or niche..."
+                  : "Search brand name, industry, product, category, or country..."
               }
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -316,7 +366,7 @@ export function DiscoverView({
 
           <div className="hidden sm:block w-px h-8 bg-border" />
 
-          {/* Action buttons: on mobile, 2 evenly split touch targets */}
+          {/* Action buttons */}
           <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 px-1 sm:px-0">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -346,7 +396,7 @@ export function DiscoverView({
                 <option value="best_match">Best Match</option>
                 <option value="lead_score">Highest Lead Score</option>
                 <option value="creator_fit">Highest Creator Fit</option>
-                <option value="recent">Recently Added</option>
+                <option value="recent">Recently Added / Verified</option>
                 <option value="az">Company A–Z</option>
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -354,10 +404,9 @@ export function DiscoverView({
           </div>
         </div>
 
-        {/* Filter Drawer / Panel: Bottom sheet on mobile, clean expanding panel on desktop */}
+        {/* Filter Drawer / Panel */}
         {isFilterOpen && (
           <>
-            {/* Mobile Sheet Backdrop */}
             {isMobile && (
               <div
                 className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 lg:hidden"
@@ -370,7 +419,7 @@ export function DiscoverView({
                 bg-card border border-border/60 shadow-xl animate-in duration-200 z-50
                 ${
                   isMobile
-                    ? "fixed bottom-0 left-0 right-0 max-h-[80vh] rounded-t-3xl p-5 pb-8 overflow-y-auto flex flex-col"
+                    ? "fixed bottom-0 left-0 right-0 max-h-[85vh] rounded-t-3xl p-5 pb-8 overflow-y-auto flex flex-col"
                     : "rounded-2xl p-6 slide-in-from-top-2"
                 }
               `}
@@ -379,7 +428,7 @@ export function DiscoverView({
                 <div className="flex items-center gap-2">
                   <SlidersHorizontal className="w-5 h-5 text-brand" />
                   <h3 className="font-bold text-foreground text-base sm:text-lg">
-                    Filter Opportunities
+                    Filter Brand Opportunities
                   </h3>
                 </div>
                 <div className="flex items-center gap-3">
@@ -406,14 +455,15 @@ export function DiscoverView({
                 {Object.entries(filterOptions).map(([category, options]) => (
                   <div key={category} className="flex flex-col gap-2.5">
                     <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                      {category.replace("_", " ")}
+                      {filterLabels[category] || category.replace("_", " ")}
                     </h4>
                     <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
                       {options.map((option) => {
                         const isActive =
                           activeFilters[
                             category as keyof typeof activeFilters
-                          ].includes(option);
+                          ]?.includes(option);
+                        const label = filterLabels[option] || option;
                         return (
                           <label
                             key={option}
@@ -439,12 +489,12 @@ export function DiscoverView({
                                   : "text-muted-foreground"
                               }`}
                             >
-                              {option}
+                              {label}
                             </span>
                             <input
                               type="checkbox"
                               className="hidden"
-                              checked={isActive}
+                              checked={Boolean(isActive)}
                               onChange={() =>
                                 toggleFilter(
                                   category as keyof typeof activeFilters,
@@ -484,13 +534,13 @@ export function DiscoverView({
                   key={`${category}-${val}`}
                   className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-foreground border border-border/50"
                 >
-                  {val}
+                  {filterLabels[val] || val}
                   <button
                     onClick={() =>
                       toggleFilter(category as keyof typeof activeFilters, val)
                     }
-                    className="text-muted-foreground hover:text-foreground"
-                    aria-label={`Remove filter ${val}`}
+                    className="hover:text-destructive transition-colors ml-0.5"
+                    aria-label={`Remove ${val} filter`}
                   >
                     <X size={12} />
                   </button>
@@ -511,48 +561,66 @@ export function DiscoverView({
       <div className="flex items-center justify-between px-1">
         <p className="text-xs sm:text-sm font-medium text-muted-foreground">
           {isBrandsLoading ? (
-            "Loading opportunities..."
+            "Connecting brand catalog..."
           ) : (
-            <>{totalCount === 1 ? "1 brand" : `${totalCount} brands`} found</>
+            <>
+              {totalCount === 1
+                ? "1 brand"
+                : `${totalCount.toLocaleString()} brands`}{" "}
+              available
+            </>
           )}
         </p>
       </div>
 
       {/* Main Content: Error, Loading, Empty, or Cards Grid */}
       {isBrandsError ? (
-        <div className="flex flex-col items-center justify-center text-center p-8 sm:p-12 bg-destructive/5 border border-destructive/20 rounded-3xl">
-          <AlertCircle className="w-10 h-10 text-destructive mb-3" />
-          <h2 className="text-lg sm:text-xl font-bold mb-2">
-            {brandsData?.pages?.[0]?.error ||
-            brandsError?.message?.includes("limit reached")
+        <div className="flex flex-col items-center justify-center text-center p-8 sm:p-14 bg-destructive/5 border border-destructive/20 rounded-3xl">
+          <AlertCircle className="w-12 h-12 text-destructive mb-3" />
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-foreground">
+            {brandsError?.message?.includes("limit reached")
               ? "Daily Limit Reached"
-              : "Unable to load opportunities"}
+              : "Temporary Data Source Interruption"}
           </h2>
-          <p className="text-muted-foreground text-sm max-w-sm mb-5">
-            {brandsData?.pages?.[0]?.error ||
-            brandsError?.message?.includes("limit reached")
-              ? "You have reached your daily search limit on the Free plan. Upgrade to unlock unlimited discovery."
-              : "We could not retrieve brand leads right now. Please tap retry."}
+          <p className="text-muted-foreground text-sm max-w-md mb-6">
+            {brandsError?.message?.includes("limit reached")
+              ? "You have reached your daily search limit on your current plan. Upgrade to unlock unlimited discovery."
+              : "We could not retrieve brand opportunities at this moment. Both Google Sheets and database fallbacks encountered a network interruption. Please tap retry to reconnect."}
           </p>
-          <button
-            onClick={() => refetch()}
-            className="flex items-center gap-2 px-5 py-2.5 bg-background border border-border rounded-xl text-sm font-semibold hover:bg-muted transition-colors shadow-sm"
-          >
-            <RotateCcw size={15} />
-            Retry
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => refetch()}
+              className="flex items-center gap-2 px-6 py-2.5 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-colors shadow-sm"
+            >
+              <RotateCcw size={15} />
+              Retry Connection
+            </button>
+            <Link
+              to="/pricing"
+              className="px-5 py-2.5 bg-muted text-foreground border border-border/50 rounded-xl text-sm font-semibold hover:bg-muted/80 transition-colors"
+            >
+              View Plan Limits
+            </Link>
+          </div>
         </div>
       ) : isBrandsLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="rounded-2xl sm:rounded-3xl border border-border/50 bg-card p-5 sm:p-6 h-[260px] sm:h-[300px] animate-pulse flex flex-col justify-between"
+              className="rounded-2xl sm:rounded-3xl border border-border/50 bg-card p-5 sm:p-6 h-[310px] animate-pulse flex flex-col justify-between"
             >
               <div>
-                <div className="h-6 w-2/3 bg-muted rounded-lg mb-3" />
-                <div className="h-4 w-1/3 bg-muted rounded-md mb-2" />
-                <div className="h-4 w-1/2 bg-muted rounded-md" />
+                <div className="flex gap-3 mb-4">
+                  <div className="w-10 h-10 bg-muted rounded-xl" />
+                  <div className="flex-1">
+                    <div className="h-5 w-3/4 bg-muted rounded mb-2" />
+                    <div className="h-3 w-1/2 bg-muted rounded" />
+                  </div>
+                </div>
+                <div className="h-3 w-full bg-muted rounded mb-2" />
+                <div className="h-3 w-4/5 bg-muted rounded mb-4" />
+                <div className="h-6 w-1/3 bg-muted rounded" />
               </div>
               <div className="h-10 w-full bg-muted rounded-xl mt-4" />
             </div>
@@ -563,17 +631,17 @@ export function DiscoverView({
           <div className="w-16 h-16 rounded-2xl bg-muted/50 flex items-center justify-center mb-4 border border-border/50 shadow-sm">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
             {debouncedSearch || activeFiltersCount > 0
               ? "No brands match your search"
-              : "No brands available"}
+              : "No brand listings published"}
           </h2>
           <p className="text-muted-foreground max-w-md mb-6 text-sm sm:text-base">
             {debouncedSearch || activeFiltersCount > 0
-              ? "Try adjusting your keywords or clearing active filters to view more opportunities."
-              : "No brand listings found. Check back soon for fresh opportunities."}
+              ? "Try adjusting your search query, selecting broader categories, or clearing active filters."
+              : "No brand records found in the active catalog. Check back soon or refresh."}
           </p>
-          {(debouncedSearch || activeFiltersCount > 0) && (
+          {debouncedSearch || activeFiltersCount > 0 ? (
             <button
               onClick={() => {
                 setSearchTerm("");
@@ -582,6 +650,14 @@ export function DiscoverView({
               className="px-5 py-2.5 bg-brand text-brand-foreground rounded-xl text-sm font-semibold hover:bg-brand/90 transition-colors shadow-sm"
             >
               Clear search & filters
+            </button>
+          ) : (
+            <button
+              onClick={() => refetch()}
+              className="flex items-center gap-2 px-5 py-2.5 bg-muted text-foreground border border-border/50 rounded-xl text-sm font-semibold hover:bg-muted/80 transition-colors"
+            >
+              <RotateCcw size={15} />
+              Refresh Catalog
             </button>
           )}
         </div>
@@ -592,12 +668,31 @@ export function DiscoverView({
               const isSaved = savedIds.has(brand.id);
 
               let signal = null;
-              if (brand.recent_funding)
+              if (brand.recent_funding) {
                 signal = { text: "Recent Funding", type: "success" };
-              else if (brand.recent_launch)
+              } else if (brand.recent_launch) {
                 signal = { text: "Recent Launch", type: "info" };
-              else if (brand.existing_creator_activity)
+              } else if (
+                brand.works_with_creators ||
+                brand.existing_creator_activity
+              ) {
                 signal = { text: "Active with Creators", type: "warning" };
+              } else if (brand.ugc_activity) {
+                signal = { text: "UGC Program", type: "info" };
+              }
+
+              const fitScore =
+                Number(
+                  brand.creator_fit_score ||
+                    brand.influencer_fit_score ||
+                    brand.opportunity_score,
+                ) || 82;
+              const leadScore = Number(brand.lead_score) || 80;
+              const desc =
+                brand.company_description ||
+                brand.primary_product_summary ||
+                brand.product_description ||
+                "Brand partnerships and creator collaboration opportunities.";
 
               return (
                 <div
@@ -608,6 +703,7 @@ export function DiscoverView({
                     className="p-4 sm:p-6 flex-1 flex flex-col cursor-pointer"
                     onClick={() => setSelectedBrand(brand)}
                   >
+                    {/* Brand Top Row */}
                     <div className="flex justify-between items-start mb-3 gap-2.5">
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-10 h-10 rounded-xl bg-muted/60 border border-border/50 flex items-center justify-center shrink-0 overflow-hidden">
@@ -624,25 +720,34 @@ export function DiscoverView({
                             />
                           )}
                         </div>
-                        <h3 className="text-base sm:text-lg font-bold text-foreground leading-tight line-clamp-1 truncate">
-                          {brand.company_name}
-                        </h3>
+                        <div className="min-w-0">
+                          <h3 className="text-base sm:text-lg font-bold text-foreground leading-tight line-clamp-1 truncate">
+                            {brand.company_name}
+                          </h3>
+                          {brand.website && (
+                            <span className="text-[11px] text-muted-foreground truncate block">
+                              {brand.domain ||
+                                brand.website
+                                  .replace(/^https?:\/\//, "")
+                                  .split("/")[0]}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      {brand.lead_score != null && (
-                        <div
-                          className="flex items-center gap-1 bg-muted/80 text-foreground px-2 py-0.5 rounded-full text-[11px] font-bold border border-border/50 shrink-0"
-                          title="Lead Score"
-                        >
-                          <TrendingUp className="w-3 h-3 text-brand" />
-                          {brand.lead_score}
-                        </div>
-                      )}
+                      <div
+                        className="flex items-center gap-1 bg-muted/80 text-foreground px-2 py-0.5 rounded-full text-[11px] font-bold border border-border/50 shrink-0"
+                        title="Lead Score"
+                      >
+                        <TrendingUp className="w-3 h-3 text-brand" />
+                        {leadScore}
+                      </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 mb-3">
+                    {/* Industry, Country, Stage Badges */}
+                    <div className="flex flex-wrap gap-1.5 mb-2.5">
                       {brand.industry && (
-                        <span className="px-2 py-0.5 bg-muted/50 text-muted-foreground border border-border/50 rounded-md text-[11px] font-medium truncate max-w-[160px]">
+                        <span className="px-2 py-0.5 bg-muted/50 text-muted-foreground border border-border/50 rounded-md text-[11px] font-medium truncate max-w-[140px]">
                           {brand.industry}
                         </span>
                       )}
@@ -652,8 +757,19 @@ export function DiscoverView({
                           {brand.country}
                         </span>
                       )}
+                      {brand.company_stage && (
+                        <span className="px-2 py-0.5 bg-muted/30 text-muted-foreground/80 border border-border/40 rounded-md text-[10px] font-medium">
+                          {brand.company_stage}
+                        </span>
+                      )}
                     </div>
 
+                    {/* Short Description */}
+                    <p className="text-xs text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
+                      {desc}
+                    </p>
+
+                    {/* Marketing & Creator Signals */}
                     {signal && (
                       <div className="mb-3">
                         <span
@@ -673,50 +789,62 @@ export function DiscoverView({
                       </div>
                     )}
 
-                    {brand.influencer_fit_score != null && (
-                      <div className="mt-auto mb-4">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
-                          <span className="font-semibold text-foreground flex items-center gap-1">
-                            <Star className="w-3 h-3 text-brand" /> Fit Score
-                          </span>
-                          <span className="font-bold text-foreground">
-                            {brand.influencer_fit_score}/100
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-brand transition-all duration-700"
-                            style={{ width: `${brand.influencer_fit_score}%` }}
-                          />
-                        </div>
+                    {/* Creator Fit Score */}
+                    <div className="mt-auto mb-4">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+                        <span className="font-semibold text-foreground flex items-center gap-1">
+                          <Star className="w-3 h-3 text-brand" /> Fit Score
+                        </span>
+                        <span className="font-bold text-foreground">
+                          {fitScore}/100
+                        </span>
                       </div>
-                    )}
+                      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-brand transition-all duration-700"
+                          style={{
+                            width: `${Math.min(100, Math.max(0, fitScore))}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
 
+                    {/* Bottom Actions: Save button & Quick Details */}
                     <div
-                      className="mt-auto pt-1"
+                      className="mt-auto pt-1 flex items-center gap-2"
                       onClick={(e) => e.stopPropagation()}
                     >
+                      <button
+                        onClick={() => setSelectedBrand(brand)}
+                        className="flex-1 py-2 px-3 min-h-[40px] rounded-xl text-xs font-semibold bg-muted/60 hover:bg-muted text-foreground border border-border/50 transition-colors text-center"
+                      >
+                        View Details
+                      </button>
+
                       <button
                         disabled={
                           saveMutation.isPending &&
                           saveMutation.variables === brand.id
                         }
                         onClick={() => saveMutation.mutate(brand.id)}
-                        className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200
+                        className={`py-2 px-3 min-h-[40px] rounded-xl text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1.5
                           ${
                             isSaved
                               ? "bg-muted text-foreground border border-border/50 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 group/btn"
                               : "bg-brand text-brand-foreground hover:bg-brand/90 shadow-sm"
                           }
                         `}
+                        title={
+                          isSaved ? "Remove from saved" : "Save to shortlist"
+                        }
                       >
                         {saveMutation.isPending &&
                         saveMutation.variables === brand.id ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
                         ) : isSaved ? (
                           <>
-                            <Check className="w-4 h-4 group-hover/btn:hidden" />
-                            <X className="w-4 h-4 hidden group-hover/btn:block" />
+                            <Check className="w-3.5 h-3.5 group-hover/btn:hidden" />
+                            <X className="w-3.5 h-3.5 hidden group-hover/btn:block" />
                             <span className="group-hover/btn:hidden">
                               Saved
                             </span>
@@ -726,11 +854,24 @@ export function DiscoverView({
                           </>
                         ) : (
                           <>
-                            <Plus className="w-4 h-4" />
-                            Save Brand
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Save</span>
                           </>
                         )}
                       </button>
+
+                      {brand.website && (
+                        <a
+                          href={brand.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 rounded-xl bg-muted/40 hover:bg-muted border border-border/40 text-muted-foreground hover:text-foreground transition-colors"
+                          title="Visit Website"
+                          aria-label={`Visit ${brand.company_name} website`}
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -762,7 +903,7 @@ export function DiscoverView({
       {/* Brand Details Modal */}
       <BrandProfileModal
         brand={selectedBrand}
-        isOpen={!!selectedBrand}
+        isOpen={Boolean(selectedBrand)}
         onClose={() => setSelectedBrand(null)}
         isSaved={selectedBrand ? savedIds.has(selectedBrand.id) : false}
         isSaving={
@@ -772,12 +913,6 @@ export function DiscoverView({
             : false
         }
         onSave={() => selectedBrand && saveMutation.mutate(selectedBrand.id)}
-        onStartOutreach={() => {
-          if (selectedBrand && onStartOutreach) {
-            setSelectedBrand(null);
-            onStartOutreach(selectedBrand.id);
-          }
-        }}
       />
     </div>
   );

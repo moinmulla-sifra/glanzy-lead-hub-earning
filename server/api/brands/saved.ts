@@ -55,7 +55,7 @@ interface SavedRecord {
   updated_at: string;
 }
 
-function loadSavedRecords(): SavedRecord[] {
+export function loadSavedRecords(): SavedRecord[] {
   try {
     if (fs.existsSync(SAVED_FILE)) {
       return JSON.parse(fs.readFileSync(SAVED_FILE, "utf-8")) || [];

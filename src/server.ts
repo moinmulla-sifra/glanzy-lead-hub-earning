@@ -12,6 +12,7 @@ import { handleContactedBrands } from "../server/api/brands/contacted";
 import { handleDodoWebhook } from "../server/api/webhook/dodo";
 import { handleSubscriptionCurrent } from "../server/api/subscription/current";
 import { handlePerfectFitAgent } from "../server/api/ai/perfect-fit";
+import { handleDashboardAnalytics } from "../server/api/analytics/dashboard";
 
 type ServerEntry = {
   fetch: (
@@ -115,6 +116,12 @@ export default {
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
         return await handleDodoWebhook(request, env);
+      }
+      if (
+        url.pathname === "/api/analytics/dashboard" &&
+        (request.method === "POST" || request.method === "GET")
+      ) {
+        return await handleDashboardAnalytics(request, env);
       }
       if (
         url.pathname === "/api/ai/perfect-fit" &&
