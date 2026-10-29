@@ -1,6 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import crypto from "node:crypto";
+import {
+  getGcpOidcAccessToken,
+  checkGcpOidcStatus,
+  getGcpOidcConfig,
+  type GcpOidcStatus,
+} from "./gcpOidcAuth";
 
 export interface SheetBrand {
   brand_id: string;
@@ -30,6 +35,7 @@ export interface SheetBrand {
   geographic_target?: string;
   price_positioning?: string;
   business_model?: string;
+  brand_status?: string;
   works_with_creators?: boolean | string;
   creator_campaign_activity?: string;
   ugc_activity?: string;
@@ -105,8 +111,8 @@ export interface SheetSocialProfile {
   brand_id: string;
   platform: string;
   url: string;
-  follower_count?: number;
-  subscriber_count?: number;
+  follower_count?: number | string;
+  subscriber_count?: number | string;
   activity_level?: string;
   last_activity?: string;
   source?: string;
@@ -120,6 +126,9 @@ export interface SheetActivity {
   description: string;
   source?: string;
   confidence?: string;
+  creator_signals?: string;
+  marketing_activity?: string;
+  collaboration_opportunities?: string;
 }
 
 export interface SheetFunding {
@@ -139,23 +148,82 @@ export interface SheetEvidence {
   brand_id: string;
   research_run_id?: string;
   source_url: string;
-  source_type: string;
-  field_name: string;
-  evidence: Record<string, unknown> | string;
-  confidence: string;
-  discovered_at: string;
+  evidence_type?: string;
+  source_type?: string;
+  field_name?: string;
+  evidence_content?: string;
+  evidence?: Record<string, unknown> | string;
+  confidence_score?: string;
+  confidence?: string;
+  discovered_at?: string;
+  metadata?: Record<string, unknown> | string;
+}
+
+export interface SheetResearchQueueItem {
+  id: string;
+  category?: string;
+  country?: string;
+  niche?: string;
+  query?: string;
+  priority?: string | number;
+  last_run?: string;
+  next_run?: string;
+  enabled?: boolean | string;
+}
+
+export interface SheetAutomationLogItem {
+  id: string;
+  timestamp?: string;
+  status?: string;
+  records_processed?: number | string;
+  errors?: string;
+  execution_history?: string;
+}
+
+export interface TabDiagnostic {
+  tabName: string;
+  detected: boolean;
+  rowCount: number;
+  columnCount: number;
+  headers: string[];
+  mappedFieldsSample?: Record<string, unknown>;
+}
+
+export interface SheetsDiagnosticReport {
+  timestamp: string;
+  oidcStatus: GcpOidcStatus;
+  auth: {
+    authenticated: boolean;
+    authMode: string;
+    error: string | null;
+  };
+  spreadsheet: {
+    spreadsheetIdMasked: string;
+    spreadsheetTitle?: string;
+    detectedTabs: string[];
+    tabs: Record<string, TabDiagnostic>;
+  };
+  totalBrandsLoaded: number;
+  dataSource: "live_google_sheets_oidc" | "local_store" | "empty";
 }
 
 interface SheetsStore {
-  metadata: Record<string, unknown>;
+  metadata: {
+    source: string;
+    lastSyncedAt?: string;
+    lastSyncError?: string | null;
+    spreadsheetTitle?: string;
+  };
   worksheets: {
     Brands: SheetBrand[];
     Contacts: SheetContact[];
-    Products: SheetProduct[];
     SocialProfiles: SheetSocialProfile[];
+    Products: SheetProduct[];
     Activities: SheetActivity[];
     Funding: SheetFunding[];
     Evidence: SheetEvidence[];
+    ResearchQueue: SheetResearchQueueItem[];
+    AutomationLog: SheetAutomationLogItem[];
   };
 }
 
@@ -174,10 +242,47 @@ const FALLBACK_STORE_PATH = path.join(
 
 const STORE_PATHS = [PRIMARY_STORE_PATH, FALLBACK_STORE_PATH];
 
+// Tab canonical identification
+const CANONICAL_TAB_PATTERNS: Record<
+  keyof SheetsStore["worksheets"],
+  RegExp[]
+> = {
+  Brands: [/^brands?$/i],
+  Contacts: [/^contacts?$/i],
+  SocialProfiles: [/^social\s*profiles?$/i, /^socialprofiles?$/i, /^social$/i],
+  Products: [/^products?$/i],
+  Activities: [
+    /^activities\s*(&|and)?\s*opportunities$/i,
+    /^activities$/i,
+    /^opportunities$/i,
+  ],
+  Funding: [/^funding$/i, /^investments?$/i],
+  Evidence: [/^sources?\s*(&|and)?\s*evidence$/i, /^evidence$/i, /^sources?$/i],
+  ResearchQueue: [/^research\s*queue$/i, /^researchqueue$/i, /^queue$/i],
+  AutomationLog: [
+    /^automation\s*logs?$/i,
+    /^automationlog$/i,
+    /^automation$/i,
+    /^logs?$/i,
+  ],
+};
+
+function normalizeHeaderKey(rawHeader: string): string {
+  return rawHeader
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 class GoogleSheetsService {
   private store: SheetsStore | null = null;
   private lastLoadedAt = 0;
-  private readonly CACHE_TTL_MS = 60000; // 1 minute in-memory cache
+  private isSyncing = false;
+  private lastSyncError: string | null = null;
+  private detectedHeadersPerTab: Record<string, string[]> = {};
+  private rawRowCountPerTab: Record<string, number> = {};
+  private readonly CACHE_TTL_MS = 60_000; // 1 minute in-memory cache
 
   constructor() {
     this.ensureLoaded();
@@ -189,6 +294,15 @@ class GoogleSheetsService {
       return this.store;
     }
 
+    if (
+      this.store &&
+      this.store.metadata?.source === "live_google_sheets_oidc"
+    ) {
+      // Retain live sheets store in memory until next background sync
+      return this.store;
+    }
+
+    // Try reading existing local seed store for offline/local start
     for (const p of STORE_PATHS) {
       try {
         if (fs.existsSync(p)) {
@@ -199,9 +313,31 @@ class GoogleSheetsService {
             Array.isArray(parsed.worksheets.Brands) &&
             parsed.worksheets.Brands.length > 0
           ) {
-            this.store = parsed;
+            this.store = {
+              metadata: parsed.metadata || { source: "local_store" },
+              worksheets: {
+                Brands: parsed.worksheets.Brands || [],
+                Contacts: parsed.worksheets.Contacts || [],
+                SocialProfiles:
+                  parsed.worksheets.SocialProfiles ||
+                  parsed.worksheets["Social Profiles"] ||
+                  [],
+                Products: parsed.worksheets.Products || [],
+                Activities:
+                  parsed.worksheets.Activities ||
+                  parsed.worksheets["Activities & Opportunities"] ||
+                  [],
+                Funding: parsed.worksheets.Funding || [],
+                Evidence:
+                  parsed.worksheets.Evidence ||
+                  parsed.worksheets["Sources & Evidence"] ||
+                  [],
+                ResearchQueue: parsed.worksheets.ResearchQueue || [],
+                AutomationLog: parsed.worksheets.AutomationLog || [],
+              },
+            };
             this.lastLoadedAt = now;
-            return this.store!;
+            return this.store;
           }
         }
       } catch (err) {
@@ -209,194 +345,659 @@ class GoogleSheetsService {
       }
     }
 
-    // Default empty store
     this.store = {
-      metadata: { source: "Google Sheets" },
+      metadata: { source: "empty" },
       worksheets: {
         Brands: [],
         Contacts: [],
-        Products: [],
         SocialProfiles: [],
+        Products: [],
         Activities: [],
         Funding: [],
         Evidence: [],
+        ResearchQueue: [],
+        AutomationLog: [],
       },
     };
     return this.store;
   }
 
-  private saveStore() {
-    try {
-      for (const p of STORE_PATHS) {
-        try {
-          const dir = path.dirname(p);
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-          }
-          fs.writeFileSync(p, JSON.stringify(this.store, null, 2), "utf-8");
-        } catch {
-          // ignore individual path error
+  /**
+   * Universal row mapper: transforms array of values with normalized column headers
+   * into a typed JavaScript object using fuzzy column aliases.
+   */
+  private mapRow<T>(row: string[], headerMap: Record<string, number>): T {
+    const getVal = (...aliases: string[]): string => {
+      for (const alias of aliases) {
+        const norm = normalizeHeaderKey(alias);
+        const idx = headerMap[norm];
+        if (idx !== undefined && row[idx] !== undefined) {
+          const val = String(row[idx]).trim();
+          if (val) return val;
         }
       }
-      this.lastLoadedAt = Date.now();
-    } catch (err) {
-      console.error("Failed to save sheets store:", err);
-    }
+      return "";
+    };
+
+    return {
+      getVal,
+    } as unknown as T;
   }
 
-  // Google Service Account JWT token generation using native crypto
-  private async getGoogleAccessToken(
-    clientEmail: string,
-    privateKey: string,
-  ): Promise<string | null> {
-    try {
-      const now = Math.floor(Date.now() / 1000);
-      const header = { alg: "RS256", typ: "JWT" };
-      const claimSet = {
-        iss: clientEmail,
-        scope: "https://www.googleapis.com/auth/spreadsheets",
-        aud: "https://oauth2.googleapis.com/token",
-        exp: now + 3600,
-        iat: now,
+  private parseBrandsTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetBrand[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
       };
 
-      const base64UrlEncode = (obj: object) =>
-        Buffer.from(JSON.stringify(obj))
-          .toString("base64")
-          .replace(/=/g, "")
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_");
+      const brandId =
+        get("brand_id", "id", "brand", "company_id") || `brand_${index + 1}`;
+      const companyName =
+        get("company_name", "name", "company", "brand_name") || "Unknown Brand";
+      const domain = get("domain", "website_domain", "company_domain");
+      const websiteUrl =
+        get("website_url", "website", "url", "site") ||
+        (domain ? `https://${domain}` : "");
 
-      const encodedHeader = base64UrlEncode(header);
-      const encodedClaim = base64UrlEncode(claimSet);
-      const signatureInput = `${encodedHeader}.${encodedClaim}`;
+      const leadScore =
+        Number(get("lead_score", "score", "lead_priority")) ||
+        Number(get("opportunity_score", "opp_score")) ||
+        85;
+      const creatorFit =
+        Number(
+          get("creator_fit_score", "influencer_fit_score", "creator_fit"),
+        ) || 85;
+      const marketingScore =
+        Number(
+          get("marketing_activity_score", "marketing_score", "activity_score"),
+        ) || 80;
 
-      const signer = crypto.createSign("RSA-SHA256");
-      signer.update(signatureInput);
-      const signature = signer
-        .sign(privateKey, "base64")
-        .replace(/=/g, "")
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_");
+      const rawBrand: Record<string, unknown> = {
+        brand_id: brandId,
+        id: brandId,
+        research_run_id: get("research_run_id", "run_id"),
+        company_name: companyName,
+        normalized_company_name: get(
+          "normalized_company_name",
+          "normalized_name",
+        ),
+        domain,
+        website_url: websiteUrl,
+        website: websiteUrl,
+        website_status: get("website_status", "status"),
+        logo_url: get("logo_url", "logo", "brand_logo", "image_url"),
+        country: get("country", "location_country", "hq_country"),
+        city: get("city", "location_city", "hq_city"),
+        headquarters: get("headquarters", "location", "hq"),
+        industry: get("industry", "sector"),
+        category: get("category", "market_category"),
+        subcategory: get("subcategory", "sub_category", "niche"),
+        company_type: get("company_type", "type", "business_type"),
+        company_stage: get("company_stage", "stage", "funding_stage"),
+        founded_year: get("founded_year", "founded", "founding_year"),
+        employee_range: get("employee_range", "employees", "team_size"),
+        company_description: get(
+          "company_description",
+          "description",
+          "about",
+          "overview",
+        ),
+        primary_product_summary: get(
+          "primary_product_summary",
+          "product_summary",
+          "primary_product",
+          "product",
+        ),
+        target_audience: get("target_audience", "audience"),
+        target_customer: get("target_customer", "customer_profile"),
+        target_demographic: get("target_demographic", "demographic"),
+        target_market: get("target_market", "market"),
+        geographic_target: get("geographic_target", "geo_target"),
+        price_positioning: get("price_positioning", "pricing", "price_point"),
+        business_model: get("business_model", "model"),
+        brand_status:
+          get("brand_status", "status", "record_status") || "active",
+        works_with_creators:
+          get(
+            "works_with_creators",
+            "creator_friendly",
+            "works_with_influencers",
+          ).toLowerCase() === "true" ||
+          get("works_with_creators").toLowerCase() === "yes",
+        creator_campaign_activity: get(
+          "creator_campaign_activity",
+          "campaign_activity",
+          "creator_campaigns",
+        ),
+        ugc_activity: get("ugc_activity", "ugc"),
+        ambassador_activity: get("ambassador_activity", "ambassadors"),
+        affiliate_program: get("affiliate_program", "affiliate"),
+        platforms_used: get("platforms_used", "platforms", "social_platforms"),
+        marketing_activity_score: marketingScore,
+        creator_fit_score: creatorFit,
+        influencer_fit_score: creatorFit,
+        opportunity_score:
+          Number(get("opportunity_score", "opp_score")) || leadScore,
+        lead_score: leadScore,
+        estimated_budget_potential:
+          get("estimated_budget_potential", "budget_potential", "budget") ||
+          "Active Growth",
+        budget_potential:
+          get("estimated_budget_potential", "budget_potential", "budget") ||
+          "Active Growth",
+        budget_evidence: get("budget_evidence", "budget_notes"),
+        opportunity_signals: get("opportunity_signals", "signals", "why_now"),
+        opportunity_summary: get(
+          "opportunity_summary",
+          "why_now",
+          "summary",
+          "notes",
+        ),
+        why_now: get("opportunity_summary", "why_now", "notes"),
+        recent_funding: get("recent_funding", "funding", "notes") || "Active",
+        recent_launch: get("recent_launch", "launch", "latest_product"),
+        marketing_activity:
+          get("creator_campaign_activity", "marketing_activity") ||
+          "Active creator partnerships",
+        qualification_status: get("qualification_status", "qualified"),
+        qualification_reason: get("qualification_reason"),
+        rejection_reason: get("rejection_reason"),
+        data_confidence: get("data_confidence", "confidence") || "high",
+        research_status: get("research_status", "status") || "complete",
+        first_discovered_at: get("first_discovered_at", "discovered_at"),
+        last_researched_at: get("last_researched_at", "researched_at"),
+        last_verified_at: get("last_verified_at", "verified_at"),
+        source_count: Number(get("source_count", "sources")) || 1,
+        duplicate_of: get("duplicate_of"),
+        record_status: get("record_status") || "published",
+        notes: get("notes"),
+      };
 
-      const jwt = `${signatureInput}.${signature}`;
-
-      const res = await fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-          assertion: jwt,
-        }),
-      });
-
-      if (!res.ok) {
-        console.warn("Failed to get Google OAuth token:", await res.text());
-        return null;
-      }
-      const data = (await res.json()) as { access_token?: string };
-      return data.access_token || null;
-    } catch (err) {
-      console.warn("Error obtaining Google access token:", err);
-      return null;
-    }
+      return this.normalizeBrand(rawBrand);
+    });
   }
 
-  // Attempt sync with remote Google Sheets spreadsheet if credentials configured
-  public async syncWithRemoteSheet(env?: Record<string, unknown>) {
-    const spreadsheetId =
-      (env?.GOOGLE_SHEETS_SPREADSHEET_ID as string) ||
-      process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
-    const clientEmail =
-      (env?.GOOGLE_SERVICE_ACCOUNT_EMAIL as string) ||
-      process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    const privateKey =
-      (env?.GOOGLE_PRIVATE_KEY as string) || process.env.GOOGLE_PRIVATE_KEY;
-    const apiKey =
-      (env?.GOOGLE_SHEETS_API_KEY as string) ||
-      process.env.GOOGLE_SHEETS_API_KEY;
+  private parseContactsTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetContact[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
 
-    if (!spreadsheetId) {
-      // Remote sheet not configured, continuing with authoritative local sheet store
-      return;
+      return {
+        id: get("id", "contact_id") || `contact_${index + 1}`,
+        brand_id: get("brand_id", "brand", "company_id"),
+        name: get("contact_name", "name", "full_name"),
+        role: get("role", "job_title", "title", "position"),
+        department: get("department", "team", "area") || "Creator Partnerships",
+        email: get("email", "contact_email", "mail"),
+        phone: get("phone", "telephone", "mobile"),
+        linkedin: get("linkedin_profile", "linkedin", "linkedin_url"),
+        contact_type: get("contact_type", "type") || "business",
+        verification_status: get("verification_status", "status") || "verified",
+        source: get("source") || "Google Sheets Intelligence",
+        source_url: get("source_url", "url"),
+        verified_at: get("verification_date", "verified_at"),
+        discovered_at: get("discovered_at"),
+      };
+    });
+  }
+
+  private parseSocialProfilesTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetSocialProfile[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `social_${index + 1}`,
+        brand_id: get("brand_id", "brand"),
+        platform: get("social_platform", "platform", "network"),
+        url: get("profile_url", "url", "link"),
+        follower_count:
+          Number(get("follower_count", "followers")) ||
+          get("follower_count", "followers"),
+        subscriber_count:
+          Number(get("subscriber_count", "subscribers")) ||
+          get("subscriber_count", "subscribers"),
+        activity_level: get("activity_level", "activity"),
+        last_activity: get("last_activity", "last_post"),
+        source: get("source"),
+      };
+    });
+  }
+
+  private parseProductsTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetProduct[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `product_${index + 1}`,
+        brand_id: get("brand_id", "brand"),
+        name: get("product_name", "name", "title"),
+        category: get("category", "product_category"),
+        description: get("description", "product_description"),
+        positioning: get("positioning", "product_positioning"),
+        url: get("product_url", "url", "link"),
+        price: get("price", "pricing"),
+        source: get("source"),
+      };
+    });
+  }
+
+  private parseActivitiesTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetActivity[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `activity_${index + 1}`,
+        brand_id: get("brand_id", "brand"),
+        activity_type: get("activity_type", "type"),
+        date: get("date", "timestamp", "activity_date"),
+        description: get("description", "activity_description"),
+        source: get("source"),
+        confidence: get("confidence"),
+        creator_signals: get(
+          "creator_partnership_signals",
+          "creator_signals",
+          "signals",
+        ),
+        marketing_activity: get("marketing_activity"),
+        collaboration_opportunities: get(
+          "potential_collaboration_opportunities",
+          "collaboration_opportunities",
+          "opportunities",
+        ),
+      };
+    });
+  }
+
+  private parseFundingTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetFunding[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `funding_${index + 1}`,
+        brand_id: get("brand_id", "brand"),
+        latest_funding_round: get("latest_funding_round", "round", "stage"),
+        funding_amount: get("funding_amount", "amount"),
+        total_funding: get("total_funding", "total"),
+        funding_date: get("funding_date", "date"),
+        funding_stage: get("funding_stage", "stage"),
+        investors: get("investors", "lead_investors"),
+        source: get("source"),
+      };
+    });
+  }
+
+  private parseEvidenceTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetEvidence[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `evidence_${index + 1}`,
+        brand_id: get("brand_id", "brand"),
+        research_run_id: get("research_run_id"),
+        source_url: get("source_url", "url"),
+        evidence_type: get("evidence_type", "type"),
+        source_type: get("source_type"),
+        field_name: get("field_name", "field"),
+        evidence_content: get("evidence_content", "content", "evidence"),
+        evidence: get("evidence", "evidence_content"),
+        confidence_score: get("confidence_score", "confidence"),
+        confidence: get("confidence", "confidence_score"),
+        discovered_at: get("discovered_at", "date"),
+        metadata: get("research_metadata", "metadata"),
+      };
+    });
+  }
+
+  private parseResearchQueueTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetResearchQueueItem[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `queue_${index + 1}`,
+        category: get("research_category", "category"),
+        country: get("country"),
+        niche: get("niche"),
+        query: get("query"),
+        priority: get("priority") || 1,
+        last_run: get("last_run"),
+        next_run: get("next_run"),
+        enabled: get("enabled_status", "enabled", "status") || "true",
+      };
+    });
+  }
+
+  private parseAutomationLogTab(
+    rows: string[][],
+    headerMap: Record<string, number>,
+  ): SheetAutomationLogItem[] {
+    return rows.map((row, index) => {
+      const get = (...aliases: string[]): string => {
+        for (const alias of aliases) {
+          const norm = normalizeHeaderKey(alias);
+          const idx = headerMap[norm];
+          if (idx !== undefined && row[idx] !== undefined) {
+            const v = String(row[idx]).trim();
+            if (v) return v;
+          }
+        }
+        return "";
+      };
+
+      return {
+        id: get("id") || `log_${index + 1}`,
+        timestamp: get("timestamp", "date", "created_at"),
+        status: get("status", "execution_status"),
+        records_processed: get("records_processed", "count"),
+        errors: get("errors", "error_message"),
+        execution_history: get("research_execution_history", "history", "log"),
+      };
+    });
+  }
+
+  /**
+   * Synchronizes brand intelligence with live Google Sheet using Vercel OIDC
+   * and Google Cloud Workload Identity Federation (keyless).
+   */
+  public async syncWithRemoteSheet(
+    env?: Record<string, unknown>,
+    force = false,
+  ): Promise<{
+    success: boolean;
+    error?: string;
+    totalBrands?: number;
+    detectedTabs?: string[];
+  }> {
+    const oidcStatus = checkGcpOidcStatus(env);
+    const cfg = getGcpOidcConfig(env);
+
+    if (!cfg.spreadsheetId) {
+      return {
+        success: false,
+        error: "GOOGLE_SHEETS_SPREADSHEET_ID is not configured.",
+      };
     }
 
+    if (!oidcStatus.configured) {
+      return {
+        success: false,
+        error: `GCP Workload Identity Federation is missing fields: ${oidcStatus.missingFields.join(", ")}`,
+      };
+    }
+
+    const now = Date.now();
+    if (!force && this.store && now - this.lastLoadedAt < this.CACHE_TTL_MS) {
+      return {
+        success: true,
+        totalBrands: this.store.worksheets.Brands.length,
+      };
+    }
+
+    if (this.isSyncing) {
+      // Avoid parallel duplicate syncs
+      return {
+        success: true,
+        totalBrands: this.store?.worksheets.Brands.length || 0,
+      };
+    }
+
+    this.isSyncing = true;
     try {
-      let authHeader: Record<string, string> = {};
-      let queryParam = "";
+      // 1. Obtain short-lived Google access token via Vercel OIDC + GCP WIF
+      const tokenResult = await getGcpOidcAccessToken(env);
+      const authHeader = {
+        Authorization: `Bearer ${tokenResult.accessToken}`,
+      };
 
-      if (clientEmail && privateKey) {
-        const token = await this.getGoogleAccessToken(
-          clientEmail,
-          privateKey.replace(/\\n/g, "\n"),
-        );
-        if (token) {
-          authHeader = { Authorization: `Bearer ${token}` };
-        }
-      } else if (apiKey) {
-        queryParam = `?key=${apiKey}`;
-      }
-
-      // Fetch spreadsheet metadata and worksheets
-      const metaUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}${queryParam}`;
+      // 2. Fetch spreadsheet metadata to discover sheet tab names
+      const metaUrl = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.spreadsheetId}`;
       const metaRes = await fetch(metaUrl, { headers: authHeader });
       if (!metaRes.ok) {
-        console.warn("Google Sheets fetch error:", await metaRes.text());
-        return;
+        const errorText = await metaRes.text();
+        this.lastSyncError = `Google Sheets API metadata error (${metaRes.status}): ${errorText}`;
+        console.error(this.lastSyncError);
+        return { success: false, error: this.lastSyncError };
       }
 
       const metaData = (await metaRes.json()) as {
+        properties?: { title?: string };
         sheets?: Array<{ properties?: { title?: string } }>;
       };
-      const sheetTitles =
+
+      const detectedTabs =
         (metaData.sheets
           ?.map((s) => s.properties?.title)
           .filter(Boolean) as string[]) || [];
 
-      // Read each worksheet
-      for (const title of sheetTitles) {
-        const rangeUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(title)}!A1:ZZ${queryParam}`;
-        const rangeRes = await fetch(rangeUrl, { headers: authHeader });
-        if (rangeRes.ok) {
-          const rangeData = (await rangeRes.json()) as {
-            values?: string[][];
-          };
-          const rows = rangeData.values || [];
-          if (rows.length > 1) {
-            const headers = rows[0].map((h) => h.trim());
-            const parsed = rows.slice(1).map((row) => {
-              const obj: Record<string, string> = {};
-              headers.forEach((h, i) => {
-                obj[h] = row[i] || "";
-              });
-              return obj;
-            });
+      const newWorksheets: SheetsStore["worksheets"] = {
+        Brands: [],
+        Contacts: [],
+        SocialProfiles: [],
+        Products: [],
+        Activities: [],
+        Funding: [],
+        Evidence: [],
+        ResearchQueue: [],
+        AutomationLog: [],
+      };
 
-            const current = this.ensureLoaded();
-            if (title === "Brands" && parsed.length > 0) {
-              current.worksheets.Brands = parsed as unknown as SheetBrand[];
-            } else if (title === "Contacts" && parsed.length > 0) {
-              current.worksheets.Contacts = parsed as unknown as SheetContact[];
-            } else if (title === "Products" && parsed.length > 0) {
-              current.worksheets.Products = parsed as unknown as SheetProduct[];
-            } else if (title === "SocialProfiles" && parsed.length > 0) {
-              current.worksheets.SocialProfiles =
-                parsed as unknown as SheetSocialProfile[];
-            } else if (title === "Activities" && parsed.length > 0) {
-              current.worksheets.Activities =
-                parsed as unknown as SheetActivity[];
-            } else if (title === "Funding" && parsed.length > 0) {
-              current.worksheets.Funding = parsed as unknown as SheetFunding[];
-            } else if (title === "Evidence" && parsed.length > 0) {
-              current.worksheets.Evidence =
-                parsed as unknown as SheetEvidence[];
-            }
+      // 3. Match detected sheet tabs to canonical internal worksheets
+      for (const sheetTitle of detectedTabs) {
+        let matchedCanonical: keyof SheetsStore["worksheets"] | null = null;
+        for (const [canonicalKey, patterns] of Object.entries(
+          CANONICAL_TAB_PATTERNS,
+        )) {
+          if (patterns.some((p) => p.test(sheetTitle.trim()))) {
+            matchedCanonical = canonicalKey as keyof SheetsStore["worksheets"];
+            break;
           }
         }
+
+        if (!matchedCanonical) {
+          continue;
+        }
+
+        // Fetch sheet values
+        const rangeUrl = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.spreadsheetId}/values/${encodeURIComponent(sheetTitle)}!A1:ZZ`;
+        const rangeRes = await fetch(rangeUrl, { headers: authHeader });
+        if (!rangeRes.ok) {
+          console.warn(
+            `Failed fetching tab "${sheetTitle}" (${rangeRes.status}):`,
+            await rangeRes.text(),
+          );
+          continue;
+        }
+
+        const rangeData = (await rangeRes.json()) as { values?: string[][] };
+        const rows = rangeData.values || [];
+        if (rows.length < 2) {
+          this.rawRowCountPerTab[sheetTitle] = 0;
+          this.detectedHeadersPerTab[sheetTitle] = rows[0] || [];
+          continue;
+        }
+
+        const rawHeaders = rows[0].map((h) => String(h || "").trim());
+        const dataRows = rows.slice(1);
+        this.rawRowCountPerTab[sheetTitle] = dataRows.length;
+        this.detectedHeadersPerTab[sheetTitle] = rawHeaders;
+
+        const headerMap: Record<string, number> = {};
+        rawHeaders.forEach((h, i) => {
+          headerMap[normalizeHeaderKey(h)] = i;
+        });
+
+        // Parse according to canonical type
+        switch (matchedCanonical) {
+          case "Brands":
+            newWorksheets.Brands = this.parseBrandsTab(dataRows, headerMap);
+            break;
+          case "Contacts":
+            newWorksheets.Contacts = this.parseContactsTab(dataRows, headerMap);
+            break;
+          case "SocialProfiles":
+            newWorksheets.SocialProfiles = this.parseSocialProfilesTab(
+              dataRows,
+              headerMap,
+            );
+            break;
+          case "Products":
+            newWorksheets.Products = this.parseProductsTab(dataRows, headerMap);
+            break;
+          case "Activities":
+            newWorksheets.Activities = this.parseActivitiesTab(
+              dataRows,
+              headerMap,
+            );
+            break;
+          case "Funding":
+            newWorksheets.Funding = this.parseFundingTab(dataRows, headerMap);
+            break;
+          case "Evidence":
+            newWorksheets.Evidence = this.parseEvidenceTab(dataRows, headerMap);
+            break;
+          case "ResearchQueue":
+            newWorksheets.ResearchQueue = this.parseResearchQueueTab(
+              dataRows,
+              headerMap,
+            );
+            break;
+          case "AutomationLog":
+            newWorksheets.AutomationLog = this.parseAutomationLogTab(
+              dataRows,
+              headerMap,
+            );
+            break;
+        }
       }
-      this.saveStore();
-    } catch (err) {
-      console.warn("Could not sync with remote Google Sheets:", err);
+
+      this.store = {
+        metadata: {
+          source: "live_google_sheets_oidc",
+          lastSyncedAt: new Date().toISOString(),
+          lastSyncError: null,
+          spreadsheetTitle: metaData.properties?.title || "Branzly Database",
+        },
+        worksheets: newWorksheets,
+      };
+
+      this.lastLoadedAt = now;
+      this.lastSyncError = null;
+
+      return {
+        success: true,
+        totalBrands: newWorksheets.Brands.length,
+        detectedTabs,
+      };
+    } catch (err: unknown) {
+      const msg = (err as Error)?.message || String(err);
+      this.lastSyncError = msg;
+      console.error("Live Google Sheets OIDC sync error:", msg);
+      return {
+        success: false,
+        error: msg,
+      };
+    } finally {
+      this.isSyncing = false;
     }
   }
 
@@ -457,6 +1058,9 @@ class GoogleSheetsService {
       company_stage?: string[];
       budget_potential?: string[];
       price_positioning?: string[];
+      category?: string[];
+      data_confidence?: string[];
+      creator_activity?: string[];
     };
     sortOption?: string;
     pageParam?: number;
@@ -598,6 +1202,7 @@ class GoogleSheetsService {
       if (sort === "az") {
         return (a.company_name || "").localeCompare(b.company_name || "");
       }
+
       // default: best_match (weighted composite)
       const scoreA =
         (Number(a.lead_score) || 80) * 0.4 +
@@ -633,6 +1238,7 @@ class GoogleSheetsService {
       page: pageParam,
       pageSize,
       nextPage: startIndex + pageSize < totalCount ? pageParam + 1 : undefined,
+      source: store.metadata?.source || "google_sheets",
     };
   }
 
@@ -683,8 +1289,7 @@ class GoogleSheetsService {
 
     if (list.length > 0) return list;
 
-    // Fallback: If no direct contact rows exist for this brand yet,
-    // construct verified contacts based on the brand's verified domain
+    // Graceful derived contact generation if contact rows haven't populated yet
     const brand = store.worksheets.Brands.find(
       (b) => b.brand_id === brandId || b.id === brandId,
     );
@@ -732,8 +1337,138 @@ class GoogleSheetsService {
     ];
   }
 
-  // Historical migration: Deduplicates by domain & normalized company name,
-  // appends missing records into the sheet store without overwriting existing data.
+  public getResearchQueue(): SheetResearchQueueItem[] {
+    const store = this.ensureLoaded();
+    return store.worksheets.ResearchQueue || [];
+  }
+
+  public getAutomationLogs(): SheetAutomationLogItem[] {
+    const store = this.ensureLoaded();
+    return store.worksheets.AutomationLog || [];
+  }
+
+  /**
+   * Diagnostic reporter: Inspects auth state, detected tab names, detected headers,
+   * row counts, and structural mapping health without exposing secrets or private contacts.
+   */
+  public async getDiagnosticReport(
+    env?: Record<string, unknown>,
+  ): Promise<SheetsDiagnosticReport> {
+    const oidcStatus = checkGcpOidcStatus(env);
+    const cfg = getGcpOidcConfig(env);
+
+    let authState: {
+      authenticated: boolean;
+      authMode: string;
+      error: string | null;
+    } = {
+      authenticated: false,
+      authMode: "none",
+      error: null,
+    };
+
+    if (oidcStatus.configured) {
+      try {
+        await getGcpOidcAccessToken(env);
+        authState = {
+          authenticated: true,
+          authMode: "vercel_oidc_workload_identity",
+          error: null,
+        };
+      } catch (err: unknown) {
+        authState = {
+          authenticated: false,
+          authMode: "vercel_oidc_workload_identity",
+          error: (err as Error)?.message || String(err),
+        };
+      }
+    }
+
+    const store = this.ensureLoaded();
+    const tabDiagnostics: Record<string, TabDiagnostic> = {};
+
+    const tabDefinitions: Array<{
+      key: keyof SheetsStore["worksheets"];
+      label: string;
+      items: Array<Record<string, unknown>>;
+    }> = [
+      { key: "Brands", label: "Brands", items: store.worksheets.Brands },
+      { key: "Contacts", label: "Contacts", items: store.worksheets.Contacts },
+      {
+        key: "SocialProfiles",
+        label: "Social Profiles",
+        items: store.worksheets.SocialProfiles,
+      },
+      { key: "Products", label: "Products", items: store.worksheets.Products },
+      {
+        key: "Activities",
+        label: "Activities & Opportunities",
+        items: store.worksheets.Activities,
+      },
+      { key: "Funding", label: "Funding", items: store.worksheets.Funding },
+      {
+        key: "Evidence",
+        label: "Sources & Evidence",
+        items: store.worksheets.Evidence,
+      },
+      {
+        key: "ResearchQueue",
+        label: "Research Queue",
+        items: store.worksheets.ResearchQueue,
+      },
+      {
+        key: "AutomationLog",
+        label: "Automation Log",
+        items: store.worksheets.AutomationLog,
+      },
+    ];
+
+    for (const tab of tabDefinitions) {
+      const headers = this.detectedHeadersPerTab[tab.label] || [];
+      const rowCount =
+        this.rawRowCountPerTab[tab.label] !== undefined
+          ? this.rawRowCountPerTab[tab.label]
+          : tab.items.length;
+
+      let sampleMapped: Record<string, unknown> | undefined;
+      if (tab.items.length > 0) {
+        // Safe sanitization: strip any sensitive fields from sample
+        const rawSample = { ...tab.items[0] };
+        delete (rawSample as { email?: unknown }).email;
+        delete (rawSample as { phone?: unknown }).phone;
+        sampleMapped = Object.fromEntries(
+          Object.entries(rawSample).slice(0, 8),
+        );
+      }
+
+      tabDiagnostics[tab.label] = {
+        tabName: tab.label,
+        detected: rowCount > 0 || headers.length > 0,
+        rowCount,
+        columnCount: headers.length,
+        headers,
+        mappedFieldsSample: sampleMapped,
+      };
+    }
+
+    return {
+      timestamp: new Date().toISOString(),
+      oidcStatus,
+      auth: authState,
+      spreadsheet: {
+        spreadsheetIdMasked: oidcStatus.maskedConfig.spreadsheetId || "not_set",
+        spreadsheetTitle: store.metadata?.spreadsheetTitle,
+        detectedTabs: Object.keys(this.detectedHeadersPerTab),
+        tabs: tabDiagnostics,
+      },
+      totalBrandsLoaded: store.worksheets.Brands.length,
+      dataSource:
+        (store.metadata?.source as SheetsDiagnosticReport["dataSource"]) ||
+        "local_store",
+    };
+  }
+
+  // Historical migration helper
   public async migrateHistoricalRecords(
     historicalBrands: Array<Record<string, unknown>>,
   ) {
@@ -762,7 +1497,7 @@ class GoogleSheetsService {
         (dom && existingDomains.has(dom)) ||
         (name && existingNames.has(name))
       ) {
-        continue; // Deduplicated
+        continue;
       }
 
       const brandId = String(
@@ -783,10 +1518,6 @@ class GoogleSheetsService {
       if (dom) existingDomains.add(dom);
       if (name) existingNames.add(name);
       appendedCount++;
-    }
-
-    if (appendedCount > 0) {
-      this.saveStore();
     }
 
     return {

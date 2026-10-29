@@ -13,6 +13,7 @@ import { handleDodoWebhook } from "../server/api/webhook/dodo";
 import { handleSubscriptionCurrent } from "../server/api/subscription/current";
 import { handlePerfectFitAgent } from "../server/api/ai/perfect-fit";
 import { handleDashboardAnalytics } from "../server/api/analytics/dashboard";
+import { handleSheetsDiagnostic } from "../server/api/admin/sheets-diagnostic";
 
 type ServerEntry = {
   fetch: (
@@ -128,6 +129,16 @@ export default {
         (request.method === "POST" || request.method === "GET")
       ) {
         return await handlePerfectFitAgent(request, env);
+      }
+      if (
+        (url.pathname === "/api/admin/sheets-diagnostic" ||
+          url.pathname === "/api/sheets/diagnostic") &&
+        (request.method === "GET" || request.method === "POST")
+      ) {
+        return await handleSheetsDiagnostic(
+          request,
+          env as Record<string, unknown>,
+        );
       }
       if (url.pathname === "/api/cron") {
         return new Response(

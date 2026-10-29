@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { PLANS, PlanType } from "../../../src/lib/monetization";
 import { getEffectiveSubscription } from "../../lib/subscriptionStore";
 import { googleSheetsService } from "../../lib/googleSheetsService";
+import { checkGcpOidcStatus } from "../../lib/gcpOidcAuth";
 
 const DEFAULT_SUPABASE_URL = "https://ldxjxrtdylnuhvmmcveg.supabase.co";
 const DEFAULT_SUPABASE_KEY =
@@ -43,7 +44,10 @@ function normalizePlan(plan: string): PlanType {
   return PLANS[plan as PlanType] ? (plan as PlanType) : "free";
 }
 
-function getSortColumn(sortOption?: string): { column: string; ascending: boolean } {
+function getSortColumn(sortOption?: string): {
+  column: string;
+  ascending: boolean;
+} {
   switch ((sortOption || "").toLowerCase()) {
     case "newest":
     case "recent":
@@ -90,13 +94,25 @@ async function getSupabaseBrandFallback(
     const industry = filters.industry;
     const category = filters.category;
     const stage = filters.companyStage ?? filters.company_stage;
-    if (typeof country === "string" && country && country.toLowerCase() !== "all") {
+    if (
+      typeof country === "string" &&
+      country &&
+      country.toLowerCase() !== "all"
+    ) {
       query = query.ilike("country", country);
     }
-    if (typeof industry === "string" && industry && industry.toLowerCase() !== "all") {
+    if (
+      typeof industry === "string" &&
+      industry &&
+      industry.toLowerCase() !== "all"
+    ) {
       query = query.ilike("industry", industry);
     }
-    if (typeof category === "string" && category && category.toLowerCase() !== "all") {
+    if (
+      typeof category === "string" &&
+      category &&
+      category.toLowerCase() !== "all"
+    ) {
       query = query.ilike("category", category);
     }
     if (typeof stage === "string" && stage && stage.toLowerCase() !== "all") {
@@ -105,7 +121,10 @@ async function getSupabaseBrandFallback(
   }
 
   const sort = getSortColumn(sortOption);
-  query = query.order(sort.column, { ascending: sort.ascending, nullsFirst: false });
+  query = query.order(sort.column, {
+    ascending: sort.ascending,
+    nullsFirst: false,
+  });
   const from = Math.max(0, pageParam) * Math.max(1, pageSize);
   query = query.range(from, from + Math.max(1, pageSize) - 1);
 
@@ -116,8 +135,7 @@ async function getSupabaseBrandFallback(
     id: brand.id,
     brand_id: brand.id,
     name: brand.company_name,
-    primary_product_summary:
-      brand.product_description || brand.product || null,
+    primary_product_summary: brand.product_description || brand.product || null,
     opportunity_signals: brand.opportunity_signals || brand.opportunity_signals,
     source: "supabase_fallback",
   }));
@@ -218,10 +236,13 @@ export const handleDiscover = async (
             planConfig.limits.daily_brand_searches !== "unlimited" &&
             searches >= planConfig.limits.daily_brand_searches
           ) {
-            return new Response(JSON.stringify({ error: "Daily search limit reached" }), {
-              status: 403,
-              headers: { "Content-Type": "application/json" },
-            });
+            return new Response(
+              JSON.stringify({ error: "Daily search limit reached" }),
+              {
+                status: 403,
+                headers: { "Content-Type": "application/json" },
+              },
+            );
           }
           searches++;
         }
@@ -230,10 +251,13 @@ export const handleDiscover = async (
           planConfig.limits.daily_brand_leads !== "unlimited" &&
           leads >= planConfig.limits.daily_brand_leads
         ) {
-          return new Response(JSON.stringify({ error: "Daily lead limit reached" }), {
-            status: 403,
-            headers: { "Content-Type": "application/json" },
-          });
+          return new Response(
+            JSON.stringify({ error: "Daily lead limit reached" }),
+            {
+              status: 403,
+              headers: { "Content-Type": "application/json" },
+            },
+          );
         }
 
         if (!usage) {
@@ -260,7 +284,34 @@ export const handleDiscover = async (
       }
     }
 
-    let result: any = null;
+    const oidcStatus = checkGcpOidcStatus(env);
+    if (oidcStatus.configured) {
+      const syncRes = await googleSheetsService.syncWithRemoteSheet(env);
+      if (!syncRes.success && process.env.NODE_ENV === "production") {
+        console.error(
+          "Live Google Sheet sync failed in production:",
+          syncRes.error,
+        );
+        return new Response(
+          JSON.stringify({
+            error: "Authoritative Google Sheets data sync failed",
+            details: syncRes.error,
+            source: "google_sheets_error",
+          }),
+          { status: 502, headers: { "Content-Type": "application/json" } },
+        );
+      }
+    }
+
+    let result: {
+      brands: Array<Record<string, unknown>>;
+      count: number;
+      totalCount: number;
+      nextPage?: number | null;
+      page: number;
+      pageSize: number;
+      source?: string;
+    } | null = null;
     let source = "google_sheets";
     try {
       result = googleSheetsService.getBrands({
@@ -269,12 +320,21 @@ export const handleDiscover = async (
         sortOption,
         pageParam,
         pageSize,
-      });
+      }) as typeof result;
     } catch (sheetError) {
-      console.error("Google Sheets brand lookup failed; using Supabase fallback.", sheetError);
+      console.error(
+        "Google Sheets brand lookup failed; considering fallback.",
+        sheetError,
+      );
     }
 
-    if (!result || !Array.isArray(result.brands) || result.brands.length === 0) {
+    // Only fallback if Google Sheets service has 0 total records in catalogue
+    // and no search term caused the 0 results. If the user searched for something
+    // that doesn't exist, we must preserve the authentic empty result!
+    const sheetDiagnostic = await googleSheetsService.getDiagnosticReport(env);
+    const hasSheetCatalogue = sheetDiagnostic.totalBrandsLoaded > 0;
+
+    if (!hasSheetCatalogue && (!result || result.brands.length === 0)) {
       result = await getSupabaseBrandFallback(supabase, {
         search,
         filters,
@@ -285,7 +345,17 @@ export const handleDiscover = async (
       source = "supabase_fallback";
     }
 
-    const maskedBrands = result.brands.map((brand: Record<string, any>) => {
+    if (!result) {
+      return new Response(
+        JSON.stringify({
+          error: "Brand intelligence catalogue is currently unavailable",
+          source: "service_unavailable",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const maskedBrands = result.brands.map((brand: Record<string, unknown>) => {
       if (!planConfig.features.full_brand_intelligence) {
         return {
           ...brand,
