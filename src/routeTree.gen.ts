@@ -8,389 +8,389 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardRouteImport } from './routes/_dashboard'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as PoliciesRouteImport } from './routes/policies'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as SecurityRouteImport } from './routes/security'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as DashboardContactedRouteImport } from './routes/_dashboard.contacted'
-import { Route as DashboardDashboardRouteImport } from './routes/_dashboard.dashboard'
-import { Route as DashboardDiscoverRouteImport } from './routes/_dashboard.discover'
-import { Route as DashboardForYouRouteImport } from './routes/_dashboard.for-you'
-import { Route as DashboardProfileRouteImport } from './routes/_dashboard.profile'
-import { Route as DashboardSavedRouteImport } from './routes/_dashboard.saved'
-import { Route as DashboardSettingsRouteImport } from './routes/_dashboard.settings'
-import { Route as DashboardTeamRouteImport } from './routes/_dashboard.team'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as DashboardRouteImport } from "./routes/_dashboard";
+import { Route as AboutRouteImport } from "./routes/about";
+import { Route as AdminRouteImport } from "./routes/admin";
+import { Route as AuthRouteImport } from "./routes/auth";
+import { Route as OnboardingRouteImport } from "./routes/onboarding";
+import { Route as PoliciesRouteImport } from "./routes/policies";
+import { Route as PricingRouteImport } from "./routes/pricing";
+import { Route as SecurityRouteImport } from "./routes/security";
+import { Route as TermsRouteImport } from "./routes/terms";
+import { Route as DashboardContactedRouteImport } from "./routes/_dashboard.contacted";
+import { Route as DashboardDashboardRouteImport } from "./routes/_dashboard.dashboard";
+import { Route as DashboardDiscoverRouteImport } from "./routes/_dashboard.discover";
+import { Route as DashboardForYouRouteImport } from "./routes/_dashboard.for-you";
+import { Route as DashboardProfileRouteImport } from "./routes/_dashboard.profile";
+import { Route as DashboardSavedRouteImport } from "./routes/_dashboard.saved";
+import { Route as DashboardSettingsRouteImport } from "./routes/_dashboard.settings";
+import { Route as DashboardTeamRouteImport } from "./routes/_dashboard.team";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardRoute = DashboardRouteImport.update({
-  id: '/_dashboard',
+  id: "/_dashboard",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+  id: "/about",
+  path: "/about",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+  id: "/admin",
+  path: "/admin",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+  id: "/auth",
+  path: "/auth",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
+  id: "/onboarding",
+  path: "/onboarding",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const PoliciesRoute = PoliciesRouteImport.update({
-  id: '/policies',
-  path: '/policies',
+  id: "/policies",
+  path: "/policies",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
+  id: "/pricing",
+  path: "/pricing",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SecurityRoute = SecurityRouteImport.update({
-  id: '/security',
-  path: '/security',
+  id: "/security",
+  path: "/security",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+  id: "/terms",
+  path: "/terms",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardContactedRoute = DashboardContactedRouteImport.update({
-  id: '/contacted',
-  path: '/contacted',
+  id: "/contacted",
+  path: "/contacted",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardDiscoverRoute = DashboardDiscoverRouteImport.update({
-  id: '/discover',
-  path: '/discover',
+  id: "/discover",
+  path: "/discover",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardForYouRoute = DashboardForYouRouteImport.update({
-  id: '/for-you',
-  path: '/for-you',
+  id: "/for-you",
+  path: "/for-you",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+  id: "/profile",
+  path: "/profile",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardSavedRoute = DashboardSavedRouteImport.update({
-  id: '/saved',
-  path: '/saved',
+  id: "/saved",
+  path: "/saved",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+  id: "/settings",
+  path: "/settings",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 const DashboardTeamRoute = DashboardTeamRouteImport.update({
-  id: '/team',
-  path: '/team',
+  id: "/team",
+  path: "/team",
   getParentRoute: () => DashboardRoute,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
-  '/onboarding': typeof OnboardingRoute
-  '/policies': typeof PoliciesRoute
-  '/pricing': typeof PricingRoute
-  '/security': typeof SecurityRoute
-  '/terms': typeof TermsRoute
-  '/contacted': typeof DashboardContactedRoute
-  '/dashboard': typeof DashboardDashboardRoute
-  '/discover': typeof DashboardDiscoverRoute
-  '/for-you': typeof DashboardForYouRoute
-  '/profile': typeof DashboardProfileRoute
-  '/saved': typeof DashboardSavedRoute
-  '/settings': typeof DashboardSettingsRoute
-  '/team': typeof DashboardTeamRoute
+  "/": typeof IndexRoute;
+  "/about": typeof AboutRoute;
+  "/admin": typeof AdminRoute;
+  "/auth": typeof AuthRoute;
+  "/onboarding": typeof OnboardingRoute;
+  "/policies": typeof PoliciesRoute;
+  "/pricing": typeof PricingRoute;
+  "/security": typeof SecurityRoute;
+  "/terms": typeof TermsRoute;
+  "/contacted": typeof DashboardContactedRoute;
+  "/dashboard": typeof DashboardDashboardRoute;
+  "/discover": typeof DashboardDiscoverRoute;
+  "/for-you": typeof DashboardForYouRoute;
+  "/profile": typeof DashboardProfileRoute;
+  "/saved": typeof DashboardSavedRoute;
+  "/settings": typeof DashboardSettingsRoute;
+  "/team": typeof DashboardTeamRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
-  '/onboarding': typeof OnboardingRoute
-  '/policies': typeof PoliciesRoute
-  '/pricing': typeof PricingRoute
-  '/security': typeof SecurityRoute
-  '/terms': typeof TermsRoute
-  '/contacted': typeof DashboardContactedRoute
-  '/dashboard': typeof DashboardDashboardRoute
-  '/discover': typeof DashboardDiscoverRoute
-  '/for-you': typeof DashboardForYouRoute
-  '/profile': typeof DashboardProfileRoute
-  '/saved': typeof DashboardSavedRoute
-  '/settings': typeof DashboardSettingsRoute
-  '/team': typeof DashboardTeamRoute
+  "/": typeof IndexRoute;
+  "/about": typeof AboutRoute;
+  "/admin": typeof AdminRoute;
+  "/auth": typeof AuthRoute;
+  "/onboarding": typeof OnboardingRoute;
+  "/policies": typeof PoliciesRoute;
+  "/pricing": typeof PricingRoute;
+  "/security": typeof SecurityRoute;
+  "/terms": typeof TermsRoute;
+  "/contacted": typeof DashboardContactedRoute;
+  "/dashboard": typeof DashboardDashboardRoute;
+  "/discover": typeof DashboardDiscoverRoute;
+  "/for-you": typeof DashboardForYouRoute;
+  "/profile": typeof DashboardProfileRoute;
+  "/saved": typeof DashboardSavedRoute;
+  "/settings": typeof DashboardSettingsRoute;
+  "/team": typeof DashboardTeamRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_dashboard': typeof DashboardRouteWithChildren
-  '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
-  '/onboarding': typeof OnboardingRoute
-  '/policies': typeof PoliciesRoute
-  '/pricing': typeof PricingRoute
-  '/security': typeof SecurityRoute
-  '/terms': typeof TermsRoute
-  '/_dashboard/contacted': typeof DashboardContactedRoute
-  '/_dashboard/dashboard': typeof DashboardDashboardRoute
-  '/_dashboard/discover': typeof DashboardDiscoverRoute
-  '/_dashboard/for-you': typeof DashboardForYouRoute
-  '/_dashboard/profile': typeof DashboardProfileRoute
-  '/_dashboard/saved': typeof DashboardSavedRoute
-  '/_dashboard/settings': typeof DashboardSettingsRoute
-  '/_dashboard/team': typeof DashboardTeamRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/_dashboard": typeof DashboardRouteWithChildren;
+  "/about": typeof AboutRoute;
+  "/admin": typeof AdminRoute;
+  "/auth": typeof AuthRoute;
+  "/onboarding": typeof OnboardingRoute;
+  "/policies": typeof PoliciesRoute;
+  "/pricing": typeof PricingRoute;
+  "/security": typeof SecurityRoute;
+  "/terms": typeof TermsRoute;
+  "/_dashboard/contacted": typeof DashboardContactedRoute;
+  "/_dashboard/dashboard": typeof DashboardDashboardRoute;
+  "/_dashboard/discover": typeof DashboardDiscoverRoute;
+  "/_dashboard/for-you": typeof DashboardForYouRoute;
+  "/_dashboard/profile": typeof DashboardProfileRoute;
+  "/_dashboard/saved": typeof DashboardSavedRoute;
+  "/_dashboard/settings": typeof DashboardSettingsRoute;
+  "/_dashboard/team": typeof DashboardTeamRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/about'
-    | '/admin'
-    | '/auth'
-    | '/onboarding'
-    | '/policies'
-    | '/pricing'
-    | '/security'
-    | '/terms'
-    | '/contacted'
-    | '/dashboard'
-    | '/discover'
-    | '/for-you'
-    | '/profile'
-    | '/saved'
-    | '/settings'
-    | '/team'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/about"
+    | "/admin"
+    | "/auth"
+    | "/onboarding"
+    | "/policies"
+    | "/pricing"
+    | "/security"
+    | "/terms"
+    | "/contacted"
+    | "/dashboard"
+    | "/discover"
+    | "/for-you"
+    | "/profile"
+    | "/saved"
+    | "/settings"
+    | "/team";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/about'
-    | '/admin'
-    | '/auth'
-    | '/onboarding'
-    | '/policies'
-    | '/pricing'
-    | '/security'
-    | '/terms'
-    | '/contacted'
-    | '/dashboard'
-    | '/discover'
-    | '/for-you'
-    | '/profile'
-    | '/saved'
-    | '/settings'
-    | '/team'
+    | "/"
+    | "/about"
+    | "/admin"
+    | "/auth"
+    | "/onboarding"
+    | "/policies"
+    | "/pricing"
+    | "/security"
+    | "/terms"
+    | "/contacted"
+    | "/dashboard"
+    | "/discover"
+    | "/for-you"
+    | "/profile"
+    | "/saved"
+    | "/settings"
+    | "/team";
   id:
-    | '__root__'
-    | '/'
-    | '/_dashboard'
-    | '/about'
-    | '/admin'
-    | '/auth'
-    | '/onboarding'
-    | '/policies'
-    | '/pricing'
-    | '/security'
-    | '/terms'
-    | '/_dashboard/contacted'
-    | '/_dashboard/dashboard'
-    | '/_dashboard/discover'
-    | '/_dashboard/for-you'
-    | '/_dashboard/profile'
-    | '/_dashboard/saved'
-    | '/_dashboard/settings'
-    | '/_dashboard/team'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/_dashboard"
+    | "/about"
+    | "/admin"
+    | "/auth"
+    | "/onboarding"
+    | "/policies"
+    | "/pricing"
+    | "/security"
+    | "/terms"
+    | "/_dashboard/contacted"
+    | "/_dashboard/dashboard"
+    | "/_dashboard/discover"
+    | "/_dashboard/for-you"
+    | "/_dashboard/profile"
+    | "/_dashboard/saved"
+    | "/_dashboard/settings"
+    | "/_dashboard/team";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
-  AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
-  AuthRoute: typeof AuthRoute
-  OnboardingRoute: typeof OnboardingRoute
-  PoliciesRoute: typeof PoliciesRoute
-  PricingRoute: typeof PricingRoute
-  SecurityRoute: typeof SecurityRoute
-  TermsRoute: typeof TermsRoute
+  IndexRoute: typeof IndexRoute;
+  DashboardRoute: typeof DashboardRouteWithChildren;
+  AboutRoute: typeof AboutRoute;
+  AdminRoute: typeof AdminRoute;
+  AuthRoute: typeof AuthRoute;
+  OnboardingRoute: typeof OnboardingRoute;
+  PoliciesRoute: typeof PoliciesRoute;
+  PricingRoute: typeof PricingRoute;
+  SecurityRoute: typeof SecurityRoute;
+  TermsRoute: typeof TermsRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_dashboard': {
-      id: '/_dashboard'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/policies': {
-      id: '/policies'
-      path: '/policies'
-      fullPath: '/policies'
-      preLoaderRoute: typeof PoliciesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/security': {
-      id: '/security'
-      path: '/security'
-      fullPath: '/security'
-      preLoaderRoute: typeof SecurityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_dashboard/contacted': {
-      id: '/_dashboard/contacted'
-      path: '/contacted'
-      fullPath: '/contacted'
-      preLoaderRoute: typeof DashboardContactedRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/dashboard': {
-      id: '/_dashboard/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardDashboardRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/discover': {
-      id: '/_dashboard/discover'
-      path: '/discover'
-      fullPath: '/discover'
-      preLoaderRoute: typeof DashboardDiscoverRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/for-you': {
-      id: '/_dashboard/for-you'
-      path: '/for-you'
-      fullPath: '/for-you'
-      preLoaderRoute: typeof DashboardForYouRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/profile': {
-      id: '/_dashboard/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/saved': {
-      id: '/_dashboard/saved'
-      path: '/saved'
-      fullPath: '/saved'
-      preLoaderRoute: typeof DashboardSavedRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/settings': {
-      id: '/_dashboard/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/_dashboard/team': {
-      id: '/_dashboard/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof DashboardTeamRouteImport
-      parentRoute: typeof DashboardRoute
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_dashboard": {
+      id: "/_dashboard";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof DashboardRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/about": {
+      id: "/about";
+      path: "/about";
+      fullPath: "/about";
+      preLoaderRoute: typeof AboutRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin": {
+      id: "/admin";
+      path: "/admin";
+      fullPath: "/admin";
+      preLoaderRoute: typeof AdminRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/auth": {
+      id: "/auth";
+      path: "/auth";
+      fullPath: "/auth";
+      preLoaderRoute: typeof AuthRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/onboarding": {
+      id: "/onboarding";
+      path: "/onboarding";
+      fullPath: "/onboarding";
+      preLoaderRoute: typeof OnboardingRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/policies": {
+      id: "/policies";
+      path: "/policies";
+      fullPath: "/policies";
+      preLoaderRoute: typeof PoliciesRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/pricing": {
+      id: "/pricing";
+      path: "/pricing";
+      fullPath: "/pricing";
+      preLoaderRoute: typeof PricingRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/security": {
+      id: "/security";
+      path: "/security";
+      fullPath: "/security";
+      preLoaderRoute: typeof SecurityRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/terms": {
+      id: "/terms";
+      path: "/terms";
+      fullPath: "/terms";
+      preLoaderRoute: typeof TermsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_dashboard/contacted": {
+      id: "/_dashboard/contacted";
+      path: "/contacted";
+      fullPath: "/contacted";
+      preLoaderRoute: typeof DashboardContactedRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/dashboard": {
+      id: "/_dashboard/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardDashboardRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/discover": {
+      id: "/_dashboard/discover";
+      path: "/discover";
+      fullPath: "/discover";
+      preLoaderRoute: typeof DashboardDiscoverRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/for-you": {
+      id: "/_dashboard/for-you";
+      path: "/for-you";
+      fullPath: "/for-you";
+      preLoaderRoute: typeof DashboardForYouRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/profile": {
+      id: "/_dashboard/profile";
+      path: "/profile";
+      fullPath: "/profile";
+      preLoaderRoute: typeof DashboardProfileRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/saved": {
+      id: "/_dashboard/saved";
+      path: "/saved";
+      fullPath: "/saved";
+      preLoaderRoute: typeof DashboardSavedRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/settings": {
+      id: "/_dashboard/settings";
+      path: "/settings";
+      fullPath: "/settings";
+      preLoaderRoute: typeof DashboardSettingsRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
+    "/_dashboard/team": {
+      id: "/_dashboard/team";
+      path: "/team";
+      fullPath: "/team";
+      preLoaderRoute: typeof DashboardTeamRouteImport;
+      parentRoute: typeof DashboardRoute;
+    };
   }
 }
 
 interface DashboardRouteChildren {
-  DashboardContactedRoute: typeof DashboardContactedRoute
-  DashboardDashboardRoute: typeof DashboardDashboardRoute
-  DashboardDiscoverRoute: typeof DashboardDiscoverRoute
-  DashboardForYouRoute: typeof DashboardForYouRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
-  DashboardSavedRoute: typeof DashboardSavedRoute
-  DashboardSettingsRoute: typeof DashboardSettingsRoute
-  DashboardTeamRoute: typeof DashboardTeamRoute
+  DashboardContactedRoute: typeof DashboardContactedRoute;
+  DashboardDashboardRoute: typeof DashboardDashboardRoute;
+  DashboardDiscoverRoute: typeof DashboardDiscoverRoute;
+  DashboardForYouRoute: typeof DashboardForYouRoute;
+  DashboardProfileRoute: typeof DashboardProfileRoute;
+  DashboardSavedRoute: typeof DashboardSavedRoute;
+  DashboardSettingsRoute: typeof DashboardSettingsRoute;
+  DashboardTeamRoute: typeof DashboardTeamRoute;
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -402,11 +402,11 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSavedRoute: DashboardSavedRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardTeamRoute: DashboardTeamRoute,
-}
+};
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
-)
+);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -419,17 +419,17 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SecurityRoute: SecurityRoute,
   TermsRoute: TermsRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx";
+import type { startInstance } from "./start.ts";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>;
   }
 }

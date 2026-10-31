@@ -53,9 +53,11 @@ export async function handleSheetsDiagnostic(
         {
           status: report.auth.authenticated
             ? "connected"
-            : oidcStatus.configured
-              ? "auth_failed"
-              : "not_configured",
+            : oidcStatus.configured && !oidcStatus.oidcAvailable
+              ? "oidc_token_pending"
+              : oidcStatus.configured
+                ? "auth_failed"
+                : "not_configured",
           liveSheetAuthoritative:
             report.dataSource === "live_google_sheets_oidc",
           diagnostic: report,

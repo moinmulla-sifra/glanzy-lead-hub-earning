@@ -75,70 +75,78 @@ export default {
     try {
       const url = new URL(request.url);
 
+      const incomingVercelOidc = request.headers.get("x-vercel-oidc-token");
+      if (incomingVercelOidc) {
+        process.env.VERCEL_OIDC_TOKEN = incomingVercelOidc;
+      }
+      const effectiveEnv = {
+        ...((env as Record<string, unknown>) || {}),
+        ...(incomingVercelOidc
+          ? { "x-vercel-oidc-token": incomingVercelOidc }
+          : {}),
+      };
+
       // API Routes Intercept
       if (
         url.pathname === "/api/subscription/current" &&
         (request.method === "GET" || request.method === "POST")
       ) {
-        return await handleSubscriptionCurrent(request, env);
+        return await handleSubscriptionCurrent(request, effectiveEnv);
       }
       if (url.pathname === "/api/checkout" && request.method === "POST") {
-        return await handleCheckout(request, env);
+        return await handleCheckout(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/checkout/verify" &&
         request.method === "POST"
       ) {
-        return await handleVerifyCheckout(request, env);
+        return await handleVerifyCheckout(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/brands/discover" &&
         request.method === "POST"
       ) {
-        return await handleDiscover(request, env);
+        return await handleDiscover(request, effectiveEnv);
       }
       if (url.pathname === "/api/brands/reveal" && request.method === "POST") {
-        return await handleReveal(request, env);
+        return await handleReveal(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/brands/details" &&
         (request.method === "GET" || request.method === "POST")
       ) {
-        return await handleBrandDetails(request, env);
+        return await handleBrandDetails(request, effectiveEnv);
       }
       if (url.pathname === "/api/brands/saved" && request.method === "POST") {
-        return await handleSavedBrands(request, env);
+        return await handleSavedBrands(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/brands/contacted" &&
         request.method === "POST"
       ) {
-        return await handleContactedBrands(request, env);
+        return await handleContactedBrands(request, effectiveEnv);
       }
       if (url.pathname === "/api/webhook/dodo" && request.method === "POST") {
-        return await handleDodoWebhook(request, env);
+        return await handleDodoWebhook(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/analytics/dashboard" &&
         (request.method === "POST" || request.method === "GET")
       ) {
-        return await handleDashboardAnalytics(request, env);
+        return await handleDashboardAnalytics(request, effectiveEnv);
       }
       if (
         url.pathname === "/api/ai/perfect-fit" &&
         (request.method === "POST" || request.method === "GET")
       ) {
-        return await handlePerfectFitAgent(request, env);
+        return await handlePerfectFitAgent(request, effectiveEnv);
       }
       if (
         (url.pathname === "/api/admin/sheets-diagnostic" ||
           url.pathname === "/api/sheets/diagnostic") &&
         (request.method === "GET" || request.method === "POST")
       ) {
-        return await handleSheetsDiagnostic(
-          request,
-          env as Record<string, unknown>,
-        );
+        return await handleSheetsDiagnostic(request, effectiveEnv);
       }
       if (url.pathname === "/api/cron") {
         return new Response(

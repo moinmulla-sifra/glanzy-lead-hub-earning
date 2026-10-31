@@ -285,21 +285,17 @@ export const handleDiscover = async (
     }
 
     const oidcStatus = checkGcpOidcStatus(env);
+    let syncWarning: string | null = null;
     if (oidcStatus.configured) {
-      const syncRes = await googleSheetsService.syncWithRemoteSheet(env);
-      if (!syncRes.success && process.env.NODE_ENV === "production") {
-        console.error(
-          "Live Google Sheet sync failed in production:",
-          syncRes.error,
-        );
-        return new Response(
-          JSON.stringify({
-            error: "Authoritative Google Sheets data sync failed",
-            details: syncRes.error,
-            source: "google_sheets_error",
-          }),
-          { status: 502, headers: { "Content-Type": "application/json" } },
-        );
+      try {
+        const syncRes = await googleSheetsService.syncWithRemoteSheet(env);
+        if (!syncRes.success) {
+          syncWarning = syncRes.error || "Live Google Sheet sync unavailable";
+          console.warn("Live Google Sheet sync notice:", syncWarning);
+        }
+      } catch (err: unknown) {
+        syncWarning = (err as Error)?.message || String(err);
+        console.warn("Live Google Sheet sync notice:", syncWarning);
       }
     }
 
@@ -385,6 +381,7 @@ export const handleDiscover = async (
         page: result.page,
         pageSize: result.pageSize,
         source: result.source || source,
+        syncWarning: syncWarning || undefined,
       }),
       { headers: { "Content-Type": "application/json" } },
     );

@@ -12,6 +12,7 @@ export interface GcpOidcConfig {
 
 export interface GcpOidcStatus {
   configured: boolean;
+  oidcAvailable: boolean;
   missingFields: string[];
   maskedConfig: {
     projectId?: string;
@@ -61,6 +62,16 @@ function maskString(val?: string, visibleChars = 4): string {
   return `${val.substring(0, visibleChars)}...${val.substring(val.length - Math.min(3, val.length - visibleChars))}`;
 }
 
+export function isVercelOidcAvailable(env?: Record<string, unknown>): boolean {
+  return Boolean(
+    env?.VERCEL_OIDC_TOKEN ||
+    env?.["x-vercel-oidc-token"] ||
+    process.env.VERCEL_OIDC_TOKEN ||
+    process.env.VERCEL ||
+    process.env.VERCEL_ENV,
+  );
+}
+
 export function checkGcpOidcStatus(
   env?: Record<string, unknown>,
 ): GcpOidcStatus {
@@ -77,6 +88,7 @@ export function checkGcpOidcStatus(
 
   return {
     configured: missing.length === 0,
+    oidcAvailable: isVercelOidcAvailable(env),
     missingFields: missing,
     maskedConfig: {
       projectId: cfg.projectId ? maskString(cfg.projectId, 6) : undefined,
@@ -132,16 +144,33 @@ export function getGcpExternalAccountClient(
     service_account_impersonation_url: impersonationUrl,
     subject_token_supplier: {
       getSubjectToken: async () => {
+        const directToken =
+          (env?.VERCEL_OIDC_TOKEN as string) ||
+          (env?.["x-vercel-oidc-token"] as string) ||
+          process.env.VERCEL_OIDC_TOKEN;
+
+        if (directToken && directToken.trim()) {
+          return directToken.trim();
+        }
+
         try {
           const vercelToken = await getVercelOidcToken();
           if (!vercelToken) {
             throw new Error(
-              "Vercel OIDC token returned empty. Ensure Vercel project OIDC is enabled.",
+              "Vercel OIDC token returned empty. Ensure Vercel project OIDC is enabled in Project Settings > Integrations.",
             );
           }
           return vercelToken;
         } catch (err: unknown) {
           const msg = (err as Error)?.message || String(err);
+          if (
+            msg.includes("missing from the request") ||
+            msg.includes("x-vercel-oidc-token")
+          ) {
+            throw new Error(
+              "The 'x-vercel-oidc-token' header is missing from the request. Live Google Sheet federation requires running on Vercel with OIDC enabled in Project Settings.",
+            );
+          }
           throw new Error(
             `Failed to obtain Vercel OIDC token for GCP federation: ${msg}`,
           );
