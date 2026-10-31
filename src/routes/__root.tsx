@@ -50,29 +50,52 @@ function ErrorComponent({
 }) {
   console.error(error);
   const router = useRouter();
+  const errorMessage = String((error as Error)?.message || error);
+  const isModuleFetchError =
+    errorMessage.includes("Failed to fetch dynamically imported module") ||
+    errorMessage.includes("dynamically imported module") ||
+    errorMessage.includes("Importing a module script failed");
+
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
+
+    if (isModuleFetchError && typeof window !== "undefined") {
+      const lastReload = sessionStorage.getItem("chunk_reload_timestamp");
+      const now = Date.now();
+      // Only auto-reload if not reloaded in the last 15 seconds to avoid infinite reload loops
+      if (!lastReload || now - parseInt(lastReload, 10) > 15000) {
+        sessionStorage.setItem("chunk_reload_timestamp", String(now));
+        window.location.reload();
+      }
+    }
+  }, [error, isModuleFetchError]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {isModuleFetchError
+            ? "Updating to the latest version..."
+            : "This page didn't load"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back
-          home.
+          {isModuleFetchError
+            ? "A newer version of this page is available. Click below to refresh."
+            : "Something went wrong on our end. You can try refreshing or head back home."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
-              router.invalidate();
-              reset();
+              if (isModuleFetchError && typeof window !== "undefined") {
+                window.location.reload();
+              } else {
+                router.invalidate();
+                reset();
+              }
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {isModuleFetchError ? "Refresh page" : "Try again"}
           </button>
           <a
             href="/"
@@ -235,6 +258,24 @@ function GoogleAdSense() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handlePreloadError = () => {
+      const lastReload = sessionStorage.getItem("chunk_reload_timestamp");
+      const now = Date.now();
+      if (!lastReload || now - parseInt(lastReload, 10) > 15000) {
+        sessionStorage.setItem("chunk_reload_timestamp", String(now));
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener("vite:preloadError", handlePreloadError);
+    return () => {
+      window.removeEventListener("vite:preloadError", handlePreloadError);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

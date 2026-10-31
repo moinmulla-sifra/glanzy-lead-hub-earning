@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PLANS, type PlanType } from "@/lib/monetization";
-import { Check, X, Sparkles, Building2, User, ArrowLeft } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Check, X, Building2, User, ArrowLeft } from "lucide-react";
+import React, { useState, useEffect, type ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useMonetization } from "@/lib/useMonetization";
@@ -369,7 +369,7 @@ function Feature({
   children,
   included,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   included: boolean;
 }) {
   return (
