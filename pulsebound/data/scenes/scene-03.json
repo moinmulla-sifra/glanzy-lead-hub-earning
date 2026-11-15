@@ -1,0 +1,145 @@
+{
+  "n": 3,
+  "title": "BREAKFAST",
+  "act": "ACT I — THE ORDINARY WORLD",
+  "start": "05:00",
+  "end": "07:00",
+  "dur": 120,
+  "location": "L03 · DINING AREA",
+  "tod": "07:15 → 07:35 · morning, everything golden",
+  "logline": "Small domestic comedy, played entirely in the body. The family at its most functional — and its most fragile.",
+  "grade": "The warmest grade in the episode: amber key, honeyed highlights, gentle highlight roll-off. Nothing in this scene may look cool.",
+  "key": "assets/storyboard/S03.png",
+  "voiceBlock": 2,
+  "narration": [
+    {
+      "hi": "घर में सुबह की आवाज़ें हमेशा एक जैसी थीं — चाय की केतली, माँ की डाँट, और विवान की हँसी।",
+      "t": "05:06–05:26",
+      "en": "The sounds of morning at home were always the same — the kettle, Maa's scolding, and Vivaan's laugh."
+    },
+    {
+      "hi": "उस वक़्त मुझे नहीं पता था कि ये मामूली सी सुबह मेरी सबसे कीमती यादों में से एक बन जाएगी।",
+      "t": "05:34–05:56",
+      "en": "Back then I didn't know that this ordinary morning would become one of my most precious memories."
+    }
+  ],
+  "shots": [
+    {
+      "id": "S03-01",
+      "dur": 22,
+      "size": "MS",
+      "lens": "35mm",
+      "cam": "Interior, height 1.05 m — table-top height, slightly below eye-line, looking across the table",
+      "move": "Static. Hands do the acting in the foreground.",
+      "cast": [
+        "MAA",
+        "PITA",
+        "AAROHI",
+        "VIVAAN",
+        "ISHAAN (hands)"
+      ],
+      "action": "Parathas, a steel bowl of curd, four glasses of milk, one hand stealing, one hand swatting, one hand pouring.",
+      "expr": "— (faces cropped above the frame line)",
+      "env": "Dining table with a steel thali set, a plastic mat, a newspaper folded beside Pita's plate.",
+      "light": "Window light from frame-left skimming the table surface; the steel reflects small warm hotspots.",
+      "vfx": "Steam off the parathas; no bloom on the steel.",
+      "vo": "Line 1 at 05:06.",
+      "cont": "Table dressing is a registered set piece (SET-03). Same plates, same mat, every shot."
+    },
+    {
+      "id": "S03-02",
+      "dur": 20,
+      "size": "MS",
+      "lens": "50mm",
+      "cam": "Interior, height 1.20 m, seated eye-level, Aarohi frame-right facing camera-left",
+      "move": "Gentle push-in 0.15 m/s.",
+      "cast": [
+        "AAROHI",
+        "ISHAAN (foreground shoulder)"
+      ],
+      "action": "Aarohi points her spoon at Ishaan's head, mimes an explosion, and grins.",
+      "expr": "Delighted cruelty. Eyebrows high, chin down.",
+      "env": "Dining table, Ishaan's shoulder a soft dark mass in the foreground-right.",
+      "light": "Warm key on Aarohi; foreground shoulder in shadow.",
+      "vfx": "None.",
+      "vo": "Silence — the joke has to land visually.",
+      "cont": "Her braid stays over her RIGHT shoulder in all breakfast shots."
+    },
+    {
+      "id": "S03-03",
+      "dur": 22,
+      "size": "CU",
+      "lens": "85mm",
+      "cam": "Interior, height 1.20 m, 60 cm, dead-on eye level",
+      "move": "Static, 1-px breathing.",
+      "cast": [
+        "ISHAAN"
+      ],
+      "action": "Chews, stops, pats his hair down twice, fails, gives his sister a flat look, then goes back to eating.",
+      "expr": "Deadpan. Eyes only: 'really?' The mouth never changes.",
+      "env": "Background defocused, warm and busy.",
+      "light": "Warm key from the left, soft shadow side; catchlights in both eyes.",
+      "vfx": "None.",
+      "vo": "Line 2 begins at 05:34 — it must start on the flat look.",
+      "cont": "Jacket NOT worn yet in this scene — he is in the white shirt only. Signature jacket appears in S04."
+    },
+    {
+      "id": "S03-04",
+      "dur": 20,
+      "size": "MS",
+      "lens": "40mm",
+      "cam": "Interior, height 1.15 m, across the table, Vivaan frame-left",
+      "move": "Small 10° lateral drift right.",
+      "cast": [
+        "VIVAAN",
+        "MAA (hand)"
+      ],
+      "action": "Vivaan reaches across for a paratha, knocks his milk glass, and Maa's hand appears from frame-right and catches it without her looking.",
+      "expr": "Guilt → relief → instant re-offence.",
+      "env": "Dining table, milk sloshing but not spilling.",
+      "light": "Warm; the milk is the second-brightest object in frame.",
+      "vfx": "Tiny milk ripple; do not over-simulate.",
+      "vo": "Silence. One clean comedic beat, then cut.",
+      "cont": "Vivaan uses his LEFT hand — established habit, repeat in S09."
+    },
+    {
+      "id": "S03-05",
+      "dur": 20,
+      "size": "MS",
+      "lens": "32mm",
+      "cam": "Interior, height 1.45 m, near the main door, looking back into the room",
+      "move": "Static.",
+      "cast": [
+        "PITA",
+        "MAA",
+        "ISHAAN (background)"
+      ],
+      "action": "Pita stands, checks his watch, is handed a steel tiffin by Maa without a word exchanged. He nods once. She straightens his collar.",
+      "expr": "Pita: businesslike. Maa: fond exasperation.",
+      "env": "Main door area, the family behind them at the table.",
+      "light": "Cool daylight at the door behind Pita; warm room light on Maa — the two-temperature frame returns.",
+      "vfx": "None.",
+      "vo": "Line 2 continues and ends here — on the collar straightening, not on the words.",
+      "cont": "The tiffin is prop P-02; it appears again in S09 on the kitchen counter."
+    },
+    {
+      "id": "S03-06",
+      "dur": 16,
+      "size": "CU",
+      "lens": "100mm",
+      "cam": "Table height, 25 cm, macro on the hands",
+      "move": "Static. Cut to black at 06:58 with a 10-frame fade.",
+      "cast": [
+        "MAA (hand)",
+        "ISHAAN (hand)"
+      ],
+      "action": "Maa's hand slides a second paratha onto Ishaan's plate. His hand closes over it. Her hand withdraws, then returns to briefly pat his knuckles.",
+      "expr": "—",
+      "env": "Plate detail: steel thali, ghee sheen, fingerprints on the rim.",
+      "light": "Warm; the hand textures are the point of the shot.",
+      "vfx": "None.",
+      "vo": "Silence over the whole shot. The episode's thesis, delivered without a word.",
+      "cont": "Maa's bangles must ring — but per the audio rule, no sound effect is mixed; the motion must SUGGEST the sound."
+    }
+  ]
+}

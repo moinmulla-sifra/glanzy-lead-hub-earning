@@ -1,0 +1,113 @@
+{
+  "n": 13,
+  "title": "THE PULSE CORE",
+  "act": "ACT III — AARANYA RIDGE",
+  "start": "33:00",
+  "end": "35:20",
+  "dur": 140,
+  "location": "L12 · PULSE CORE CHAMBER",
+  "tod": "No daylight. No time. Blue.",
+  "logline": "A boy reaches for something older than the mountain, and the mountain answers. Episode 01 ends on the first contact.",
+  "grade": "Total palette collapse to blue + skin. Everything that is not a face becomes a blue value. Final 4 frames: pure white → hard cut to black → title.",
+  "key": "assets/storyboard/S13.png",
+  "voiceBlock": 10,
+  "narration": [
+    { "hi": "उस पल मुझे समझ नहीं आ रहा था कि मेरे साथ क्या हो रहा है।", "t": "34:06–34:22", "en": "In that moment I couldn't understand what was happening to me." },
+    { "hi": "मैं बस एक चीज़ जानता था...", "t": "34:30–34:36", "en": "I only knew one thing…" },
+    { "hi": "अब कुछ भी पहले जैसा नहीं रहने वाला था।", "t": "34:42–34:58", "en": "Nothing was ever going to be the same again." }
+  ],
+  "shots": [
+    {
+      "id": "S13-01", "dur": 18, "size": "ELS", "lens": "24mm",
+      "cam": "Interior, height 1.30 m at the chamber mouth, subject 60 m away",
+      "move": "Static. Fade up from black over 2 s, already inside the reveal. No whoosh, no shake.",
+      "cast": ["—"],
+      "action": "The chamber: a domed void, 60 m across, ribbed stone pillars converging overhead, and at its centre — floating a metre above a circular dais — the CORE.",
+      "expr": "—",
+      "env": "L12 chamber: concentric floor rings, a 40 m apical oculus (sealed), water on the floor reflecting everything, the sigil pattern inlaid in a 30 m radius.",
+      "light": "The Core is the only light. Blue at 100%, with physically plausible falloff — pillars near it are bright, the mouth of the chamber is almost black.",
+      "vfx": "VFX HERO SHOT 3: volumetric shafts through the haze; reflection in standing water; slow orbital particles. The Core must read as ANCIENT, INTELLIGENT, MYSTERIOUS — not a crystal.",
+      "vo": "Silence for the first 4 s of the reveal. Let the room be the loudest thing in the film.",
+      "cont": "The dome's rib count and pillar positions are locked to a plan drawing (see Environment Bible, A-12). S13-06 must match this geometry exactly."
+    },
+    {
+      "id": "S13-02", "dur": 20, "size": "LS", "lens": "28mm",
+      "cam": "Interior, height 1.55 m, wide on the two boys at the chamber mouth",
+      "move": "Slight 8° push, then stop. They do not move for 12 s.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Kabir takes one step in, then stops and grabs Ishaan's sleeve. Ishaan keeps walking. Kabir lets go.",
+      "expr": "Kabir: fear, correctly. Ishaan: compulsion, incorrectly.",
+      "env": "The mouth of the chamber, the vast space beyond.",
+      "light": "They are rim-lit from 60 m away — small blue silhouettes with warm skin edges.",
+      "vfx": "Haze between camera and subject.",
+      "vo": "Line 1 at 34:06.",
+      "cont": "THE DECISION POINT: Kabir does NOT follow past the third ring. He stays at the mouth. But he must be visible in S13-06 — do not lose him."
+    },
+    {
+      "id": "S13-03", "dur": 22, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.45 m, tracking sideways with him as he crosses the floor",
+      "move": "Smooth lateral track, 0.7 m/s, perfect steadiness — the camera is being pulled too.",
+      "cast": ["ISHAAN"],
+      "action": "He walks across the water-film floor. Ripples spread from each footfall. As he advances, geometric lines in the floor ignite one ring at a time, ahead of him, as if leading.",
+      "expr": "Not scared. That is the unsettling part.",
+      "env": "Floor rings, water film, inlaid sigil widening.",
+      "light": "Blue key from the Core, climbing his body as he approaches; his jacket's red lining goes black-and-blue.",
+      "vfx": "Ripple simulation + ring ignition with a 0.4 s propagation, plus a reflection double in the water that is very slightly out of sync.",
+      "vo": "Silence. Only the wet footfalls that we never hear.",
+      "cont": "The ring he is standing on must be identical in count to S13-06. Count them: 9 concentric rings."
+    },
+    {
+      "id": "S13-04", "dur": 22, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.50 m, 3/4 front on Ishaan, the Core's light behind and above him",
+      "move": "Very slow push, 0.1 m/s.",
+      "cast": ["ISHAAN"],
+      "action": "He stops a metre away. He raises his right hand — his thumb brushes the small blue accent on his sleeve once, the first habit from S04-04 — and then he extends his fingers.",
+      "expr": "Wonder. Mouth open, eyes wide, no fear at all. The audience should want to shout at him.",
+      "env": "Core glow behind him, out of focus.",
+      "light": "Full blue key from above-front, warm fill retained in the skin so he doesn't look like a corpse.",
+      "vfx": "Particles drawn toward his hand, 2 frames behind his motion.",
+      "vo": "Line 1 continues and lands at 34:22, on the raised hand.",
+      "cont": "RIGHT hand, always. Do not mirror the shot — the sleeve accent is only on the RIGHT arm; if you mirror, the continuity is destroyed."
+    },
+    {
+      "id": "S13-05", "dur": 24, "size": "ECU", "lens": "100mm macro",
+      "cam": "Interior, level with his fingertips, 8 cm away",
+      "move": "Static. The last 3 s are completely still before contact.",
+      "cast": ["ISHAAN (fingertips)"],
+      "action": "Fingertips stop 2 cm from the surface. The air between skin and Core distorts. Contact.",
+      "expr": "—",
+      "env": "The Core's surface: not glass, not crystal — a suspended laminar fluid that holds an internal lattice of light. Ancient, layered, almost organic.",
+      "light": "At contact the key jumps 2 stops — but only on the fingers, never on the whole frame.",
+      "vfx": "VFX HERO SHOT 4: a shockwave that is a SILENCE of light — the glow collapses inward for 6 frames, then blooms outward in the sigil's geometry. No sparks. No electricity. No lightning.",
+      "vo": "Silence. Absolute. This is the episode's loudest moment and it has no sound at all.",
+      "cont": "The Core's internal lattice must resolve into the S12-02 sigil when viewed at contact. Continuity supervisor: compare frames at 100%."
+    },
+    {
+      "id": "S13-06", "dur": 18, "size": "LS", "lens": "24mm",
+      "cam": "Interior, height 1.20 m — the SAME framing and height as S02-07, but from behind Ishaan",
+      "move": "Static. The light floods from the centre outward in 2 s.",
+      "cast": ["ISHAAN", "KABIR (small, at the chamber mouth)"],
+      "action": "Blue energy travels out along every groove, ring, pillar and sigil in the chamber. The water brightens. Ishaan is a silhouette at the centre of a mandala of light. Kabir covers his eyes at the mouth.",
+      "expr": "Ishaan's face is only a profile edge — the rest is absorbed by the light.",
+      "env": "The whole chamber, now fully lit by its own patterns.",
+      "light": "Rim + silhouette. The light arrives in waves, not all at once — three pulses, rising.",
+      "vfx": "Full-chamber propagation, reflection, volumetric bloom, particle storm held to a readable density. Controlled, architectural, magnificent.",
+      "vo": "Line 2 at 34:30 — 'I only knew one thing' — delivered over the flood, quietly.",
+      "cont": "MOTIF-01 PAYOFF: this is the mirror of S02-07 (watching his family from a doorway). Same height, same lens, same framing language — but inverted: he is now the thing being watched."
+    },
+    {
+      "id": "S13-07", "dur": 16, "size": "ECU → BLACK", "lens": "50mm",
+      "cam": "Interior, eye-line, filling the frame with one eye",
+      "move": "Static. Iris dilation on a 6-frame curve. Cut to white for 4 frames, then hard cut to black.",
+      "cast": ["ISHAAN (eye)"],
+      "action": "One eye, flooded with blue. The amber flecks in the iris brighten — the only warm thing left. Then a single line of light crosses the pupil, like a scan.",
+      "expr": "Not pain. Not joy. Arrival.",
+      "env": "Skin texture, eyelashes, one tear forming but not falling.",
+      "light": "Blue everywhere except the amber iris flecks, which must stay amber.",
+      "vfx": "Iris detail, subtle chromatic shift at the edges only, one scan line. NO full-frame distortion.",
+      "vo": "Line 3 at 34:42–34:58, delivered almost tenderly.",
+      "cont": "The tear does not fall in Episode 01. Do not resolve it. It belongs to Episode 02.",
+      "tail": "34:58–35:02 black. 35:02 TITLE CARD: PULSEBOUND — EPISODE 01. 35:08: TO BE CONTINUED."
+    }
+  ]
+}

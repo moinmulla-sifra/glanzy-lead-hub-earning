@@ -1,0 +1,98 @@
+{
+  "n": 9,
+  "title": "PREPARATION",
+  "act": "ACT II — THE NEW GIRL",
+  "start": "22:00",
+  "end": "24:00",
+  "dur": 120,
+  "location": "L02 · FAMILY HOME → L03 · DINING → L01 · BEDROOM",
+  "tod": "19:40 → 22:15 · evening, tungsten + one window of blue dusk",
+  "logline": "The last ordinary night. A signature on a form, a mother packing a bag, a sister hiding a jacket, a brother sneaking a toy in.",
+  "grade": "Warm tungsten interior fighting a cold blue window. Half the frame warm, half cold — the episode's last 'safety' image.",
+  "key": "assets/storyboard/S09.png",
+  "voiceBlock": 8,
+  "narration": [
+    { "hi": "पापा ने फ़ॉर्म देखा, दो सवाल पूछे, और साइन कर दिए। माँ ने बैग पैक किया — जैसे मैं किसी युद्ध पर जा रहा हूँ।", "t": "22:06–22:32", "en": "Papa looked at the form, asked two questions, and signed it. Maa packed my bag — as if I were going to war." },
+    { "hi": "आरोही ने मेरी जैकेट छुपा दी थी, मज़ाक में। और विवान ने बैग में अपना खिलौना रख दिया — 'ताकि तुम अकेले न हो'।", "t": "22:38–23:06", "en": "Aarohi had hidden my jacket, as a joke. And Vivaan put his toy in my bag — 'so you're not alone'." }
+  ],
+  "shots": [
+    {
+      "id": "S09-01", "dur": 20, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.30 m, across the dining table from Pita's side",
+      "move": "Static; a single lamp pools light on the form.",
+      "cast": ["PITA", "ISHAAN"],
+      "action": "Ishaan sets the permission form down. Pita reads it, turns it over, reads the back, and looks up with two silent questions.",
+      "expr": "Pita: scrutiny without hostility. Ishaan: hopeful, trying to look responsible.",
+      "env": "Dining table at night: form, a pen, a cup of tea, the newspaper folded.",
+      "light": "Single tungsten pendant overhead creating a hard pool of light, the rest of the room in blue window light.",
+      "vfx": "None.",
+      "vo": "Line 1 at 22:06.",
+      "cont": "FORM LOCK: one A4 sheet, white, school letterhead at the top, a signature line at the bottom right. No readable text needed — but the same sheet must appear in S09-02."
+    },
+    {
+      "id": "S09-02", "dur": 20, "size": "ECU", "lens": "100mm",
+      "cam": "Table height, 20 cm, macro on the signature line",
+      "move": "Static. He signs; the pen lifts; the shot holds on the wet ink.",
+      "cast": ["PITA (hand only)"],
+      "action": "A fountain pen comes down and signs in one unhurried stroke. A thumb presses the corner flat.",
+      "expr": "—",
+      "env": "Paper fibres, pen nib, one drop of ink where the nib rested.",
+      "light": "Warm pool, raking low; the paper texture is the subject.",
+      "vfx": "None.",
+      "vo": "Line 1 continues.",
+      "cont": "This is the last 'ordinary object' close-up before the observatory. Treat it as an heirloom shot."
+    },
+    {
+      "id": "S09-03", "dur": 20, "size": "MS", "lens": "40mm",
+      "cam": "Interior, height 1.15 m, low, at the bed, Maa seated on its edge",
+      "move": "Static; gentle 8° arc as she leans to fold.",
+      "cast": ["MAA"],
+      "action": "She folds clothes with a precision that suggests she has done it a thousand times, counts them silently, and adds one extra sweater.",
+      "expr": "Absorbed. A mother's face doing arithmetic on the weather.",
+      "env": "Bedroom, open backpack on the bed, clothes stacked in neat thirds, a small torch, a strip of tablets.",
+      "light": "Warm bedside lamp from the left; window dusk behind her — rim light on her hair.",
+      "vfx": "None.",
+      "vo": "Line 1 ends on the extra sweater.",
+      "cont": "The bag is P-03; the same bag Ishaan carries in S04-06 and S10."
+    },
+    {
+      "id": "S09-04", "dur": 20, "size": "MS", "lens": "32mm",
+      "cam": "Interior, height 1.35 m, in the bedroom doorway, Aarohi facing camera",
+      "move": "Static; she takes one step back when Ishaan reaches for her.",
+      "cast": ["AAROHI", "ISHAAN (foreground, back to camera)"],
+      "action": "Aarohi stands with the black jacket held behind her back and her chin high. Ishaan extends a hand. She shakes her head. One beat of standoff.",
+      "expr": "Nose in the air; the beginning of a grin she is fighting.",
+      "env": "Bedroom doorway, corridor behind.",
+      "light": "Warm from the room, cool from the corridor — she's on the boundary line.",
+      "vfx": "None.",
+      "vo": "Line 2 begins at 22:38.",
+      "cont": "The jacket must remain visibly JKT-BLR-01 in her hands: crimson lining peeking out from her fingers."
+    },
+    {
+      "id": "S09-05", "dur": 20, "size": "MS", "lens": "28mm",
+      "cam": "Interior, height 1.05 m, LOW at the bed, so the bag is at frame-centre",
+      "move": "Static. We see the act as a shadow, not an action.",
+      "cast": ["VIVAAN", "ISHAAN (background, pretending not to look)"],
+      "action": "Vivaan, in the background, quietly pushes a small toy car into the bag's front pocket and steps away with his hands behind his back.",
+      "expr": "Guilty concentration; then a virtuously blank face.",
+      "env": "Bag front pocket, toy car: red, chipped paint (P-04).",
+      "light": "Warm lamp, with Vivaan half in shadow.",
+      "vfx": "None.",
+      "vo": "Line 2 continues.",
+      "cont": "P-04 must be in frame on the observatory trip: it is visible again in S12-01 when the bag is opened. Prop continuity is the joke."
+    },
+    {
+      "id": "S09-06", "dur": 20, "size": "LS", "lens": "24mm",
+      "cam": "Interior, height 1.60 m, from the corridor looking into the bedroom door",
+      "move": "Static, held. He crosses to the bag and closes it. Last 12 frames are the window.",
+      "cast": ["ISHAAN"],
+      "action": "He zips the bag, sets it by the door, sits on the bed, and looks at his own bedroom for a moment.",
+      "expr": "Content, uncomplicated, entirely unaware. The last happy frame in the episode.",
+      "env": "Bedroom at night, lamp on, window showing deep blue dusk, bag by the door.",
+      "light": "Warm interior + blue window; the split at 50/50 is exactly the point.",
+      "vfx": "None.",
+      "vo": "Silence. Hold the final 3 s on the empty doorway after he lies back.",
+      "cont": "Final warm-to-cool hand-off in the episode: from here, the film's palette moves permanently toward blue."
+    }
+  ]
+}

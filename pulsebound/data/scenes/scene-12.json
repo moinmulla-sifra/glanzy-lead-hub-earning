@@ -1,0 +1,99 @@
+{
+  "n": 12,
+  "title": "THE HIDDEN DOOR",
+  "act": "ACT III — AARANYA RIDGE",
+  "start": "30:00",
+  "end": "33:00",
+  "dur": 180,
+  "location": "L11 · OLD OBSERVATORY WING → PASSAGE (L12 approach)",
+  "tod": "13:45 · the sun has moved off the old wing entirely",
+  "logline": "Two boys step out of the day and into a corridor that was built for something the world has forgotten.",
+  "grade": "Progressive desaturation. By the end of the scene, the only saturated colour left in the frame is the blue. Skin tones stay warm — protect them or the characters will look dead.",
+  "key": "assets/storyboard/S12.png",
+  "voiceBlock": 10,
+  "narration": [
+    { "hi": "मैंने किसी को नहीं बताया। सिर्फ़ कबीर को इशारा किया — और वो समझ गया।", "t": "30:04–30:20", "en": "I didn't tell anyone. I only signalled Kabir — and he understood." },
+    { "hi": "दीवार पर एक निशान था। तीन रेखाएँ, एक गोलाई... जैसे कोई पुरानी भाषा मेरा नाम बुला रही हो।", "t": "30:44–31:08", "en": "There was a mark on the wall. Three lines, one circle… as if some old language were calling my name." },
+    { "hi": "सीढ़ियाँ नीचे जाती थीं। हवा ठंडी थी, और अंधेरे में भी कुछ चमक रहा था।", "t": "32:10–32:30", "en": "The stairs went down. The air was cold, and even in the dark something was shining." }
+  ],
+  "shots": [
+    {
+      "id": "S12-01", "dur": 28, "size": "MS", "lens": "35mm",
+      "cam": "Exterior, height 1.55 m, side-on to the old wing's north wall, the group far background frame-right",
+      "move": "Slow lateral track right, following the two of them along the wall.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Ishaan tilts his head — Kabir looks, follows the look, and grins. They drift sideways away from the group, casual as thieves. Kabir opens the bag and shows the toy car; Ishaan takes it out and pockets it (P-04).",
+      "expr": "Conspiratorial joy. Kabir mouths something; Ishaan shushes him with one finger.",
+      "env": "Old wing north wall, gravel, wind-bent grass, a rusted drainpipe.",
+      "light": "Sun now behind the building: the wall is in shade, the boys half-lit by bounce.",
+      "vfx": "Wind, dust.",
+      "vo": "Line 1 at 30:04.",
+      "cont": "P-04 appears here — the red toy car. If it's absent, the audience will notice the missing payoff in Episode 2. Do not drop it. PROPOSED (non-canon): Ishaan pocketing the toy as a lucky charm."
+    },
+    {
+      "id": "S12-02", "dur": 30, "size": "CU", "lens": "100mm",
+      "cam": "Exterior, height 1.35 m, low, close on the stone at shoulder height",
+      "move": "Static. Dust is wiped away by a hand entering from frame-right.",
+      "cast": ["ISHAAN (hand)"],
+      "action": "A hand sweeps the dust off the stone. Underneath: a carved geometric sigil — three concentric arcs, a bisecting line, and a central circle, all cut shallow into the stone.",
+      "expr": "—",
+      "env": "Weathered sandstone, mortar lines, lichen in the grooves, chisel marks visible at the edges.",
+      "light": "Flat shade, then a thin sliver of warm light catches the carving from the left and defines it.",
+      "vfx": "Dust falling. No glow yet — the symbol is just a carving. Restraint is the whole point.",
+      "vo": "Line 2 at 30:44.",
+      "cont": "SIGIL LOCK: three arcs + one bisecting line + one circle. This exact geometry is the series' mark. It reappears on the floor of the Core chamber in S13-06. Never simplify or embellish it."
+    },
+    {
+      "id": "S12-03", "dur": 30, "size": "MS", "lens": "28mm",
+      "cam": "Exterior, height 1.50 m, 3/4 behind Ishaan, Kabir just behind his right shoulder",
+      "move": "Static; the stone responds — a 6-frame mechanical shift, then stillness.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Ishaan's fingers trace the outer arc. A hairline of blue light traces the groove he touched. Both boys go very still. Kabir's hand closes on Ishaan's shoulder.",
+      "expr": "Awe and fear in the same face, in that order, in three seconds.",
+      "env": "The wall, the sigil at chest height, the boarded window frame-left.",
+      "light": "The blue now lights their faces from below — the first time the film's key light comes from inside a wall.",
+      "vfx": "VFX HERO SHOT 2: light travels the groove like liquid in a channel, 0.6 s, then settles to a steady 20% glow. Volumetric bloom kept to a 2-px radius.",
+      "vo": "Silence. No narration over the discovery. This is the audience's moment alone.",
+      "cont": "Blue intensity locked at 20% here, 40% at S12-04, 60% at S12-05, 100% at S13-06 — a deliberate four-step escalation across the act."
+    },
+    {
+      "id": "S12-04", "dur": 30, "size": "LS", "lens": "24mm",
+      "cam": "Exterior, height 1.60 m, wide enough to hold both boys and a 3 m section of wall",
+      "move": "Static. The wall section sinks and slides back 40 cm, then stops — no whoosh, no dust cloud.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "A section of stonework recesses and grinds sideways, revealing a descending stairwell. Cold air moves their hair. Ishaan looks at Kabir. Kabir looks at the stairs.",
+      "expr": "Terror and invitation. Kabir's grin returns first.",
+      "env": "The opening: a meter-wide rectangle of black in a sunlit wall, stone steps going down, a smell we cannot see but must believe.",
+      "light": "Daylight outside vs absolute darkness inside; a faint blue wash rising from below the stair head.",
+      "vfx": "Cold vapour rolling out over the threshold — ground fog, 4 cm deep. Stone dust settling. Corroborating weight in the stone's motion.",
+      "vo": "Line 2 ends at 31:08.",
+      "cont": "The opening is 1 m wide × 2 m high, in the north wall, 4 m from the boarded window. Architectural geometry must be consistent inside and out."
+    },
+    {
+      "id": "S12-05", "dur": 32, "size": "MS", "lens": "28mm",
+      "cam": "Interior of the stairwell, height 1.70 m, from above and behind, looking down at their backs",
+      "move": "Slow descending follow, steadicam, matching their pace — 0.5 m/s, never faster.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "They descend shoulder to shoulder, Kabir's hand flat on the stone wall as a guide. Ishaan counts steps under his breath. Their breathing becomes visible.",
+      "expr": "Faces barely lit; we read them by posture and one reflected highlight each.",
+      "env": "Stone spiral-ish stair, 60 cm steps, hand-cut, a low corbel ceiling, walls wet with condensation.",
+      "light": "Blue from below at 60%, warm daylight dying behind them at the top of frame — the mouth of the opening slowly losing brightness shot by shot.",
+      "vfx": "Condensation, breath vapour, light scattering through the blue haze.",
+      "vo": "Line 3 at 32:10.",
+      "cont": "Their shadows must fall UP the stairs behind them, toward the daylight. Physically correct, narratively perfect."
+    },
+    {
+      "id": "S12-06", "dur": 30, "size": "LS", "lens": "24mm",
+      "cam": "Interior, height 1.65 m, from inside the corridor looking back at them arriving",
+      "move": "Static. They step into frame from the stairwell at frame-left and stop.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "A corridor. Ribbed stone columns, an arched ceiling, inlaid geometric lines running the length of the floor. Blue light bleeds from every groove. They stand at the threshold, absolutely silent.",
+      "expr": "Two small faces doing the largest possible version of 'what is this place'.",
+      "env": "L12 approach corridor: 3 m wide, 4 m high, 40 m long, no doors — everything leads to the chamber.",
+      "light": "Blue-only environment, but with correct falloff: bright at the grooves, dark between them, and a soft overall ambient so the walls stay readable.",
+      "vfx": "Volumetric haze, slow particle drift, floor reflections that are 30% too coherent to be natural — the architecture is awake.",
+      "vo": "Line 3 continues; the last words land on the empty corridor ahead of them, not on their faces.",
+      "cont": "ANCIENT ARCHITECTURE LOCK A-12: no sci-fi greebles, no neon strips, no circuitry. This is stone that predates the building above it. The technology must look carved."
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "n": 8,
+  "title": "THE TRIP",
+  "act": "ACT II — THE NEW GIRL",
+  "start": "19:00",
+  "end": "22:00",
+  "dur": 180,
+  "location": "L07 · ASSEMBLY HALL",
+  "tod": "09:30 · overcast, cool, big-room light",
+  "logline": "The inciting invitation. A name is spoken over a loudspeaker: AARANYA RIDGE OBSERVATORY. The story's door opens.",
+  "grade": "Cool, dusty, high-ceilinged. Sunlight through tall windows in visible shafts. The only saturated colour in the hall is the projection screen.",
+  "key": "assets/storyboard/S08.png",
+  "voiceBlock": 7,
+  "narration": [
+    { "hi": "अगले हफ़्ते की सुबह असेंबली में एक नाम आया — आरण्य रिज ऑब्ज़र्वेटरी।", "t": "19:08–19:30", "en": "The following week, in assembly, a name came over the speakers — Aaranya Ridge Observatory." },
+    { "hi": "तीन दिन का एजुकेशनल ट्रिप। पहाड़, दूरबीनें, और स्कूल से दूर दो रातें। कबीर की आँखों में चिंगारी थी। मेरी भी थी।", "t": "19:36–20:04", "en": "A three-day educational trip. Mountains, telescopes, and two nights away from school. There was a spark in Kabir's eyes. In mine too." }
+  ],
+  "shots": [
+    {
+      "id": "S08-01", "dur": 26, "size": "LS", "lens": "24mm",
+      "cam": "Interior, height 2.20 m on a riser at the back of the hall, centred on the stage",
+      "move": "Slow 10° drift left to reveal the full room.",
+      "cast": ["TEACHER (on stage)", "BACKGROUND STUDENTS (≈120)"],
+      "action": "Rows of students in uniform, a few whispering, one teacher at the microphone; the projection screen is still white.",
+      "expr": "— (crowd)",
+      "env": "L07 assembly hall: raked floor, stage with a wooden podium, tall windows on the RIGHT wall, ceiling fans, a projector hanging from the centre truss.",
+      "light": "Overcast daylight through the tall windows: soft directional shafts, dust suspended; house lights off.",
+      "vfx": "Volumetric shafts (very subtle), dust.",
+      "vo": "Line 1 at 19:08.",
+      "cont": "CROWD LOCK: assembly is a different crowd from the classroom — vary faces, but no character from the main cast wears a different uniform. Ever."
+    },
+    {
+      "id": "S08-02", "dur": 24, "size": "MS", "lens": "50mm",
+      "cam": "Interior, height 1.70 m, on the stage, 3/4 side on the teacher at the podium",
+      "move": "Static; she looks from her notes to the room.",
+      "cast": ["TEACHER"],
+      "action": "She taps the mic twice, checks a paper, and gestures toward the screen. Her lips move — no audio.",
+      "expr": "Friendly but disciplined: a slight smile, then straight back to business.",
+      "env": "Podium, a glass of water, a stack of permission forms, the microphone stand.",
+      "light": "Stage key from a high side window; her shadow falls back-left onto the curtains.",
+      "vfx": "None.",
+      "vo": "Line 1 continues.",
+      "cont": "TEACHER LOCK: 30s, glasses, navy saree with a plain border, hair in a low bun, ID lanyard. Same as S06 but formal saree, not classroom saree. Do not give her a name."
+    },
+    {
+      "id": "S08-03", "dur": 26, "size": "CU", "lens": "100mm",
+      "cam": "Interior, height 1.90 m, projector lens level, framed so only the screen fills the frame",
+      "move": "Static; three slow slide changes on a 4 s dissolve each.",
+      "cast": ["—"],
+      "action": "Slides: (1) a dome observatory on a ridge at dawn, (2) a long-exposure star field, (3) students looking through a telescope.",
+      "expr": "—",
+      "env": "Projection surface only: cool white, faint hotspot in the centre.",
+      "light": "The screen is the light source for this shot — project a soft glow onto the surrounding darkness.",
+      "vfx": "Projector dust, a faint horizontal scan shimmer. Keep it analogue and period-honest.",
+      "vo": "Silence. Let the audience read the photographs.",
+      "cont": "The dome in slide 1 MUST match the architecture revealed in S11 (A-11): white ribbed dome, single slit, ridge on the left. Continuity supervisor to compare frames."
+    },
+    {
+      "id": "S08-04", "dur": 24, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.55 m, from the stage looking down at the front rows — reverse angle to S08-01",
+      "move": "Slow 20° pan right across the faces.",
+      "cast": ["BACKGROUND STUDENTS", "ISHAAN", "KABIR", "MEERA"],
+      "action": "Heads turning to each other; a ripple of excitement; one student actually bounces in his seat.",
+      "expr": "Uncontained teenage excitement, in 60 different shades.",
+      "env": "Front six rows, wooden seats, backpacks on laps.",
+      "light": "Cool ambient; faces lit from the front by the screen reflection — a moving blue-white key.",
+      "vfx": "Screen-reflected flicker on faces, extremely subtle.",
+      "vo": "Line 2 at 19:36.",
+      "cont": "Meera is in the third row, Ishaan and Kabir in the fifth. Keep them separated here — the bus reunites them."
+    },
+    {
+      "id": "S08-05", "dur": 26, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.45 m, seated eye level, 3/4 on Kabir",
+      "move": "Static. Small 1-px shake only when he grabs Ishaan's arm.",
+      "cast": ["KABIR"],
+      "action": "His face lights up two beats before he moves; then he turns and grabs Ishaan's forearm with both hands.",
+      "expr": "The full grin. Mouth open, eyes wide, dimple deep. This is Kabir's best frame in the episode.",
+      "env": "Seated rows, shoulders of other students framing him.",
+      "light": "Screen light from frame-left, warm bounce from Ishaan's jacket on the right.",
+      "vfx": "None.",
+      "vo": "Line 2 continues.",
+      "cont": "His sweater-vest sleeve must be visible — he never wears a jacket."
+    },
+    {
+      "id": "S08-06", "dur": 28, "size": "MS (2-shot)", "lens": "40mm",
+      "cam": "Interior, height 1.50 m, in front of them at bench height, looking back",
+      "move": "Static; a 15° correction to keep the teacher's glare in frame-right.",
+      "cast": ["ISHAAN", "KABIR", "TEACHER (foreground, defocused)"],
+      "action": "The boys whisper furiously and bump fists under the seat. The teacher's head turns; they freeze instantly into identical innocent postures.",
+      "expr": "Panic-comedy. Identical straight faces, one bead of sweat on Kabir.",
+      "env": "Assembly seating, foreground teacher shoulder out of focus.",
+      "light": "Screen key, side fill.",
+      "vfx": "None.",
+      "vo": "Silence.",
+      "cont": "PROPOSED (non-canon): the fist bump and the freeze. It's a genre beat, not a plot event."
+    },
+    {
+      "id": "S08-07", "dur": 26, "size": "LS", "lens": "24mm",
+      "cam": "Interior, height 2.30 m, wide from the back of the hall as the room reacts",
+      "move": "Slow crane up 0.8 m over the shot — the room opening like a held breath.",
+      "cast": ["BACKGROUND STUDENTS", "TEACHER"],
+      "action": "A visible wave of excitement moves through the hall; students turn to each other; the teacher raises a hand for quiet, smiling.",
+      "expr": "Collective joy, played silently.",
+      "env": "Full hall depth.",
+      "light": "Overcast shafts; the projector is now dark, so the room dims by a stop and the shafts dominate.",
+      "vfx": "Dust, shafts.",
+      "vo": "Line 2 ends at 20:04; 90 s of wordless school life before Scene 9.",
+      "cont": "End the scene on the hall, not on a face — the pull of the destination must feel bigger than the characters."
+    }
+  ]
+}

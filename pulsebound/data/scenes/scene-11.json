@@ -1,0 +1,111 @@
+{
+  "n": 11,
+  "title": "AARANYA RIDGE",
+  "act": "ACT III — AARANYA RIDGE",
+  "start": "27:00",
+  "end": "30:00",
+  "dur": 180,
+  "location": "L10 · AARANYA RIDGE OBSERVATORY (exterior) → L11 · OLD OBSERVATORY WING",
+  "tod": "11:00 → 13:30 · hard mountain noon, wind",
+  "logline": "A beautiful place with one wrong thing in it. The old wing is boarded up, and something blue is leaking through the gaps.",
+  "grade": "Clean, high, cold daylight. Whites are bright but never clipped. The ONE blue is the light from the old wing — it must be the only unnatural colour in the scene.",
+  "key": "assets/storyboard/S11.png",
+  "voiceBlock": 9,
+  "narration": [
+    { "hi": "आरण्य रिज। बादलों के नीचे बना एक शांत इमारत — जैसे पहाड़ ने खुद के लिए एक दरवाज़ा बनाया हो।", "t": "27:06–27:34", "en": "Aaranya Ridge. A quiet building beneath the clouds — as if the mountain had made a door for itself." },
+    { "hi": "पुरानी इमारत बंद थी। ताले पर जंग थी, दीवारों पर धूल। लेकिन उसी तरफ़ से नीली रोशनी आ रही थी।", "t": "29:02–29:30", "en": "The old building was sealed. Rust on the lock, dust on the walls. But a blue light was coming from that side." }
+  ],
+  "shots": [
+    {
+      "id": "S11-01", "dur": 26, "size": "ELS (aerial)", "lens": "24mm",
+      "cam": "Drone, 200 m, approaching the ridge from the valley side, dome in the left third",
+      "move": "Slow forward push over the ridge crest; the building reveals itself over the horizon line.",
+      "cast": ["—"],
+      "action": "Cloud pours over the far ridge. The dome catches the sun. A small figure-scale bus is parked below.",
+      "expr": "—",
+      "env": "L10 observatory: white ribbed dome on a concrete-and-glass research block, single slit, solar panels on the roof, a gravel apron, wind-bent grass.",
+      "light": "Hard noon sun, short shadows, sky deep blue at the zenith fading pale at the horizon.",
+      "vfx": "Cloud sea, wind-blown grass, one bird at the top of frame.",
+      "vo": "Line 1 at 27:06.",
+      "cont": "A-11 ARCHITECTURE: the dome in S08-03's slide must match this exactly. Modern block runs east–west; the OLD WING is a separate stone structure 60 m north-west, half-abandoned. Never swap sides."
+    },
+    {
+      "id": "S11-02", "dur": 24, "size": "LS", "lens": "35mm",
+      "cam": "Exterior, height 1.60 m, at the gravel apron, bus in frame-left",
+      "move": "Static; students spill out of the door.",
+      "cast": ["BACKGROUND STUDENTS", "ISHAAN", "KABIR", "MEERA"],
+      "action": "Disembarking. Wind immediately messes everyone's hair and clothes. Two students chase a blown cap.",
+      "expr": "Awe, then immediate shivering and laughing.",
+      "env": "Gravel apron, low stone parapet, the modern building behind.",
+      "light": "Hard sun, high contrast; everyone squints. Do not correct the squinting — it's the honesty of the location.",
+      "vfx": "Dust kicked from the gravel, hair physics, one blown cap. Wind is a character in this scene.",
+      "vo": "Line 1 continues.",
+      "cont": "Meera gets off last. That is a character beat, not a camera accident."
+    },
+    {
+      "id": "S11-03", "dur": 26, "size": "MS", "lens": "28mm",
+      "cam": "Exterior, height 1.50 m, wide-ish on the group with the teacher in the middle",
+      "move": "Slow 15° pan following the teacher's pointing hand toward the dome.",
+      "cast": ["TEACHER", "BACKGROUND STUDENTS", "ISHAAN", "KABIR"],
+      "action": "The teacher gathers them with two raised hands and gestures at the dome, then at the path. Students bunch up around her.",
+      "expr": "Disciplined enthusiasm.",
+      "env": "Apron, path to the dome, wind-bent grass at the edges.",
+      "light": "Hard noon; the teacher's shadow falls toward camera — this fixes the sun's direction for the whole location (SUN-LOCK A-11).",
+      "vfx": "Wind.",
+      "vo": "Silence.",
+      "cont": "TEACHER stays with the group for the rest of Scene 11. She must NOT notice the boys slip away in S12 — she is occupied with a student's question."
+    },
+    {
+      "id": "S11-04", "dur": 26, "size": "LS", "lens": "24mm",
+      "cam": "Exterior, height 1.75 m, low angle from the path looking up at the research block",
+      "move": "Slow 25° tilt up from the entrance to the dome.",
+      "cast": ["—"],
+      "action": "Nothing moves. Architectural reveal only — glass, concrete, the ribbed dome, a single antenna.",
+      "expr": "—",
+      "env": "Modern building: three storeys, curtain-wall glazing, deep concrete reveals, a service door with a keypad.",
+      "light": "Glass reflects the cloud sea; the concrete is bright and neutral.",
+      "vfx": "Reflection detail only.",
+      "vo": "Silence. A breath of pure production design.",
+      "cont": "Do NOT put readable signage anywhere in this shot. The name exists in narration and in the episode title card."
+    },
+    {
+      "id": "S11-05", "dur": 26, "size": "MS", "lens": "40mm",
+      "cam": "Exterior, height 1.55 m, 3/4 behind Ishaan, the old wing across frame",
+      "move": "Static until the last 6 s, then a slow 12° drift toward the old wing — the camera leaning toward the mystery before he does.",
+      "cast": ["ISHAAN"],
+      "action": "He turns away from the group. His attention catches on something off-axis. He takes half a step, stops, and looks properly.",
+      "expr": "The 'wait, what' face — brow gathering, mouth opening slightly.",
+      "env": "Old wing in the middle distance: stone walls, boarded windows, a rusted chain and padlock, a dead creeper, a collapsed gutter.",
+      "light": "The old wing is in shade — a full stop darker than everything else. Its shadow side faces camera.",
+      "vfx": "Wind-blown dust at the base of the wall.",
+      "vo": "Line 2 at 29:02.",
+      "cont": "L11 must read as OLD — but not gothic. Practical, institutional, forgotten. No cobwebs-cliché."
+    },
+    {
+      "id": "S11-06", "dur": 26, "size": "CU", "lens": "100mm",
+      "cam": "Exterior, height 1.55 m, 2.5 m from the boarded window, telephoto through the gap in the planks",
+      "move": "Very slow push-in, 0.1 m/s — an investigative move, not a horror move.",
+      "cast": ["—"],
+      "action": "Through a 4 cm gap between planks: darkness, dust suspended, and a faint, pulsing blue glow from below floor level.",
+      "expr": "—",
+      "env": "Boarded window: splintered timber, rusted nails, a stone sill with lichen.",
+      "light": "Daylight outside at 5 stops over the interior: the gap is almost white, the interior pure black, the blue glow the only other value.",
+      "vfx": "VFX HERO SHOT 1: a slow 2.4 s pulse of blue from a source below frame; dust motes drifting in the gap; no lens flare, no god rays.",
+      "vo": "Line 2 continues.",
+      "cont": "The blue is #2F6DFF at 40% intensity, never neon, never a hard-edged beam. This is a leak, not a beacon. Locked as VFX-CORE-01."
+    },
+    {
+      "id": "S11-07", "dur": 26, "size": "CU", "lens": "85mm",
+      "cam": "Exterior, height 1.55 m, 3/4 on Ishaan's face, old wing behind him",
+      "move": "Static; a 2-frame head-turn and then absolute stillness.",
+      "cast": ["ISHAAN"],
+      "action": "He looks directly at the boarded window. Nothing about his face changes except his eyes narrowing and his breathing stopping for a beat.",
+      "expr": "Recognition without understanding. This is the moment the episode's spine locks in.",
+      "env": "Old wing behind, out of focus, a dark shape in a bright frame.",
+      "light": "Sun on the left of his face; a barely perceptible blue bounce on his right cheek — the light is already touching him.",
+      "vfx": "A single, tiny blue specular in his left iris. 4 frames. Almost subliminal.",
+      "vo": "Silence. End scene on the iris. Hard cut.",
+      "cont": "Continuity supervisor: the specular must be in the LEFT iris only, matching the light source's position relative to the old wing."
+    }
+  ]
+}

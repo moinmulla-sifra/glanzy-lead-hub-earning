@@ -1,0 +1,147 @@
+{
+  "n": 4,
+  "title": "ISHAAN",
+  "act": "ACT I — THE ORDINARY WORLD",
+  "start": "07:00",
+  "end": "09:00",
+  "dur": 120,
+  "location": "L01 · ISHAAN'S BEDROOM (mirror wall)",
+  "tod": "07:40 · strong lateral morning sun",
+  "logline": "The character reveal. The jacket goes on, and the boy the audience will follow for the next 26 minutes is formally introduced.",
+  "grade": "Warm key, cool bounce, and — for the first time — the jacket's RED and BLUE accents are the only saturated colours in frame. Grade the scene to protect them.",
+  "key": "assets/storyboard/S04.png",
+  "voiceBlock": 3,
+  "narration": [
+    {
+      "hi": "वैसे, अभी तक मैंने अपने बारे में कुछ बताया ही नहीं।",
+      "t": "07:04–07:12",
+      "en": "Actually, I haven't told you anything about myself yet."
+    },
+    {
+      "hi": "मेरा नाम ईशान है।",
+      "t": "07:18–07:24",
+      "en": "My name is Ishaan."
+    },
+    {
+      "hi": "क्लास टेन का स्टूडेंट। स्कूल, दोस्त, होमवर्क और परीक्षाएँ... बस यही मेरी दुनिया थी।",
+      "t": "07:30–07:52",
+      "en": "A class-ten student. School, friends, homework, exams… that was my entire world."
+    },
+    {
+      "hi": "कम से कम, उस दिन तक तो नहीं।",
+      "t": "08:36–08:48",
+      "en": "At least, not until that day."
+    }
+  ],
+  "shots": [
+    {
+      "id": "S04-01",
+      "dur": 18,
+      "size": "CU",
+      "lens": "85mm",
+      "cam": "Interior, height 1.55 m, over his shoulder into the mirror — we see the REFLECTION, not him",
+      "move": "Static. Fade up already inside the shot — no scene-setting.",
+      "cast": [
+        "ISHAAN"
+      ],
+      "action": "The black jacket is already on his shoulders; he turns the collar up, then flattens it, then settles it.",
+      "expr": "Focused on the task; jaw set; eyes on his own reflection.",
+      "env": "Mirror above a small dresser, a comb, a school ID card, a tube of hair product.",
+      "light": "Hard lateral sun from frame-right catching the crimson inner lining as the collar moves.",
+      "vfx": "Red lining edge bloom only when it faces the light — one flicker, no constant glow.",
+      "vo": "Line 1 at 07:04, deliberately casual.",
+      "cont": "JACKET LOCK JKT-BLR-01: matte black technical bomber, crimson inner lining, thin red piping on shoulder seam and chest pocket zip, two cobalt-blue geometric accents (collar tab + right forearm), ribbed cuffs, no hood, no logo."
+    },
+    {
+      "id": "S04-02",
+      "dur": 22,
+      "size": "ECU",
+      "lens": "100mm",
+      "cam": "Interior, height 1.58 m, 40 cm, framed on the eyes in the mirror",
+      "move": "Imperceptible push, 0.1 m/s.",
+      "cast": [
+        "ISHAAN (reflection)"
+      ],
+      "action": "He looks at himself, blinks once, and pushes his fringe out of his left eye — it falls straight back.",
+      "expr": "Self-assessment without vanity: a small frown, then acceptance.",
+      "env": "Mirror glass with a faint smudge at frame-left; the room behind him is soft bokeh.",
+      "light": "Two catchlights, warm; dark brown iris with amber flecks at 4 o'clock.",
+      "vfx": "None. Eyes must be pristine — no over-sharpening.",
+      "vo": "Line 2 at 07:18 — 'My name is Ishaan' lands here, on his own reflection, not on a wide shot.",
+      "cont": "Pupil size identical to S01-04. Iris fleck position locked (CONT-EYE-01)."
+    },
+    {
+      "id": "S04-03",
+      "dur": 20,
+      "size": "MS",
+      "lens": "35mm",
+      "cam": "Interior, height 1.30 m, three-quarter front, window behind camera-left",
+      "move": "Slow 20° arc around him, clockwise, keeping the window at his back-left.",
+      "cast": [
+        "ISHAAN"
+      ],
+      "action": "Turns from the mirror, rolls his shoulders once to settle the jacket, and tugs the ribbed cuff.",
+      "expr": "Neutral; the beginning of confidence.",
+      "env": "Bedroom, school bag on the bed, jacket fully visible for the first time.",
+      "light": "Key from frame-left, cool bounce from the wall — the jacket reads as black, never grey.",
+      "vfx": "None.",
+      "vo": "Line 3 begins at 07:30 and rides the arc.",
+      "cont": "Full-body identity check: 5'7\", lean athletic build, white school shirt under the jacket, navy trousers, black canvas shoes."
+    },
+    {
+      "id": "S04-04",
+      "dur": 20,
+      "size": "CU",
+      "lens": "50mm",
+      "cam": "Interior, height 1.10 m, low on the right forearm, angled up",
+      "move": "Static, shallow depth.",
+      "cast": [
+        "ISHAAN (arm)"
+      ],
+      "action": "His thumb traces the small blue geometric accent on the sleeve — a private, unconscious habit.",
+      "expr": "—",
+      "env": "Sleeve detail against the defocused bed.",
+      "light": "Raking side light so the blue accent catches one specular highlight; red piping glows faintly.",
+      "vfx": "None. Resist adding energy here — the jacket is ordinary in Episode 1.",
+      "vo": "Silence. The habit is a private ritual — do not narrate it.",
+      "cont": "CONT-HABIT-01: he touches this accent again in S12-04 (foreshadow) and S13-04."
+    },
+    {
+      "id": "S04-05",
+      "dur": 22,
+      "size": "LS",
+      "lens": "24mm",
+      "cam": "Interior, height 1.50 m, from the corridor looking into the doorway",
+      "move": "Static. He crosses the frame left to right and exits.",
+      "cast": [
+        "ISHAAN",
+        "MAA (background, crossing)"
+      ],
+      "action": "Full-body silhouette in the doorway; Maa passes behind him carrying laundry; he ducks slightly to let her through.",
+      "expr": "Small, automatic courtesy.",
+      "env": "Doorway framing the lit bedroom; the corridor in shadow.",
+      "light": "Backlit doorway — his outline is crisp, jacket breaks the light at the shoulders.",
+      "vfx": "None.",
+      "vo": "Line 3 ends at 07:52; the remainder of the shot is silent.",
+      "cont": "This doorway framing is the parent of S02-07 and S13-06 — the 'threshold' motif (MOTIF-01)."
+    },
+    {
+      "id": "S04-06",
+      "dur": 18,
+      "size": "MS",
+      "lens": "40mm",
+      "cam": "Interior, height 1.40 m, at the stair head, looking back at his bedroom door",
+      "move": "Static. He turns his head back once, then goes.",
+      "cast": [
+        "ISHAAN"
+      ],
+      "action": "Sling the bag over one shoulder, one last look at his room, then down the stairs out of frame.",
+      "expr": "A flicker of something unnameable — the last time he looks at this room as an ordinary room.",
+      "env": "Stair head, bedroom door behind him, morning light on the wall.",
+      "light": "Warm; the room behind him is slightly overexposed, as if already becoming a memory.",
+      "vfx": "Very faint halation on the door frame.",
+      "vo": "Line 4 at 08:36 — 'not until that day' — then hard cut to black for 12 frames, then Scene 5.",
+      "cont": "Bag: dark grey backpack with one red zip pull (P-03). Keep consistent to S10."
+    }
+  ]
+}
