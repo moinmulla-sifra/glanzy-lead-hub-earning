@@ -21,6 +21,20 @@ a VO player, the locked cast plates for that scene, and every shot's full produc
 
 ---
 
+### Watch the episode as an animatic
+
+```bash
+python3 pulsebound/scripts/build_animatic.py     # renders in ~15-20 min
+```
+
+Produces `animatic/PULSEBOUND_EP01_ANIMATIC.mp4` — the full **35:20** timeline as a pre-vis
+animatic: every scene's key frame held for its exact duration with a slow Ken Burns move, scene
+labels burnt in, Ishaan's Hindi narration placed on its real timecodes, soft Hindi subtitles
+(`PULSEBOUND_EP01.srt`) muxed in, and a 22-second end card.
+
+It is an animatic, not the finished episode — but it is the whole episode's timing, sound and
+story, watchable end to end. (The MP4 is git-ignored; regenerate it any time.)
+
 ### What's in the package
 
 | File | What it is |
@@ -32,6 +46,8 @@ a VO player, the locked cast plates for that scene, and every shot's full produc
 | `assets/audio/` | `vo-01…vo-10.mp3` — Ishaan's Hindi narration, 34 lines in 10 record blocks |
 | `data/scenes/*.json` | **Single source of truth** — timing, shots, narration |
 | `scripts/build.py` | Rebuilds the bible, the player and `index.html` from the JSON |
+| `scripts/build_animatic.py` | Renders the 35-minute animatic MP4 + Hindi `.srt` from the JSON, key frames and VO |
+| `animatic/` | `PULSEBOUND_EP01_ANIMATIC.mp4` + `PULSEBOUND_EP01.srt` (git-ignored, regenerable) |
 
 ### Numbers
 

@@ -1,0 +1,8 @@
+# Rendered animatic output — regenerate with scripts/build_animatic.py, never commit
+animatic/*.mp4
+animatic/*.m4v
+animatic/*.ts
+
+# Python cache
+__pycache__/
+*.pyc

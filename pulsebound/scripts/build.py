@@ -156,6 +156,11 @@ a{color:var(--blue2)}
 .brand h1{margin:0;font-size:19px;letter-spacing:.30em;font-weight:800;
   background:linear-gradient(92deg,#fff,#9fc0ff 60%,#3f78ff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .brand .sub{margin-top:7px;font-size:11px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+.watch{display:block;margin:0 22px 14px;padding:10px 12px;border-radius:10px;text-align:center;
+  text-decoration:none;font-size:11.5px;letter-spacing:.10em;text-transform:uppercase;font-weight:700;
+  color:#dce8ff;border:1px solid rgba(63,120,255,.45);
+  background:linear-gradient(180deg,rgba(63,120,255,.22),rgba(63,120,255,.06));transition:.16s}
+.watch:hover{border-color:#7ea6ff;box-shadow:0 0 22px rgba(63,120,255,.30)}
 .meta{display:flex;gap:8px;flex-wrap:wrap;padding:0 22px 16px}
 .chip{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);
   border:1px solid var(--line);padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.02)}
@@ -251,6 +256,7 @@ summary.shot .du{color:var(--dim);font-size:11.5px;font-variant-numeric:tabular-
       <h1>PULSEBOUND</h1>
       <div class="sub">Episode 01 · The Day Everything Changed</div>
     </div>
+    <a class="watch" href="animatic/PULSEBOUND_EP01_ANIMATIC.mp4" target="_blank" rel="noopener">▶ Watch the 35-minute animatic</a>
     <div class="meta" id="meta"></div>
     <div class="pulsebar"><i id="prog"></i></div>
     <div class="rail-scroll"><div class="rail-h">Scene reel</div><div id="reel"></div></div>
