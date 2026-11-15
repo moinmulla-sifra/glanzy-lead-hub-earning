@@ -1,0 +1,112 @@
+{
+  "n": 1,
+  "title": "MORNING",
+  "act": "ACT I — THE ORDINARY WORLD",
+  "start": "00:00",
+  "end": "02:00",
+  "dur": 120,
+  "location": "L01 · ISHAAN'S BEDROOM",
+  "tod": "06:12 → 06:26 · winter dawn, cold blue exterior / warm interior",
+  "logline": "The world before the world changes. A room, a clock, a boy who believes today will be identical to yesterday.",
+  "grade": "Cool cyan shadows (#1B2A3A) against a single warm sunrise shaft (#FFC98A). Low saturation, high contrast, soft halation on the sun edge only.",
+  "key": "assets/storyboard/S01.png",
+  "voiceBlock": 1,
+  "narration": [
+    { "hi": "कभी-कभी ज़िंदगी में कुछ ऐसा होने वाला होता है, जिसका हमें ज़रा भी अंदाज़ा नहीं होता।", "t": "00:04–00:16", "en": "Sometimes life is about to do something to us that we haven't the faintest idea of." },
+    { "hi": "हम रोज़ की तरह उठते हैं, तैयार होते हैं, स्कूल जाते हैं... और सोचते हैं कि आज का दिन भी बाकी दिनों जैसा ही होगा।", "t": "00:22–00:42", "en": "We wake as always, get ready, go to school… and assume today will be just like every other day." },
+    { "hi": "मैं भी कुछ ऐसा ही सोचता था।", "t": "00:52–00:58", "en": "I thought the same thing." }
+  ],
+  "shots": [
+    {
+      "id": "S01-01", "dur": 14, "size": "EWS", "lens": "24mm",
+      "cam": "Interior, height 1.55 m, locked off on a tripod at the foot of the bed, window at frame-left edge",
+      "move": "Static. Fade in from black over 1.5 s. No zoom.",
+      "cast": ["—"],
+      "action": "Empty-feeling room. Curtain breathes once in a draught. Dust motes drift through the sun shaft. No human movement.",
+      "expr": "—",
+      "env": "Bedroom: bed house-left, study desk house-right, wardrobe on the back wall, half-drawn curtain across a tall window.",
+      "light": "One hard low-angle sun shaft (≈12° above horizon) raking across the floor; cold 5600K ambient fill; practical bedside lamp OFF.",
+      "vfx": "Dust motes in the shaft, faint anamorphic bloom on the shaft edge only.",
+      "vo": "Narration line 1 enters at 00:04, over the empty room — deliberately before we see him.",
+      "cont": "Curtain must be drawn to exactly 2/3. Clock reads 06:12. Blanket smooth, one pillow dented."
+    },
+    {
+      "id": "S01-02", "dur": 16, "size": "ECU", "lens": "100mm macro",
+      "cam": "Tabletop height, 20 cm from the digital clock, 3/4 angle",
+      "move": "Static. Rack focus from the clock body to the digits at 00:14.",
+      "cast": ["—"],
+      "action": "Digital clock digits roll 06:14 → 06:15.",
+      "expr": "—",
+      "env": "Bedside table: clock, a glass of water, a school ID card face-down, tangled charger cable.",
+      "light": "A thin warm slit of sun crosses only the digits; the rest of the frame sits in blue shadow.",
+      "vfx": "None. This is the film's 'honest' shot — zero effects, maximum cleanliness.",
+      "vo": "Line 2 begins at 00:22, one beat after the digits settle.",
+      "cont": "Digits must read 06:15 and hold until S01-05. Clock model is registered as prop P-01."
+    },
+    {
+      "id": "S01-03", "dur": 22, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.25 m, at the side of the bed, looking slightly down at 8°",
+      "move": "Very slow dolly-in, 0.35 m/s, motive: entering his private world.",
+      "cast": ["ISHAAN"],
+      "action": "Asleep on his side, one arm out of the blanket, fingers curled. Chest rises and falls.",
+      "expr": "Fully relaxed; mouth slightly open; brow smooth.",
+      "env": "L01 bedroom, headboard against the back wall, school bag slumped on the floor.",
+      "light": "Warm rim along the cheek and shoulder from the sun shaft; face 70% in cool shadow.",
+      "vfx": "Dust motes; blanket fibre detail; no glow.",
+      "vo": "Line 2 continues — the narration is describing him while he is unconscious.",
+      "cont": "Hair falls over his LEFT eyebrow — lock this direction in every sleeping/reclining shot."
+    },
+    {
+      "id": "S01-04", "dur": 16, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.15 m, 50 cm from his face, eye-line level",
+      "move": "Near-static with 1-px handheld breathing. No dolly.",
+      "cast": ["ISHAAN"],
+      "action": "Eyes open. Three slow blinks. Pupils contract as they find the window. He does not move his head.",
+      "expr": "Sleep-fogged → mildly annoyed → resigned. Micro-performance only, no big expression.",
+      "env": "Same, background softly defocused, curtain glow behind.",
+      "light": "Warm key across the bridge of the nose; cool fill keeps the far side of the face readable.",
+      "vfx": "Slight eye-highlight bloom.",
+      "vo": "Line 2 ends; 3 s of pure room tone before line 3.",
+      "cont": "Eye colour: dark brown, amber flecks at 4 o'clock in both irises — identical in every CU."
+    },
+    {
+      "id": "S01-05", "dur": 18, "size": "MS", "lens": "32mm",
+      "cam": "Interior, height 1.4 m, near the wardrobe, looking across the bed",
+      "move": "Slow lateral dolly left→right, 0.5 m/s, following the stretch.",
+      "cast": ["ISHAAN"],
+      "action": "Pushes himself upright, sits on the edge, stretches both arms overhead, yawns, scratches the back of his head.",
+      "expr": "Eyes still half-closed; jaw cracks in the yawn; a small involuntary smile at the end.",
+      "env": "L01 bedroom, morning light now stronger and warmer.",
+      "light": "Sun shaft has moved 4° across the floor — the room is warming shot by shot.",
+      "vfx": "None.",
+      "vo": "Line 3 at 00:52 — 'I thought the same thing' lands on the yawn. Understated, almost throwaway.",
+      "cont": "Clock in background must show 06:15+. Blanket now crumpled — do not re-smooth it for the rest of the scene."
+    },
+    {
+      "id": "S01-06", "dur": 18, "size": "OTS → tracking MS", "lens": "28mm",
+      "cam": "Starts over his shoulder at 1.5 m, then swings to a trailing 3/4 rear track",
+      "move": "Smooth 90° arc + follow, steadicam, no shake, ends behind his right shoulder.",
+      "cast": ["ISHAAN"],
+      "action": "He stands, walks across the room, kicks a slipper into place, and reaches the bathroom door.",
+      "expr": "Neutral; eyes on the floor; one hand rubbing the back of his neck.",
+      "env": "Bedroom → short hallway → bathroom door. Door frame on the right third.",
+      "light": "Backlit by the window; he reads almost as a silhouette with a warm edge.",
+      "vfx": "None.",
+      "vo": "Silence. Let the footsteps we cannot hear be felt in the body language.",
+      "cont": "Door is on the RIGHT wall of the hallway (geography lock G-01). Slippers: dark grey, left one scuffed."
+    },
+    {
+      "id": "S01-07", "dur": 16, "size": "CU", "lens": "50mm",
+      "cam": "Interior, height 1.30 m, focused on the door handle, shallow depth",
+      "move": "Static. He pushes the door; light floods; slow 6-frame dissolve to Scene 2.",
+      "cast": ["ISHAAN (hand only)"],
+      "action": "Hand closes on the handle, turns it, door swings inward and warm light spills over his fingers.",
+      "expr": "—",
+      "env": "Bathroom door, painted off-white, small brass handle, a towel hook at frame-right.",
+      "light": "Practical bathroom light beyond the door: warm 3000K, blooming into the cold hallway.",
+      "vfx": "Gentle overexposure bloom on the door edge as it opens.",
+      "vo": "Line 3 finishes by 00:58, then 60 s of narration-free room tone carries us to the cut.",
+      "cont": "First appearance of the film's recurring motif: light arriving from behind a door."
+    }
+  ]
+}

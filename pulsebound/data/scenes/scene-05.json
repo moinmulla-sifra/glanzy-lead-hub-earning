@@ -1,0 +1,112 @@
+{
+  "n": 5,
+  "title": "SCHOOL LIFE",
+  "act": "ACT II — THE NEW GIRL",
+  "start": "09:00",
+  "end": "12:00",
+  "dur": 180,
+  "location": "L04 · SCHOOL EXTERIOR → L05 · CORRIDOR → L06 · CLASSROOM",
+  "tod": "07:55 → 08:20 · clear winter morning",
+  "logline": "School as a warm, loud, ordinary ecosystem. Kabir is introduced as the person who makes Ishaan's day survivable.",
+  "grade": "Slightly desaturated blue-white exterior against warm interior corridors. The school is lighter and cooler than home — the visual argument of the episode starts here.",
+  "key": "assets/storyboard/S05.png",
+  "voiceBlock": 4,
+  "narration": [
+    { "hi": "स्कूल वही था। गेट वही, दीवारें वही, और कबीर भी वही — हमेशा की तरह पाँच मिनट लेट।", "t": "09:06–09:28", "en": "School was the same. Same gate, same walls, and Kabir the same too — five minutes late, as always." },
+    { "hi": "कबीर से मिलने का मतलब था दिन की पहली हँसी। और वो हँसी हमारे बीच की सबसे पुरानी आदत थी।", "t": "09:34–09:56", "en": "Seeing Kabir meant the first laugh of the day. And that laugh was the oldest habit we had." }
+  ],
+  "shots": [
+    {
+      "id": "S05-01", "dur": 24, "size": "ELS (aerial)", "lens": "24mm",
+      "cam": "Exterior, drone at 40 m, descending along the school's front axis",
+      "move": "Slow continuous descend + 15° forward tilt. No orbit, no speed ramp.",
+      "cast": ["— (crowd as texture)"],
+      "action": "Students stream through the gate in two directions; a cycle rickshaw waits; a bell tower clock reads 07:52.",
+      "expr": "—",
+      "env": "L04 school: three-storey sand-coloured block, blue-grey roof, a neem tree at the gate, painted boundary wall, dusty playground to the right.",
+      "light": "Low winter sun behind the building, long shadows toward camera; sky pale, almost white at the horizon.",
+      "vfx": "Dust in the playground air, light atmospheric haze on the treeline.",
+      "vo": "Line 1 at 09:06 over the descent.",
+      "cont": "ARCHITECTURE LOCK A-04: gate at the south end, main block running north, corridor on the east face, assembly hall to the west. Never rotate this plan."
+    },
+    {
+      "id": "S05-02", "dur": 26, "size": "MS", "lens": "50mm",
+      "cam": "Exterior, height 1.55 m, tracking backward ahead of him at 1.0 m/s",
+      "move": "Backward track, matching his walk; crowd crosses between camera and subject twice.",
+      "cast": ["ISHAAN"],
+      "action": "Walks through the gate, shifts his bag, sidesteps a running junior, and looks for someone.",
+      "expr": "Half-awake, then alerting to a familiar face.",
+      "env": "Gate → front steps, painted wall, students in identical uniforms.",
+      "light": "Cool daylight, gently overcast; the jacket's red lining is the only warm accent in the frame.",
+      "vfx": "None.",
+      "vo": "Line 1 continues.",
+      "cont": "Background students must be visually varied — 10 distinct silhouettes minimum, no identical clones (CONT-BG-01)."
+    },
+    {
+      "id": "S05-03", "dur": 24, "size": "MS", "lens": "40mm",
+      "cam": "Exterior, height 1.45 m, at the pillar, side-on to the steps",
+      "move": "Static; Kabir moves INTO frame from the right.",
+      "cast": ["KABIR", "ISHAAN"],
+      "action": "Kabir is leaning on the pillar, sees Ishaan, pushes off it, spreads his arms theatrically, and claps Ishaan's shoulder hard enough to shift him.",
+      "expr": "Kabir: enormous grin, mouth open mid-laugh. Ishaan: wincing, then laughing despite himself.",
+      "env": "Verandah pillars, notice board behind, morning light striping the columns.",
+      "light": "Striped shadow pattern from the pillar row across both characters — identical stripe angle in all shots of this location.",
+      "vfx": "None.",
+      "vo": "Line 2 at 09:34.",
+      "cont": "KABIR LOCK: warmer, deeper brown skin than Ishaan; short black hair with a side-swept quiff and faded sides; wider jaw; rounder eyes; one dimple on the LEFT cheek. Outfit: white shirt, navy sweater-vest, maroon tie, sleeves pushed to the elbow, NO jacket. He must never wear anything resembling JKT-BLR-01."
+    },
+    {
+      "id": "S05-04", "dur": 26, "size": "MS (2-shot)", "lens": "35mm",
+      "cam": "Interior, height 1.50 m, walking backward ahead of them along the corridor",
+      "move": "Steadicam backward track, 1.1 m/s, gentle drift; no bumps.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Kabir talks with both hands, re-enacts something, trips on a bag, recovers, and keeps talking. Ishaan laughs with his shoulders rather than his mouth.",
+      "expr": "Comfortable, unforced. Kabir's face does 80% of the work; Ishaan's reactions are the other 20%.",
+      "env": "L05 corridor: classroom doors left, open verandah right, sunlight in hard rectangles on the floor.",
+      "light": "Strong side light through the verandah arches; dust visible in the beams.",
+      "vfx": "Dust in the light beams only.",
+      "vo": "Line 2 rides the walk.",
+      "cont": "Their height relationship is locked: Ishaan ~2 cm taller than Kabir; Kabir leans. Never invert this.",
+      "friendChemistry": "Kabir always walks on Ishaan's LEFT. Keep it."
+    },
+    {
+      "id": "S05-05", "dur": 26, "size": "LS", "lens": "28mm",
+      "cam": "Interior, height 1.60 m, back of the classroom at the door, deep focus",
+      "move": "Slow 8° dolly right as they enter, settling into a static composition.",
+      "cast": ["ISHAAN", "KABIR", "TEACHER", "BACKGROUND STUDENTS"],
+      "action": "Students settling — bags dropping, chairs scraping, one student copying homework at speed. The teacher stands at the board, tapping a marker against her palm.",
+      "expr": "Teacher: patient authority. Students: the universal 8:15 AM slump.",
+      "env": "L06 classroom: 6 rows of dual desks, blackboard left, window wall RIGHT, door at the back-right, ceiling fans running.",
+      "light": "Window bank on the right floods the room; left side falls into cool shadow. Sun patches on the right-hand desks.",
+      "vfx": "None.",
+      "vo": "Silence — let the room establish itself.",
+      "cont": "SEATING LOCK: Ishaan + Kabir at bench 4, window side. Meera will be seated at bench 2, centre. Do not move anyone."
+    },
+    {
+      "id": "S05-06", "dur": 28, "size": "MS", "lens": "50mm",
+      "cam": "Interior, height 1.10 m, across the desk from the front, low",
+      "move": "Static; occasional 1-px breathing.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Notebook slides between them. Kabir draws something rude, Ishaan scribbles it out, Kabir flicks a paper ball at the back of a student's head, Ishaan suppresses a laugh by biting his cheek.",
+      "expr": "Conspiratorial. Eyebrows and cheek muscles only.",
+      "env": "Desk surface: two notebooks, one geometry box, pen caps, chalk dust.",
+      "light": "Warm window light on the desk; faces half-lit.",
+      "vfx": "None.",
+      "vo": "Silence. The comedy must survive with zero audio.",
+      "cont": "PROPOSED (non-canon, please approve): the paper ball and the rude doodle. Easily removable."
+    },
+    {
+      "id": "S05-07", "dur": 26, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.30 m, 3/4 to Ishaan, window behind his shoulder",
+      "move": "Imperceptible 0.08 m/s push.",
+      "cast": ["ISHAAN"],
+      "action": "His laugh fades to a neutral face. He looks out of the window at nothing in particular and drums two fingers once on the desk.",
+      "expr": "The first hint that he is waiting for something he cannot name.",
+      "env": "Window, the neem tree outside, white sky.",
+      "light": "Window as the key: 4:1 ratio, soft cool wrap, warm accent from the corridor door.",
+      "vfx": "None.",
+      "vo": "Silence. This is the plant for Meera's arrival — do not cut it short.",
+      "cont": "Board must still read the same lesson text as S05-05 (CONT-BOARD-01)."
+    }
+  ]
+}

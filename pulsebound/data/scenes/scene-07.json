@@ -1,0 +1,111 @@
+{
+  "n": 7,
+  "title": "FRIENDSHIP",
+  "act": "ACT II — THE NEW GIRL",
+  "start": "16:00",
+  "end": "19:00",
+  "dur": 180,
+  "location": "L06 · CLASSROOM → L05 · CORRIDOR",
+  "tod": "A week compressed: 11:40 → 13:10, several days elided through light changes",
+  "logline": "Three people become a unit. And underneath it, a phone buzzes — and the audience learns something Ishaan does not.",
+  "grade": "The warmest the school will ever look. Sun patches on the floor grow imperceptibly as the week advances — the only time-passing device allowed.",
+  "key": "assets/storyboard/S07.png",
+  "voiceBlock": 6,
+  "narration": [
+    { "hi": "कुछ दिनों में मीरा हमारी क्लास का हिस्सा बन गई। कबीर को बात करने का बहाना मिल गया, और मुझे... बस देखने का।", "t": "16:06–16:34", "en": "In a few days Meera became part of our class. Kabir found an excuse to talk to her, and I found… an excuse to watch." },
+    { "hi": "एक दोपहर उसके फ़ोन पर एक मैसेज आया। उसने पढ़ा, मुस्कुराई, और फ़ोन जेब में रख दिया। मैंने कुछ नहीं पूछा।", "t": "18:02–18:30", "en": "One afternoon a message arrived on her phone. She read it, smiled, and slipped the phone back into her pocket. I didn't ask anything." }
+  ],
+  "shots": [
+    {
+      "id": "S07-01", "dur": 24, "size": "MS (over-shoulder)", "lens": "50mm",
+      "cam": "Interior, height 1.20 m, behind Meera's right shoulder onto the desk she shares with Ishaan",
+      "move": "Slow 15° arc — the camera slowly chooses Meera's side of the frame.",
+      "cast": ["MEERA", "ISHAAN"],
+      "action": "Meera slides her notebook across so Ishaan can copy a diagram. He starts to copy, gets a line wrong, and she taps the page with a pencil, correcting him.",
+      "expr": "Meera: matter-of-fact, no flirting. Ishaan: a 3-second glance at her hand, then back to the page.",
+      "env": "Desk, open notebook, pencil box, a steel water bottle.",
+      "light": "Warm window key from frame-right; notebook paper slightly blown out.",
+      "vfx": "None.",
+      "vo": "Line 1 at 16:06.",
+      "cont": "PROPOSED (non-canon): sharing a notebook and the pencil-tap correction. Consistent with the brief's 'notebook sharing' beat."
+    },
+    {
+      "id": "S07-02", "dur": 26, "size": "MS", "lens": "40mm",
+      "cam": "Interior, height 1.50 m, in the corridor, side-on to them, lockers/notice board behind",
+      "move": "Static; the three move through the frame right to left.",
+      "cast": ["MEERA", "KABIR", "ISHAAN"],
+      "action": "Kabir finishes a story with a big gesture; Meera laughs openly, head back; Ishaan laughs one beat later, watching her laugh rather than the joke.",
+      "expr": "Genuine, unguarded. Let the audience see that he is laughing at HER laugh.",
+      "env": "L05 corridor mid-block, hard sun rectangles on the floor, one hanging fan.",
+      "light": "Striped light; their shadows fall left and stay consistent with S05-04.",
+      "vfx": "Dust in the beams.",
+      "vo": "Line 1 continues.",
+      "cont": "Kabir between them in this shot — the series' enduring composition: Kabir centre, the other two either side of a gap."
+    },
+    {
+      "id": "S07-03", "dur": 24, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.40 m, low front three-quarter on Ishaan at the desk",
+      "move": "Imperceptible push, 0.06 m/s.",
+      "cast": ["ISHAAN"],
+      "action": "He writes, stops, looks up and left (toward Meera's bench), catches himself, and resumes writing — but the pen doesn't move.",
+      "expr": "The small, private smile he will not admit to.",
+      "env": "Desk, page, his own hand shadow.",
+      "light": "Warm key, 3:1; the brightest point in frame is the notebook.",
+      "vfx": "None.",
+      "vo": "Silence across the whole shot — the narration is deliberately absent here.",
+      "cont": "Eyeline must match S06-05/06-06 to the degree."
+    },
+    {
+      "id": "S07-04", "dur": 26, "size": "MS", "lens": "28mm",
+      "cam": "Interior, height 1.55 m, from behind the three of them at the open corridor arch",
+      "move": "Very slow dolly-in from behind, 0.2 m/s — we join them rather than watch them.",
+      "cast": ["MEERA", "KABIR", "ISHAAN"],
+      "action": "Three backs at the arch, looking out at the playground. Meera points at something; Kabir leans to see; Ishaan doesn't look at what she's pointing at.",
+      "expr": "Faces unseen — posture only. This is the friendship image the series will return to.",
+      "env": "Corridor arch, deep background of the playground, tree, white sky.",
+      "light": "Backlit; the interior is cool, the outside is blown white.",
+      "vfx": "Atmospheric haze in the outdoor background.",
+      "vo": "Silence.",
+      "cont": "PROPOSED (non-canon): this friendship tableau. Flagged for approval; harmless to remove."
+    },
+    {
+      "id": "S07-05", "dur": 26, "size": "MS", "lens": "50mm",
+      "cam": "Interior, height 1.30 m, across the bench at Meera, Ishaan's shoulder as foreground mass",
+      "move": "Static.",
+      "cast": ["MEERA", "ISHAAN (foreground)"],
+      "action": "Her phone buzzes on the desk. She turns it face-up, reads, and a completely different smile arrives — smaller, softer, private.",
+      "expr": "The smile must be visibly DIFFERENT from the laugh in S07-02. Softer eyes, no teeth, slightly downward.",
+      "env": "Desk, phone face-down then face-up, a stack of textbooks.",
+      "light": "Warm; the screen glow adds a tiny cool bounce to her chin — the one cool light in the scene.",
+      "vfx": "Faint screen glow on her fingers only.",
+      "vo": "Line 2 at 18:02 — begins exactly as she reads.",
+      "cont": "PHONE LOCK: plain dark-grey case, no visible logos, no readable text on screen ever. Never show the sender, never show the name (CONT-MEERA-01)."
+    },
+    {
+      "id": "S07-06", "dur": 28, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.30 m, 3/4 on Meera from Ishaan's side of the bench",
+      "move": "Static with breathing; she types two characters and stops.",
+      "cast": ["MEERA"],
+      "action": "She types a short reply, hesitates, deletes one character, retypes it, then puts the phone away and returns to her book.",
+      "expr": "The hesitation is the whole story. Eyes flick down-left, then a small resolve.",
+      "env": "Phone in hand, notebook beneath, Ishaan's out-of-focus shoulder in the corner.",
+      "light": "Window key; the phone edge catches a thin line of light.",
+      "vfx": "None.",
+      "vo": "Line 2 continues to 18:30.",
+      "cont": "She is NOT hiding the phone from Ishaan — she simply doesn't think of him as someone to hide from yet. Play it innocent."
+    },
+    {
+      "id": "S07-07", "dur": 26, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.32 m, 3/4 on Ishaan, slightly tighter than S07-06",
+      "move": "Static. End on a 10-frame hold, then cut.",
+      "cast": ["ISHAAN"],
+      "action": "He saw. He looks back down at his notebook, adjusts it unnecessarily, and keeps the small smile — but his jaw sets.",
+      "expr": "Not jealousy. Uncertainty. The performance is entirely in the jaw and the breath.",
+      "env": "Desk, notebook, hand at rest.",
+      "light": "Warm key, slightly dimmer than S07-06 — one-quarter stop down, subliminal.",
+      "vfx": "None.",
+      "vo": "Silence. The narration stops before the emotional beat, not during it.",
+      "cont": "Do not add a musical sting. The audio bible forbids it. The jaw must carry it."
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "n": 2,
+  "title": "FAMILY",
+  "act": "ACT I — THE ORDINARY WORLD",
+  "start": "02:00",
+  "end": "05:00",
+  "dur": 180,
+  "location": "L02 · FAMILY HOME — LIVING ROOM / KITCHEN / HALLWAY",
+  "tod": "06:30 → 07:10 · full morning sun inside the house",
+  "logline": "Four people, one small flat, and the ordinary choreography of a family that does not yet know it is being remembered.",
+  "grade": "Warm amber interior (#FFB870) with teal shadow pockets. Saturation +8 vs Scene 1 — the house is the warmest place in the film and must stay that way.",
+  "key": "assets/storyboard/S02.png",
+  "voiceBlock": 2,
+  "narration": [
+    { "hi": "मेरी माँ — घर की वो कड़ी जो कभी ढीली नहीं पड़ती। सबसे पहले उठने वाली, और सबसे आख़िर में बैठने वाली।", "t": "02:08–02:30", "en": "My mother — the link in this house that never goes slack. First to rise, last to sit." },
+    { "hi": "पापा। हर चीज़ का हिसाब, हर बात में तर्क। उन्हें लगता था दुनिया एक समीकरण है — और वो उसे हल कर चुके हैं।", "t": "02:38–03:02", "en": "Papa. Every thing accounted for, logic in every sentence. He believed the world was an equation — and that he had already solved it." },
+    { "hi": "आरोही — मुझसे एक क्लास छोटी, पर समझ में तीन साल आगे।", "t": "03:10–03:26", "en": "Aarohi — one class below me, three years ahead of me in understanding." },
+    { "hi": "और विवान। सातवीं का वो तूफ़ान, जिसे हर सुबह कुछ नया तोड़ना होता था।", "t": "03:34–03:52", "en": "And Vivaan. The storm of class seven, who had to break something new every morning." }
+  ],
+  "shots": [
+    {
+      "id": "S02-01", "dur": 26, "size": "EWS", "lens": "24mm",
+      "cam": "Interior, starts at ceiling height 2.8 m, centred on the living room's back wall",
+      "move": "Slow crane DOWN to 1.6 m over the full 26 s — one continuous move, no cut.",
+      "cast": ["MAA (background, out of focus)"],
+      "action": "A geography of home assembles itself as we descend: ceiling fan, wall calendar, framed family photo, sofa, dining table, and finally a figure crossing behind.",
+      "expr": "—",
+      "env": "Living room: sofa camera-right, dining table centre, kitchen doorway left, hallway to bedrooms at back. Middle-class Indian home — lived-in, not styled.",
+      "light": "Hard window light from the left casting long rectangles on the floor; warm bounced fill from the cream walls.",
+      "vfx": "Dust motes; the fan is OFF (it is winter).",
+      "vo": "Line 1 begins at 02:08.",
+      "cont": "Lock the room's geography for the whole episode (G-02): kitchen door LEFT, corridor BACK, main door RIGHT. Never mirror this."
+    },
+    {
+      "id": "S02-02", "dur": 26, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.45 m, behind Maa's right shoulder at 1.2 m",
+      "move": "Slow push-in 0.25 m/s, ending on her hands, not her face.",
+      "cast": ["MAA"],
+      "action": "Rolling dough / stirring a pan, turning a flame down, wiping her hands on her dupatta, lifting a steel tiffin off the shelf.",
+      "expr": "Not visible — we meet her through her hands first. Deliberate.",
+      "env": "Kitchen: two-burner stove, steel utensils, tiled backsplash slightly stained near the stove.",
+      "light": "Window over the sink at frame-right: warm key; steam catches the light.",
+      "vfx": "Steam, faint flour dust in the light.",
+      "vo": "Line 1 rides this entire shot.",
+      "cont": "Maa wears a deep-teal cotton saree with a mustard border; small bindi; two gold bangles on the right wrist only."
+    },
+    {
+      "id": "S02-03", "dur": 28, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.55 m, 70 cm from her face, 3/4 turned toward the doorway",
+      "move": "Static, 1-px breathing. She turns into the lens from a task.",
+      "cast": ["MAA"],
+      "action": "She calls toward the hallway (lips move, no audible words), smiles at whatever she sees off-screen, and points a spatula in mock warning.",
+      "expr": "Warm, tired, faintly amused. Eyes crease before the mouth — lock this order of expression.",
+      "env": "Kitchen defocused to warm bokeh.",
+      "light": "Window key on her left cheek; the right side falls into soft shadow, still fully readable.",
+      "vfx": "None.",
+      "vo": "Silence across the turn — let the face carry it.",
+      "cont": "Her hair is in a low bun with two loose strands at the temple, identical in every scene."
+    },
+    {
+      "id": "S02-04", "dur": 24, "size": "MS", "lens": "40mm",
+      "cam": "Interior, height 1.45 m, in the hallway looking back toward the main door",
+      "move": "Static. He walks toward the camera and passes frame-left.",
+      "cast": ["PITA"],
+      "action": "Adjusts a shirt cuff, fastens a wristwatch, picks up a slim briefcase, checks it once, sets it down again.",
+      "expr": "Focused, mildly hurried; a single glance at the mirror with no vanity in it.",
+      "env": "Hallway with a shoe rack, a mirror, and the main door at the far end.",
+      "light": "Cool daylight from the door glass against warm hallway tungsten — a two-temperature frame.",
+      "vfx": "None.",
+      "vo": "Line 2 at 02:38, landing on the wristwatch fastening.",
+      "cont": "Pita: light-blue formal shirt, dark grey trousers, no jacket indoors, silver watch on the LEFT wrist, trimmed moustache, neat hair with grey at the temples."
+    },
+    {
+      "id": "S02-05", "dur": 32, "size": "MS", "lens": "35mm",
+      "cam": "Interior, height 1.20 m, seated-height at the dining table, looking across at Aarohi",
+      "move": "Slow 15° arc to the right, keeping her centred.",
+      "cast": ["AAROHI"],
+      "action": "Sits with a textbook open, writing, then looks up sharply toward the hallway, closes the book with one finger inside, and half-rises.",
+      "expr": "Concentration → alertness → the beginning of a smirk. She is always one beat ahead.",
+      "env": "Dining table, steel glass, a stack of notebooks, a school bag hooked on the chair.",
+      "light": "Window light from frame-left, warm; the notebook page is the brightest object in the frame.",
+      "vfx": "None.",
+      "vo": "Line 3 at 03:10.",
+      "cont": "Aarohi: long dark hair in a single braid, blue ribbon at the end, 9th-standard uniform (white shirt, navy pinafore, navy sweater-vest)."
+    },
+    {
+      "id": "S02-06", "dur": 24, "size": "LS → MS", "lens": "28mm",
+      "cam": "Interior, height 1.10 m at the hall entrance, low enough to catch the bannister",
+      "move": "Handheld-lite follow as he runs past; small 20° pan, no whip.",
+      "cast": ["VIVAAN"],
+      "action": "Slides down the last three steps, lands badly, recovers with enormous dignity, and runs a toy car along the wall as he goes.",
+      "expr": "Pure chaos wearing a grin. One sock missing.",
+      "env": "Stair/hall junction, shoes scattered, a school bag dragging open.",
+      "light": "Backlit from the door; rim light catches his hair.",
+      "vfx": "None. Keep the chaos practical.",
+      "vo": "Line 4 at 03:34, timed to the landing.",
+      "cont": "Vivaan: 7th standard, short messy hair, white shirt untucked, navy shorts, one sock, scuffed black shoes."
+    },
+    {
+      "id": "S02-07", "dur": 20, "size": "OTS WIDE", "lens": "24mm",
+      "cam": "Interior, height 1.60 m, behind and left of Ishaan, down the length of the corridor",
+      "move": "Static. Ishaan steps into frame and stops; the family continues in soft focus beyond him.",
+      "cast": ["ISHAAN", "MAA", "PITA", "AAROHI", "VIVAAN"],
+      "action": "Ishaan, freshly showered in a plain white shirt, arrives at the end of the corridor and simply watches his family for two full seconds before anyone notices him.",
+      "expr": "Unreadable, then a small private smile. This is the shot the finale will echo.",
+      "env": "Corridor to living room; every family member visible but out of focus.",
+      "light": "Warm interior; Ishaan in near-silhouette with a bright edge.",
+      "vfx": "None.",
+      "vo": "Silence. Hold the whole 20 s — this is the film's emotional anchor shot.",
+      "cont": "MIRROR SHOT: S13-06 must reuse this exact framing with the light inverted to blue."
+    }
+  ]
+}

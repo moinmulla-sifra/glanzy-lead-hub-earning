@@ -1,0 +1,111 @@
+{
+  "n": 10,
+  "title": "THE ROAD",
+  "act": "ACT III — AARANYA RIDGE",
+  "start": "24:00",
+  "end": "27:00",
+  "dur": 180,
+  "location": "L08 · SCHOOL BUS INTERIOR → L09 · MOUNTAIN ROADS",
+  "tod": "06:00 → 10:30 · dawn to late morning, altitude rising",
+  "logline": "The journey out of the ordinary world, told entirely as landscape. The city drains out of the frame and the mountains take it over.",
+  "grade": "Cold blue dawn in the city, warming to clean high-altitude daylight. Reduce haze as altitude increases — the air is literally getting clearer.",
+  "key": "assets/storyboard/S10.png",
+  "voiceBlock": 9,
+  "narration": [
+    { "hi": "सुबह छह बजे बस चली। शहर धीरे-धीरे पीछे छूटता गया, और खिड़की के बाहर सड़कें पहाड़ों में बदल गईं।", "t": "24:06–24:30", "en": "The bus left at six. The city fell away behind us, and outside the window the roads turned into mountains." },
+    { "hi": "मीरा बस में पीछे की सीट पर बैठी थी। कभी-कभी वो बाहर देखती... और कभी-कभी मेरी तरफ़।", "t": "26:04–26:28", "en": "Meera was sitting at the back of the bus. Sometimes she looked outside… and sometimes she looked at me." }
+  ],
+  "shots": [
+    {
+      "id": "S10-01", "dur": 26, "size": "EWS", "lens": "24mm",
+      "cam": "Exterior, height 1.40 m from the school gate, bus front filling frame-right",
+      "move": "Static. Students load; breath fog visible in the cold.",
+      "cast": ["BACKGROUND STUDENTS", "ISHAAN", "KABIR"],
+      "action": "Bags into the hold, a queue that isn't a queue, Ishaan and Kabir near the door.",
+      "expr": "Excited, half-asleep.",
+      "env": "L04 school gate at dawn, the bus: cream-and-navy school coach, fleet number on the front, no readable text required.",
+      "light": "Blue hour, 8000K, streetlights still on and warm against it.",
+      "vfx": "Breath vapour, engine exhaust thin in the cold. Both must be subtle.",
+      "vo": "Line 1 at 24:06.",
+      "cont": "BUS LOCK: cream body, navy stripe, school crest on the door, 3+2 seating. Same bus in S10-07 and S11-02 at long range."
+    },
+    {
+      "id": "S10-02", "dur": 24, "size": "MS", "lens": "35mm",
+      "cam": "Exterior, height 1.55 m, at the bus door, 3/4",
+      "move": "Static; Kabir climbs in and turns back to say something to Ishaan.",
+      "cast": ["KABIR", "ISHAAN"],
+      "action": "Kabir puts a foot on the step, then leans out and mimes something ridiculous to Ishaan, who pushes him the rest of the way up.",
+      "expr": "Delight, mock outrage.",
+      "env": "Bus doorway, driver's silhouette, a hand rail.",
+      "light": "Warm interior lamp from inside the coach vs cold blue dawn outside — the characters are lit by the doorway.",
+      "vfx": "Breath vapour.",
+      "vo": "Line 1 continues.",
+      "cont": "Bus interior has warm tungsten strip lighting — this is important for S10-03's colour."
+    },
+    {
+      "id": "S10-03", "dur": 26, "size": "MS (2-shot)", "lens": "28mm",
+      "cam": "Interior of the bus, height 1.35 m from the seat in front, looking back at their seats",
+      "move": "Static with bus vibration — a 1-px vertical judder, no more.",
+      "cast": ["ISHAAN", "KABIR"],
+      "action": "Kabir claims the window, sees Ishaan's face, sighs theatrically, and swaps seats. Ishaan grins and takes the window.",
+      "expr": "Kabir's long-suffering generosity; Ishaan's unearned victory.",
+      "env": "L08 bus interior: rexine seats, overhead luggage rack, curtained windows, driver's mirror at the far end.",
+      "light": "Warm strip light + cold window light on Ishaan's face. Two-temperature again, but now it's on a moving vehicle.",
+      "vfx": "Dust in the strip light; light flicker from passing trees on a 3-frame rhythm.",
+      "vo": "Line 1 ends at 24:30; the rest of the ride is nearly wordless.",
+      "cont": "PROPOSED (non-canon): the seat swap. Pure character comedy, no plot."
+    },
+    {
+      "id": "S10-04", "dur": 26, "size": "CU", "lens": "85mm",
+      "cam": "Interior, height 1.35 m, three rows back, framed past seat backs",
+      "move": "Static; gentle sway synced to the bus.",
+      "cast": ["MEERA"],
+      "action": "She sits alone at the back-left, cheek against the window frame, watching the landscape. She turns her head slightly forward — not quite to camera.",
+      "expr": "Calm, unreadable, faintly sad. The first time we see her unperformed.",
+      "env": "Bus back rows, empty seat beside her, the window as a bright plane.",
+      "light": "Cold daylight on her face, warm strip light in the ceiling above — half warm, half cold on the same cheek.",
+      "vfx": "None.",
+      "vo": "Silence. Do not narrate this shot.",
+      "cont": "She must be visually separated from the boys here — the geography of the bus is a diagram of the emotional plot."
+    },
+    {
+      "id": "S10-05", "dur": 26, "size": "LS", "lens": "24mm",
+      "cam": "Exterior, height 2.10 m, rigged to a vehicle tracking the bus through the city",
+      "move": "Parallel tracking, 40 km/h matching; the bus in the right third.",
+      "cast": ["—"],
+      "action": "City edge: flyovers, shuttered shops, a tea stall, then a widening road.",
+      "expr": "—",
+      "env": "L09 city outskirts at dawn: low buildings, wires, a broken footpath, one cow.",
+      "light": "Flat blue-grey morning, sodium streetlights dying out one by one.",
+      "vfx": "Motion blur limited to the foreground only.",
+      "vo": "Silence.",
+      "cont": "The cow is a single-frame background gag — keep it, it's a real Indian road."
+    },
+    {
+      "id": "S10-06", "dur": 28, "size": "AERIAL ELS", "lens": "24mm",
+      "cam": "Drone, 120 m, tracking the bus from the front-left, mountains behind",
+      "move": "Slow forward tracking with a 10° tilt up to reveal the ridge line.",
+      "cast": ["—"],
+      "action": "The bus threads a switchback. Mist in the valley below. Pine forest on both sides.",
+      "expr": "—",
+      "env": "L09 mountain road: two-lane tarmac, stone parapet, hairpin bends, a valley of cloud.",
+      "light": "High-altitude morning: hard sun, crisp shadows, cool blue in the shadowed valley.",
+      "vfx": "Thin cloud wisps; atmospheric perspective layered in three depths.",
+      "vo": "Line 2 at 26:04 — the narration arrives exactly when the mountains do.",
+      "cont": "GEOGRAPHY: the observatory ridge is visible on the horizon from this shot onwards (a small white dome, frame-left). Planted here, paid off in S11-01."
+    },
+    {
+      "id": "S10-07", "dur": 24, "size": "ELS", "lens": "100mm (compressed)",
+      "cam": "Exterior, ground level on a far ridge, telephoto compression of the road and the bus",
+      "move": "Static. The bus is a tiny object crossing the frame in 14 s.",
+      "cast": ["—"],
+      "action": "The bus crawls along a switchback; the scale of the terrain reduces it to a beetle.",
+      "expr": "—",
+      "env": "Vast ridge landscape, terraced fields far below, snow line just visible at the top of frame.",
+      "light": "Sun on the ridge, shadow in the valley; the bus is a bright fleck.",
+      "vfx": "Haze layer between camera and subject.",
+      "vo": "Line 2 ends on this shot, on the smallness of them.",
+      "cont": "Scale rule: this is the largest frame in the episode until S13-01. Save the epic for the Core."
+    }
+  ]
+}
